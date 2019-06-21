@@ -20,6 +20,7 @@
                   android:background="@color/white"
                   android:layout_height="wrap_content">
        <RelativeLayout android:layout_width="match_parent"
+                       android:id="@+id/rl_add_friends"
                        android:layout_height="40dp">
                   <LinearLayout android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -38,6 +39,7 @@
                     android:layout_height="0.5dp"
                     android:background="@color/white_theme"/>
         <RelativeLayout android:layout_width="match_parent"
+                        android:id="@+id/rl_add_group"
                         android:layout_height="40dp">
             <LinearLayout android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
@@ -56,6 +58,7 @@
                     android:layout_height="0.5dp"
                     android:background="@color/white_theme"/>
         <RelativeLayout android:layout_width="match_parent"
+                        android:id="@+id/rl_scan"
                         android:layout_height="40dp">
             <LinearLayout android:layout_width="wrap_content"
                           android:layout_height="wrap_content"

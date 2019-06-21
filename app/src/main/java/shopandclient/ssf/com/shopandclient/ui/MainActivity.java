@@ -52,13 +52,13 @@ public class MainActivity extends BaseActivity implements BaseBiz {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_chat:
-                openActivity(FriendsListActivity.class);
+                openActivity(InfomationActivity.class);
                 break;
             case R.id.rl_run_rabitts:
                 openActivity(InfomationActivity.class);
                 break;
             case R.id.rl_friends:
-                openActivity(AddGroupChatActivity.class);
+                openActivity(FriendsListActivity.class);
                 break;
             case R.id.rl_person_center:
                 openActivity(PersonCenterActivity.class);

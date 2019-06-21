@@ -25,7 +25,7 @@ import java.util.Collections;
 /**
  * Created by zhg on 2019/6/21.
  */
-public class FriendsListActivity extends BaseActivity implements BaseBiz {
+public class FriendsListActivity extends BaseActivity implements BaseBiz,View.OnClickListener {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
@@ -45,6 +45,10 @@ public class FriendsListActivity extends BaseActivity implements BaseBiz {
     TextView tvSave;
     private PopupWindow pop;
     private  boolean state=false;
+    private RelativeLayout rl_add_friends;
+    private RelativeLayout rl_add_group;
+    private RelativeLayout rl_scan;
+
     @Override
     public int getLayoutResourceId() {
         return R.layout.activity_friends_list;
@@ -74,7 +78,7 @@ public class FriendsListActivity extends BaseActivity implements BaseBiz {
         initPop();
         rlAction.setBackgroundColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
         ivBack.setBackgroundDrawable(MyApplication.getInstance().mContext.getResources().getDrawable(R.drawable.black));
-        tvCenterTitle.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.order_detail));
+        tvCenterTitle.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.friends_list));
         tvCenterTitle.setTextColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.white));
         tvSave.setVisibility(View.INVISIBLE);
         ivScope.setImageResource(R.drawable.function);
@@ -122,6 +126,12 @@ public class FriendsListActivity extends BaseActivity implements BaseBiz {
         pop.setContentView(content);
         pop.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         pop.setHeight(ViewGroup.LayoutParams.MATCH_PARENT - ScreenDipUtil.dip2px(50));
+        rl_add_friends = (RelativeLayout)content.findViewById(R.id.rl_add_friends);
+        rl_add_friends.setOnClickListener(this);
+        rl_add_group = (RelativeLayout)content. findViewById(R.id.rl_add_group);
+        rl_add_group.setOnClickListener(this);
+        rl_scan = (RelativeLayout)content.findViewById(R.id.rl_scan);
+        rl_scan.setOnClickListener(this);
         pop.setOutsideTouchable(false);
     }
 
@@ -159,6 +169,28 @@ public class FriendsListActivity extends BaseActivity implements BaseBiz {
         state=false;
         if(pop.isShowing()){
             pop.dismiss();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.rl_add_friends:
+                state=false;
+                if(pop.isShowing()){
+                    pop.dismiss();
+                }
+                openActivity(AddFridendActivity.class);
+                break;
+            case R.id.rl_add_group:
+                state=false;
+                if(pop.isShowing()){
+                    pop.dismiss();
+                }
+                openActivity(AddGroupChatActivity.class);
+                break;
+            case R.id.rl_scan:
+                break;
         }
     }
 }
