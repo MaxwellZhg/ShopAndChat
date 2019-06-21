@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:background="@color/white">
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+        <ImageView android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_centerVertical="true"
+                   android:id="@+id/icon_order_store"
+                   android:layout_marginLeft="40dp"
+                   android:src="@drawable/icon_order_shop"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="5dp"
+                  android:textSize="16sp"
+                  android:id="@+id/tv_store_name"
+                  android:textColor="@color/text_bg"
+                  android:layout_toRightOf="@+id/icon_order_store"
+                  android:text="跑腿兔旗舰店"/>
+    </RelativeLayout>
+    <shopandclient.ssf.com.shopandclient.weiget.bananer.view.MyRecycleview
+            android:id="@+id/rv_shop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    </shopandclient.ssf.com.shopandclient.weiget.bananer.view.MyRecycleview>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_height="wrap_content">
+        <TextView android:layout_width="65dp"
+                  android:layout_height="25dp"
+                  android:text="去支付"
+                  android:gravity="center"
+                  android:id="@+id/limmit_pay"
+                  android:textColor="@color/password_tips"
+                  android:textSize="14sp"
+                  android:layout_alignParentRight="true"
+                  android:layout_marginRight="15dp"
+                  android:background="@drawable/item_gotopay_bg"/>
+        <TextView android:layout_width="65dp"
+                  android:layout_height="25dp"
+                  android:text="退款"
+                  android:gravity="center"
+                  android:layout_toLeftOf="@+id/limmit_pay"
+                  android:id="@+id/tv_retery"
+                  android:textColor="@color/important_instance"
+                  android:textSize="14sp"
+                  android:layout_marginRight="10dp"
+                  android:background="@drawable/item_default_gotopay_bg"/>
+        <TextView android:layout_width="65dp"
+                  android:layout_height="25dp"
+                  android:text="在线客服"
+                  android:gravity="center"
+                  android:layout_toLeftOf="@+id/tv_retery"
+                  android:id="@+id/link_talker"
+                  android:textColor="@color/important_instance"
+                  android:textSize="14sp"
+                  android:layout_marginRight="10dp"
+                  android:background="@drawable/item_default_gotopay_bg"/>
+    </RelativeLayout>
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="0.5dp"
+               android:layout_marginLeft="10dp"
+               android:layout_marginRight="15dp"
+               android:id="@+id/iv_cent"
+               android:background="@color/line_color"/>
+</LinearLayout>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+  <RelativeLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/rl_logo">
+                 <ImageView android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="50dp"
+                            android:layout_marginBottom="40dp"
+                            android:src="@drawable/login_logo"/>
+  </RelativeLayout>
+  <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rl_logo"
+                android:orientation="vertical">
+         <LinearLayout android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:orientation="horizontal">
+             <TextView android:layout_width="0dp"
+                       android:layout_weight="1"
+                       android:id="@+id/rl_add_tips"
+                       android:layout_height="wrap_content"
+                       android:text="+86"
+                       android:layout_marginLeft="30dp"
+                       android:textColor="@color/text_bg"
+                      android:textSize="22sp"/>
+             <EditText android:layout_width="0dp"
+                       android:layout_weight="5"
+                       android:id="@+id/et_phone"
+                       android:lines="1"
+                       android:hint="@string/input_phone_tips"
+                       android:layout_toRightOf="@+id/rl_add_tips"
+                       android:layout_toLeftOf="@+id/cancle"
+                       android:background="@null"
+                       android:layout_height="wrap_content"/>
+             <TextView android:layout_width="0dp"
+                       android:layout_weight="1"
+                       android:id="@+id/cancle"
+                       android:layout_height="wrap_content"
+                       android:text="×"
+                       android:visibility="invisible"
+                       android:gravity="center"
+                       android:layout_toRightOf="@+id/et_phone"
+                       android:textColor="@color/text_bg"
+                       android:textSize="22sp"/>
+         </LinearLayout>
+         <ImageView android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/line_color"/>
+      <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:orientation="horizontal">
+          <EditText android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:id="@+id/et_password"
+                    android:lines="1"
+                    android:hint="@string/input_password_tips"
+                    android:layout_marginLeft="30dp"
+                    android:inputType="textPassword"
+                    android:layout_toRightOf="@+id/rl_add_tips"
+                    android:layout_toLeftOf="@+id/cancle"
+                    android:background="@null"
+                    android:layout_height="wrap_content"/>
+          <TextView android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/et_password"
+                    android:textColor="@color/text_bg"
+                    android:textSize="22sp"/>
+      </LinearLayout>
+      <ImageView android:layout_width="match_parent"
+                 android:layout_height="0.5dp"
+                 android:layout_marginLeft="30dp"
+                 android:layout_marginRight="15dp"
+                 android:layout_marginTop="10dp"
+                 android:background="@color/line_color"/>
+      <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_pass_tips"
+                android:textSize="14sp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:visibility="invisible"
+                android:textColor="@color/password_tips"
+                android:text="@string/password_tips"
+                 />
+      <RelativeLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+               <Button android:layout_width="match_parent"
+                       android:background="@drawable/login_btn_bg"
+                       android:layout_marginLeft="30dp"
+                       android:layout_marginRight="30dp"
+                       android:layout_marginTop="40dp"
+                       android:textSize="20sp"
+                       android:gravity="center"
+                       android:textColor="@color/white"
+                       android:text="@string/login"
+                       android:layout_height="45dp"/>
+      </RelativeLayout>
+
+          <RelativeLayout android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                          android:layout_marginTop="20dp"
+                         android:layout_marginLeft="30dp"
+                         android:layout_marginRight="30dp">
+
+              <TextView android:id="@+id/tv_register"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_bg"
+                        android:text="@string/register"/>
+              <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_forget"
+                        android:textColor="@color/important_instance"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/forget_pass"/>
+          </RelativeLayout>
+      </LinearLayout>
+</RelativeLayout>

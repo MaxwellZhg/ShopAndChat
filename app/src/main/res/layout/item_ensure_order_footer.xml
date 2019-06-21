@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="10dp"
+                      android:id="@+id/ll_select_track"
+                      android:layout_marginBottom="10dp"
+                      android:layout_marginRight="15dp"
+                      android:layout_alignParentRight="true"
+                      android:orientation="horizontal">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textColor="@color/text_bg"
+                      android:textSize="14sp"
+                      android:text="快递"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/tv_track_way"
+                      android:textColor="@color/text_bg"
+                      android:textSize="14sp"
+                      android:layout_marginLeft="5dp"
+                      android:text="免邮"/>
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginLeft="5dp"
+                       android:layout_gravity="center_vertical"
+                       android:src="@drawable/icon_right"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="10dp"
+                      android:layout_marginLeft="60dp"
+                      android:layout_alignParentLeft="true"
+                      android:layout_toLeftOf="@+id/ll_select_track"
+                      android:layout_marginBottom="10dp"
+                      android:orientation="horizontal">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textColor="@color/text_bg"
+                      android:textSize="14sp"
+                      android:text="配送方式"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textColor="@color/important_instance"
+                      android:textSize="14sp"
+                      android:layout_marginLeft="5dp"
+                      android:text="普通配送"/>
+        </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="10dp"
+                      android:layout_marginLeft="60dp"
+                      android:layout_alignParentLeft="true"
+                      android:layout_marginBottom="10dp"
+                      android:orientation="horizontal">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textColor="@color/text_bg"
+                      android:textSize="14sp"
+                      android:text="订单备注"/>
+            <EditText android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textColorHint="@color/important_instance"
+                      android:textColor="@color/text_bg"
+                      android:textSize="14sp"
+                      android:background="@null"
+                      android:layout_marginLeft="5dp"
+                      android:hint="我是订单备注"/>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

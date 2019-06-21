@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:background="@color/white"
+              android:orientation="vertical">
+             <shopandclient.ssf.com.shopandclient.weiget.bananer.view.SwipeMenuLayout
+                     android:layout_width="match_parent"
+                     android:id="@+id/swipe"
+                     app:swipeEnable="true"
+                     android:layout_height="wrap_content">
+                 <RelativeLayout android:layout_width="match_parent"
+                                 android:layout_height="wrap_content">
+                     <TextView android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:layout_marginLeft="15dp"
+                               android:layout_marginRight="15dp"
+                               android:id="@+id/tv_address"
+                               android:textColor="@color/text_bg"
+                               android:textSize="16sp"
+                               android:text="北京市西长安街一号中南海紫光阁习主席住所"
+                               android:lines="2"/>
+                     <RelativeLayout android:layout_width="match_parent"
+                                     android:layout_height="wrap_content"
+                                     android:layout_marginLeft="15dp"
+                                     android:layout_marginRight="15dp"
+                                     android:layout_marginBottom="15dp"
+                                     android:layout_below="@+id/tv_address"
+                                     android:layout_marginTop="10dp">
+                         <TextView android:layout_width="wrap_content"
+                                   android:layout_height="wrap_content"
+                                   android:textSize="14sp"
+                                   android:id="@+id/tv_holder"
+                                   android:textColor="@color/text_bg"
+                                   android:text="11111111111111"/>
+                         <TextView android:layout_width="wrap_content"
+                                   android:layout_height="wrap_content"
+                                   android:textSize="14sp"
+                                   android:id="@+id/tv_phone"
+                                   android:layout_toRightOf="@+id/tv_holder"
+                                   android:layout_marginLeft="5dp"
+                                   android:textColor="@color/important_instance"
+                                   android:text="111111111111111"/>
+                         <ImageView android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:background="@drawable/icon_right"/>
+                     </RelativeLayout>
+                     <ImageView android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/line_color"/>
+                 </RelativeLayout>
+                 <LinearLayout
+                         android:id="@+id/right_menu"
+                         android:layout_width="wrap_content"
+                         android:layout_height="match_parent"
+                         android:orientation="horizontal">
+                     <TextView
+                             android:id="@+id/tv_editor"
+                             android:layout_width="80dp"
+                             android:layout_height="match_parent"
+                             android:background="@color/password_tips"
+                             android:gravity="center"
+                             android:text="编辑"
+                             android:textColor="@color/white"
+                             android:textSize="16sp" />
+                     <TextView
+                             android:id="@+id/tv_delete"
+                             android:layout_width="80dp"
+                             android:layout_height="match_parent"
+                             android:background="@color/swipe_detele"
+                             android:gravity="center"
+                             android:text="删除"
+                             android:textColor="@color/white"
+                             android:textSize="16sp" />
+
+                 </LinearLayout>
+
+             </shopandclient.ssf.com.shopandclient.weiget.bananer.view.SwipeMenuLayout>
+</LinearLayout>

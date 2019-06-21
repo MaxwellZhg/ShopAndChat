@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                             android:layout_width="match_parent"
+                             android:layout_height="match_parent"
+                             android:orientation="vertical">
+<include layout="@layout/action_bar"/>
+<ListView android:id="@+id/lv_retrey"
+          android:layout_below="@+id/rl_action"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:scrollbars="none"
+          android:layout_marginBottom="50dp"
+          android:overScrollMode="never"
+          android:divider="@null">
+</ListView>
+    <Button android:layout_width="match_parent"
+            android:background="@color/password_tips"
+            android:layout_alignParentBottom="true"
+            android:textSize="18sp"
+            android:text="提交"
+            android:textColor="@color/white"
+            android:layout_height="50dp"/>
+</RelativeLayout>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical"
+              android:layout_height="wrap_content">
+<RelativeLayout android:layout_width="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
+                android:layout_height="wrap_content">
+      <ImageView android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/iv_tag"
+                 android:src="@drawable/icon_order_recipient"/>
+      <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_recivier"
+                android:layout_toRightOf="@+id/iv_tag"
+                android:textColor="@color/text_bg"
+                android:layout_marginLeft="5dp"
+                android:textSize="16sp"
+                android:text="习近平"
+                />
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_below="@+id/tv_recivier"
+              android:textColor="@color/important_instance"
+              android:text="18251793609"/>
+</RelativeLayout>
+ <TextView android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginBottom="10dp"
+           android:layout_marginLeft="15dp"
+           android:textColor="@color/text_bg"
+           android:layout_marginRight="15dp"
+           android:text="北京市东城区西长安街一号中南海紫光阁习主席住所"/>
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="10dp"
+               android:background="@color/white_theme"/>
+</LinearLayout>

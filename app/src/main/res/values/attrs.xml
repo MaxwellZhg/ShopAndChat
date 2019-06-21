@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //swipe返回
+    <declare-styleable name="SwipeBackLayout">
+        <attr name="edge_size" format="dimension"/>
+        <attr name="edge_flag">
+            <enum name="left" value="0" />
+            <enum name="right" value="1" />
+            <enum name="bottom" value="2" />
+            <enum name="all" value="3" />
+        </attr>
+        <attr name="shadow_left" format="reference"/>
+        <attr name="shadow_right" format="reference"/>
+        <attr name="shadow_bottom" format="reference"/>
+    </declare-styleable>
+
+    <attr name="SwipeBackLayoutStyle" format="reference"/>
+
+
+    <declare-styleable name="Banner">
+        <attr name="delay_time" format="integer" />
+        <attr name="scroll_time" format="integer" />
+        <attr name="is_auto_play" format="boolean" />
+        <attr name="title_background" format="color|reference" />
+        <attr name="title_textcolor" format="color" />
+        <attr name="title_textsize" format="dimension" />
+        <attr name="title_height" format="dimension" />
+        <attr name="indicator_width" format="dimension" />
+        <attr name="indicator_height" format="dimension" />
+        <attr name="indicator_margin" format="dimension" />
+        <attr name="indicator_drawable_selected" format="reference" />
+        <attr name="indicator_drawable_unselected" format="reference" />
+        <attr name="banner_layout" format="reference"/>
+        <attr name="banner_default_image" format="reference"/>
+        <attr name="image_scale_type" format="enum">
+            <enum name="center" value="0" />
+            <enum name="center_crop" value="1" />
+            <enum name="center_inside" value="2" />
+            <enum name="fit_center" value="3" />
+            <enum name="fit_end" value="4" />
+            <enum name="fit_start" value="5" />
+            <enum name="fit_xy" value="6" />
+            <enum name="matrix" value="7" />
+        </attr>
+        <!--<attr name="indicator_animator" format="reference" />-->
+        <!--<attr name="indicator_animator_reverse" format="reference" />-->
+    </declare-styleable>
+    <declare-styleable name="TextBannerViewStyle">
+        <attr name="setInterval" format="integer|reference"/>
+        <attr name="setAnimDuration" format="integer|reference"/>
+        <attr name="setTextSize" format="dimension|reference"/>
+        <attr name="setTextColor" format="color|reference"/>
+        <attr name="setSingleLine" format="boolean"/>
+
+        <attr name="setFlags">
+            <enum name="strike" value="0"/>
+            <enum name="underline" value="1"/>
+        </attr>
+        <attr name="setGravity">
+            <enum name="left" value="0"/>
+            <enum name="center" value="1"/>
+            <enum name="right" value="2"/>
+        </attr>
+        <attr name="setDirection">
+            <enum name="bottom_to_top" value="0"/>
+            <enum name="top_to_bottom" value="1"/>
+            <enum name="right_to_left" value="2"/>
+            <enum name="left_to_right" value="3"/>
+        </attr>
+        <attr name="setTypeface">
+            <enum name="normal" value="0"/>
+            <enum name="bold" value="1"/>
+            <enum name="italic" value="2"/>
+            <enum name="italic_bold" value="3"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="SwipeMenuLayout">
+        <attr name="swipeEnable" format="boolean"/>
+        <attr name="ios" format="boolean"/>
+        <attr name="leftSwipe" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="TimeLineMarker">
+        <!--圆点大小-->
+        <attr name="markerSize" format="dimension" />
+        <!--圆点颜色或者图片-->
+        <attr name="marker" format="color|reference" />
+        <!--上面线段颜色或者图片-->
+        <attr name="beginLine" format="color|reference" />
+        <!--下面线段颜色或者图片-->
+        <attr name="endLine" format="color|reference" />
+        <!--线段粗细-->
+        <attr name="lineSize" format="dimension" />
+        <!--横向还是竖向-->
+        <attr name="oritation" format="boolean" />
+    </declare-styleable>
+
+
+    <declare-styleable name="QuickIndexBar">
+        <attr name="text_normal_color" format="color" />
+        <attr name="text_press_color" format="color" />
+        <attr name="text_size" format="dimension" />
+        <attr name="bg_color" format="color" />
+
+    </declare-styleable>
+
+</resources>

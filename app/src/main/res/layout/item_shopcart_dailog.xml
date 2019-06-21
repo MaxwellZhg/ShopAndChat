@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:background="@color/white">
+<RelativeLayout android:layout_width="match_parent"
+                android:layout_height="120dp">
+    <ImageView android:layout_width="100dp"
+               android:layout_height="100dp"
+               android:id="@+id/iv_shopee_bg"
+               android:layout_centerVertical="true"
+               android:layout_marginLeft="5dp"
+               android:layout_alignParentLeft="true"
+               android:background="@drawable/meinv"/>
+    <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_marginLeft="10dp"
+                   android:layout_toRightOf="@+id/iv_shopee_bg"
+                    android:layout_height="match_parent">
+        <ImageView android:layout_width="25dp"
+                    android:layout_height="25dp"
+                   android:id="@+id/cancle"
+                   android:layout_marginTop="10dp"
+                   android:layout_marginRight="15dp"
+                   android:layout_alignParentRight="true"
+                    android:background="@drawable/shanchu"/>
+                 <TextView android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_below="@+id/cancle"
+                           android:textSize="18sp"
+                           android:id="@+id/tv_price"
+                           android:textColor="@color/tv_price_color"
+                           android:text="¥186"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:lines="2"
+                  android:layout_below="@+id/tv_price"
+                  android:ellipsize="end"
+                  android:textSize="18sp"
+                  android:layout_marginRight="15dp"
+                  android:textColor="@color/text_bg"
+                  android:text="11111111111111111111111111111111111111111"/>
+    </RelativeLayout>
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="1dp"
+               android:layout_marginLeft="15dp"
+               android:layout_marginRight="15dp"
+               android:layout_alignParentBottom="true"
+               android:background="@color/line_color"/>
+</RelativeLayout>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="@color/text_bg"
+                  android:textSize="18sp"
+                  android:id="@+id/tv_goods_pro"
+                  android:layout_marginTop="15dp"
+                  android:layout_marginLeft="15dp"
+                  android:text="商品属性"/>
+       <android.support.v7.widget.RecyclerView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:id="@+id/rv_attr"
+               android:overScrollMode="never"
+               android:layout_below="@+id/tv_goods_pro"
+               android:layout_marginTop="10dp">
+
+       </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@color/white">
+                 <TextView android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_centerVertical="true"
+                           android:textSize="16sp"
+                           android:id="@+id/tv_count"
+                           android:layout_marginLeft="15dp"
+                           android:textColor="@color/text_bg"
+                           android:text="数量"/>
+        <LinearLayout android:layout_width="120dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/rl_editor_count"
+                        android:layout_toRightOf="@+id/tv_count"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:orientation="horizontal"
+                        android:background="@drawable/attrbute_uncheck_bg">
+                        <TextView android:layout_width="35dp"
+                                  android:layout_height="match_parent"
+                                  android:textSize="22sp"
+                                  android:id="@+id/tv_reduce"
+                                  android:gravity="center"
+                                  android:textColor="@color/important_instance"
+                                  android:text="—"/>
+                        <EditText android:layout_width="50dp"
+                                  android:layout_height="match_parent"
+                                  android:text="1"
+                                  android:id="@+id/et_count"
+                                  android:inputType="number"
+                                  android:gravity="center"
+                                  android:textColor="@color/text_bg"
+                                  android:textSize="20sp"
+                                 android:background="@null"/>
+                 <TextView android:layout_width="35dp"
+                      android:layout_height="match_parent"
+                      android:textSize="22sp"
+                      android:gravity="center"
+                           android:id="@+id/tv_add"
+                      android:textColor="@color/text_bg"
+                      android:text="+"/>
+        </LinearLayout>
+        <RelativeLayout android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:id="@+id/rl_ensure"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/add_into_cart_ensure">
+                      <TextView android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                android:layout_centerInParent="true"
+                                android:text="确定"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

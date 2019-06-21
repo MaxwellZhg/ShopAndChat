@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="@color/white">
+          <RelativeLayout android:layout_width="70dp"
+                          android:layout_height="wrap_content">
+              <ImageView android:layout_width="60dp"
+                         android:layout_height="60dp"
+                         android:layout_marginTop="10dp"
+                         android:id="@+id/iv_group_member_img"
+                         android:scaleType="fitXY"
+                         android:visibility="invisible"
+                         android:src="@drawable/meinv"/>
+              <TextView android:layout_below="@+id/iv_group_member_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_member_name"
+                        android:textColor="@color/text_bg"
+                        android:textSize="14sp"
+                        android:visibility="invisible"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:text="111"/>
+              <ImageView android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:id="@+id/iv_unlock"
+                         android:visibility="invisible"
+                         android:layout_alignParentRight="true"
+                         android:src="@drawable/icon_undock"/>
+              <ImageView android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:id="@+id/iv_add_friends"
+                         android:layout_marginTop="10dp"
+                         android:src="@drawable/icon_addfriends"/>
+          </RelativeLayout>
+</LinearLayout>

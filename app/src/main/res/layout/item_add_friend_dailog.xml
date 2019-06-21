@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:tools="http://schemas.android.com/tools">
+    <ImageView
+            android:id="@+id/iv_arrow_choose_number"
+            android:layout_width="27px"
+            android:layout_height="27px"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_member_triangle"
+            android:layout_marginRight="30dp"
+            tools:visibility="visible" />
+    <LinearLayout android:layout_width="124dp"
+                  android:orientation="vertical"
+                  android:layout_alignParentRight="true"
+                  android:layout_marginRight="15dp"
+                  android:layout_below="@+id/iv_arrow_choose_number"
+                  android:background="@color/white"
+                  android:layout_height="wrap_content">
+       <RelativeLayout android:layout_width="match_parent"
+                       android:layout_height="40dp">
+                  <LinearLayout android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:orientation="horizontal">
+                        <ImageView android:layout_width="wrap_content"
+                                   android:layout_height="wrap_content"
+                                   android:src="@drawable/icon_friends_add"/>
+                      <TextView android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text="添加好友"/>
+                  </LinearLayout>
+       </RelativeLayout>
+        <ImageView  android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/white_theme"/>
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="40dp">
+            <LinearLayout android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_centerInParent="true"
+                          android:orientation="horizontal">
+                <ImageView android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:src="@drawable/icon_friends_creation"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_marginLeft="5dp"
+                          android:text="创建群聊"/>
+            </LinearLayout>
+        </RelativeLayout>
+        <ImageView  android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/white_theme"/>
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="40dp">
+            <LinearLayout android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_centerInParent="true"
+                          android:orientation="horizontal">
+                <ImageView android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:src="@drawable/icon_friends_richscan"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_marginLeft="5dp"
+                          android:text="扫一扫    "/>
+            </LinearLayout>
+        </RelativeLayout>
+        <ImageView  android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/white_theme"/>
+    </LinearLayout>
+</RelativeLayout>

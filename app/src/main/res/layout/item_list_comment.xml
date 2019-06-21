@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:descendantFocusability="blocksDescendants"
+             android:orientation="vertical">
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+        <ImageView android:layout_width="40dp"
+                   android:layout_marginTop="10dp"
+                   android:id="@+id/iv_host"
+                   android:scaleType="fitXY"
+                   android:layout_marginBottom="10dp"
+                   android:layout_marginLeft="15dp"
+                   android:src="@drawable/meinv"
+                   android:layout_height="40dp"/>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_centerVertical="true"
+                      android:layout_marginLeft="10dp"
+                      android:layout_toRightOf="@+id/iv_host"
+                      android:orientation="vertical">
+              <LinearLayout android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                       <TextView android:layout_width="wrap_content"
+                                 android:layout_height="wrap_content"
+                                 android:textColor="@color/text_bg"
+                                 android:id="@+id/tv_host"
+                                 android:textSize="14sp"
+                                 android:text="美女"/>
+                       <LinearLayout android:id="@+id/ll_dy_content"
+                                     android:orientation="horizontal"
+                                     android:layout_width="wrap_content"
+                                     android:layout_height="wrap_content">
+                       </LinearLayout>
+              </LinearLayout>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textSize="14sp"
+                      android:textColor="@color/important_instance"
+                      android:text="2019年6月11日"/>
+        </LinearLayout>
+    </RelativeLayout>
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="15dp"
+              android:layout_marginRight="15dp"
+              android:textSize="14sp"
+              android:lines="3"
+              android:ellipsize="end"
+              android:textColor="@color/text_bg"
+              android:text="11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"/>
+    <shopandclient.ssf.com.shopandclient.weiget.bananer.view.MyRecycleview
+            android:id="@+id/rv_show_img"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="wrap_content">
+    </shopandclient.ssf.com.shopandclient.weiget.bananer.view.MyRecycleview>
+    <LinearLayout android:layout_marginTop="5dp"
+                  android:id="@+id/comment_list"
+                  android:background="@color/white"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_marginLeft="15dp"
+                  android:layout_marginRight="15dp"
+                  android:layout_height="wrap_content">
+    </LinearLayout>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:paddingBottom="10dp"
+                      android:paddingTop="10dp"
+                      android:layout_alignParentRight="true"
+                      android:id="@+id/rl_zan"
+                      android:orientation="horizontal">
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="match_parent"
+                       android:src="@drawable/icon_goods_like"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_marginRight="15dp"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="5dp"
+                      android:text="点赞"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/rl_comment"
+                      android:onClick="inputComment"
+                      android:paddingBottom="10dp"
+                      android:paddingTop="10dp"
+                      android:layout_marginRight="10dp"
+                      android:layout_toLeftOf="@+id/rl_zan"
+                      android:orientation="horizontal">
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="match_parent"
+                       android:src="@drawable/icon_goods_comments"/>
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="5dp"
+                      android:text="评论"/>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

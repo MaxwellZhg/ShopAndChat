@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include layout="@layout/action_bar"/>
+    <shopandclient.ssf.com.shopandclient.weiget.bananer.view.FlingScrollDetailsLayout
+            android:id="@+id/drag_content"
+            android:layout_below="@+id/rl_action"
+            android:layout_marginBottom="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical"
+    >
+
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="false">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                <RelativeLayout android:layout_width="match_parent"
+                                android:layout_height="250dp">
+                    <shopandclient.ssf.com.shopandclient.weiget.bananer.Banner
+                            android:id="@+id/banner"
+                            app:image_scale_type="fit_xy"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                    </shopandclient.ssf.com.shopandclient.weiget.bananer.Banner>
+                    <RelativeLayout android:layout_width="60dp"
+                                    android:layout_height="30dp"
+                                    android:layout_marginRight="15dp"
+                                    android:layout_marginBottom="15dp"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentBottom="true"
+                                    android:background="@drawable/item_page_num_bg">
+                        <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:textColor="@color/white"
+                                  android:id="@+id/tv_count_page"
+                                  android:textSize="18sp"
+                                  android:layout_centerInParent="true"
+                                  android:text="1/5"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:layout_marginTop="10dp"
+                              android:orientation="horizontal">
+                    <RelativeLayout android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2">
+                        <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:textSize="18sp"
+                                  android:lines="2"
+                                  android:layout_marginLeft="15dp"
+                                  android:ellipsize="end"
+                                  android:textColor="@color/text_bg"
+                                  android:text="1111111111111111111111111111111111111111111111111111111111111"/>
+                    </RelativeLayout>
+                    <RelativeLayout android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1">
+                        <RelativeLayout android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true">
+                            <ImageView android:id="@+id/img_heart"
+                                       android:layout_width="wrap_content"
+                                       android:layout_height="wrap_content"
+                                       android:background="@drawable/icon_store_like"/>
+                            <TextView android:id="@+id/tv_store_like"
+                                      android:layout_toRightOf="@+id/img_heart"
+                                      android:layout_marginLeft="5dp"
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:textColor="@color/tv_price_color"
+                                      android:text="10978人赞过"/>
+                        </RelativeLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp">
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textSize="18sp"
+                              android:layout_alignParentLeft="true"
+                              android:layout_marginLeft="15dp"
+                              android:textStyle="bold"
+                              android:textColor="@color/tv_price_color"
+                              android:text="¥186"/>
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:layout_alignParentRight="true"
+                              android:layout_marginRight="15dp"
+                              android:textSize="14sp"
+                              android:textColor="@color/important_instance"
+                              android:text="月销量:108件"/>
+                </RelativeLayout>
+                <ImageView android:layout_width="match_parent"
+                           android:layout_height="10dp"
+                           android:background="@color/light_gray_color"/>
+            </LinearLayout>
+        </ScrollView>
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <android.support.design.widget.TabLayout
+                    android:id="@+id/tablayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:tabBackground="@color/white"
+                    app:tabTextAppearance="@style/TabLayoutTextStyle"
+                    app:tabTextColor="@color/text_bg"
+                    app:tabSelectedTextColor="@color/password_tips"
+                    app:tabIndicatorColor="@color/password_tips">
+
+            </android.support.design.widget.TabLayout>
+            <ImageView android:layout_width="match_parent"
+                       android:layout_height="0.5dp"
+                       android:background="@color/white_theme"/>
+            <shopandclient.ssf.com.shopandclient.weiget.bananer.view.NoneScrollViewPager
+                    android:id="@+id/viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+            </shopandclient.ssf.com.shopandclient.weiget.bananer.view.NoneScrollViewPager>
+        </LinearLayout>
+
+
+    </shopandclient.ssf.com.shopandclient.weiget.bananer.view.FlingScrollDetailsLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="50dp"
+                  android:background="@color/white"
+                  android:orientation="horizontal"
+                  android:layout_alignParentBottom="true">
+        <RelativeLayout android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/rl_homeshop"
+                        android:padding="10dp">
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/icon_shophomepage"/>
+        </RelativeLayout>
+        <RelativeLayout android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/rl_service"
+                        android:layout_gravity="center_vertical"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/rl_homeshop"
+                        android:padding="10dp">
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/icon_service"/>
+        </RelativeLayout>
+        <RelativeLayout android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/rl_service"
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/rl_collect"
+                        android:padding="10dp">
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/icon_collect"/>
+        </RelativeLayout>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="40dp"
+                      android:layout_gravity="center_vertical"
+                      android:orientation="horizontal"
+                      android:layout_marginRight="15dp"
+                      android:layout_marginLeft="15dp"
+                      android:background="@drawable/add_shop_btn_bg">
+            <RelativeLayout android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:id="@+id/rl_add_into_shop"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginBottom="1dp"
+                            android:layout_marginLeft="1dp"
+                            android:background="@drawable/add_into_shopcart"
+                            android:layout_weight="1">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textColor="@color/brands_detail_btn_color"
+                          android:layout_centerInParent="true"
+                          android:textStyle="bold"
+                          android:textSize="14sp"
+                          android:text="加入购物车"/>
+            </RelativeLayout>
+            <RelativeLayout android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:id="@+id/limmit_buyer"
+                            android:background="@drawable/limite_buyer"
+                            android:layout_height="match_parent">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textStyle="bold"
+                          android:textSize="14sp"
+                          android:layout_centerInParent="true"
+                          android:textColor="@color/white"
+                          android:text="立即购买"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

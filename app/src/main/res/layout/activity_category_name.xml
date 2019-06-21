@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
+        <include layout="@layout/action_bar"/>
+       <LinearLayout android:layout_width="match_parent"
+                     android:layout_height="35dp"
+                     android:orientation="horizontal"
+                     android:background="@color/light_gray_color">
+           <RelativeLayout android:layout_width="0dp"
+                           android:id="@+id/rl_select_time"
+                           android:layout_height="match_parent"
+                           android:layout_weight="1">
+                          <RelativeLayout android:layout_width="wrap_content"
+                                          android:layout_height="wrap_content"
+                                          android:layout_centerInParent="true">
+                                          <TextView android:id="@+id/select_time"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:textSize="14sp"
+                                                    android:textColor="@color/text_bg"
+                                                    android:text="@string/select_time"/>
+                                         <ImageView android:id="@+id/iv_select_time"
+                                                  android:layout_toRightOf="@+id/select_time"
+                                                    android:layout_centerVertical="true"
+                                                    android:layout_width="15dp"
+                                                    android:layout_height="15dp"
+                                                    android:src="@drawable/little_down"/>
+                          </RelativeLayout>
+           </RelativeLayout>
+           <RelativeLayout android:layout_width="0dp"
+                           android:id="@+id/rl_select_sale_num"
+                           android:layout_height="match_parent"
+                           android:layout_weight="1">
+               <RelativeLayout android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:layout_centerInParent="true">
+                   <TextView android:id="@+id/select_sale_num"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:textSize="14sp"
+                             android:textColor="@color/text_bg"
+                             android:text="@string/select_sale_num"/>
+                   <ImageView android:id="@+id/iv_select_sale_num"
+                             android:layout_toRightOf="@+id/select_sale_num"
+                              android:layout_centerVertical="true"
+                              android:layout_width="15dp"
+                              android:layout_height="15dp"
+                              android:src="@drawable/little_down"/>
+               </RelativeLayout>
+           </RelativeLayout>
+           <RelativeLayout android:layout_width="0dp"
+                           android:id="@+id/rl_select_sale_price"
+                           android:layout_height="match_parent"
+                           android:layout_weight="1">
+               <RelativeLayout android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:layout_centerInParent="true">
+                   <TextView android:id="@+id/select_sale_price"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:textSize="14sp"
+                             android:textColor="@color/text_bg"
+                             android:text="@string/select_sale_price"/>
+                   <ImageView
+                           android:id="@+id/iv_select_sale_price"
+                           android:layout_toRightOf="@+id/select_sale_price"
+                              android:layout_centerVertical="true"
+                              android:layout_width="15dp"
+                              android:layout_height="15dp"
+                              android:src="@drawable/little_down"/>
+               </RelativeLayout>
+           </RelativeLayout>
+       </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+                                          android:id="@+id/rv_brands_name"
+                                           android:layout_width="match_parent"
+                                            android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

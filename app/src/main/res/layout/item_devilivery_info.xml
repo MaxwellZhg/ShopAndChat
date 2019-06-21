@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             android:layout_width="match_parent"
+                                             android:background="@color/white"
+                                             android:orientation="vertical"
+                                             android:layout_height="wrap_content">
+<RelativeLayout android:layout_width="match_parent"
+                android:layout_height="85dp">
+    <ImageView android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_centerVertical="true"
+               android:layout_marginLeft="15dp"
+               android:id="@+id/iv_express"
+               android:src="@drawable/icon_express"/>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/ll_devilivery"
+                  android:layout_centerVertical="true"
+                  android:layout_toRightOf="@+id/iv_express"
+                  android:layout_toLeftOf="@+id/iv_right"
+                  android:layout_marginLeft="15dp"
+                  android:layout_marginRight="15dp"
+                  android:orientation="vertical">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="@color/password_tips"
+                  android:lines="2"
+                 android:text="最新快递信息最新快递信息最新快递信息最新快递信息最新快递信息最新快递信息最新快递信息"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="5dp"
+                  android:textColor="@color/important_instance"
+                  android:text="2019-06-10  10:20:59"/>
+    </LinearLayout>
+    <ImageView android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_centerVertical="true"
+               android:layout_marginRight="15dp"
+               android:id="@+id/iv_right"
+               android:layout_alignParentRight="true"
+               android:src="@drawable/icon_right"/>
+</RelativeLayout>
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="10dp"
+               android:background="@color/white_theme"/>
+</LinearLayout>

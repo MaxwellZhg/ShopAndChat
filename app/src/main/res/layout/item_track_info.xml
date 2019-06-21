@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+
+                android:layout_width="match_parent"
+                android:background="@color/white"
+                android:layout_height="80dp" >
+
+<RelativeLayout android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:id="@+id/rl_time_info"
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="10dp">
+    <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:text="11111"
+            android:textColor="@color/important_instance"/>
+    <TextView
+
+            android:id="@+id/tv_time"
+            android:layout_below="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:text="11111"
+            android:textColor="@color/important_instance"/>
+</RelativeLayout>
+
+
+
+    <shopandclient.ssf.com.shopandclient.weiget.bananer.view.TimeLineMarkerView
+            android:id="@+id/tv_timelineview"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_toRightOf="@+id/rl_time_info"
+            android:layout_marginLeft="5dp"
+            app:beginLine="@color/line_color"
+            app:endLine="@color/line_color"
+            app:marker="@drawable/icon_logistics_transport_gray"
+            app:lineSize="0.5dp"
+            app:markerSize="15dp" />
+
+    <TextView
+
+            android:id="@+id/tv_content"
+
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+
+            android:gravity="center_vertical"
+
+            android:layout_toRightOf="@+id/tv_timelineview"
+            android:layout_marginLeft="10dp"
+
+            android:layout_centerVertical="true"
+
+            android:textColor="@color/important_instance"/>
+
+</RelativeLayout>

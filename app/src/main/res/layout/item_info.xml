@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:layout_height="wrap_content">
+   <RelativeLayout android:layout_width="match_parent"
+                   android:layout_height="60dp">
+       <ImageView android:layout_width="48dp"
+                  android:layout_height="48dp"
+                  android:layout_marginLeft="15dp"
+                  android:id="@+id/iv_chat_info"
+                  android:layout_centerVertical="true"
+                  android:layout_alignParentLeft="true"
+                  android:scaleType="fitXY"
+                  android:src="@drawable/meinv"/>
+       <RelativeLayout android:layout_toRightOf="@+id/iv_chat_info"
+                       android:layout_toLeftOf="@+id/tv_info_tips"
+                       android:layout_marginLeft="10dp"
+                       android:layout_width="wrap_content"
+                       android:layout_height="match_parent">
+                     <LinearLayout android:layout_width="wrap_content"
+                                   android:layout_height="wrap_content"
+                                   android:layout_centerVertical="true"
+                                   android:orientation="vertical">
+                         <TextView android:layout_width="wrap_content"
+                                   android:layout_height="wrap_content"
+                                   android:id="@+id/tv_host_name"
+                                   android:textColor="@color/text_bg"
+                                   android:textSize="14sp"
+                                   android:text="美女"/>
+                         <TextView android:layout_width="wrap_content"
+                                   android:layout_height="wrap_content"
+                                   android:lines="1"
+                                   android:ellipsize="end"
+                                   android:layout_marginTop="15dp"
+                                   android:textColor="@color/important_instance"
+                                   android:text="iqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"/>
+                     </LinearLayout>
+       </RelativeLayout>
+    <TextView android:layout_width="15dp"
+              android:layout_height="15dp"
+              android:layout_alignParentRight="true"
+              android:textColor="@color/white"
+              android:layout_marginTop="10dp"
+              android:id="@+id/tv_info_tips"
+              android:layout_marginRight="15dp"
+              android:gravity="center"
+              android:text="1"
+              android:background="@drawable/info_tips_bg"/>
+   </RelativeLayout>
+    <ImageView android:layout_width="match_parent"
+               android:background="@color/white_theme"
+               android:layout_height="0.5dp"/>
+</LinearLayout>

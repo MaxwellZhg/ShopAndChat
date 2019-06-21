@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical"
+              android:layout_height="wrap_content">
+  <RelativeLayout android:layout_width="match_parent"
+                  android:layout_height="90dp">
+     <ImageView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:id="@+id/recept"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/icon_receipt"/>
+      <LinearLayout android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/recept"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:orientation="vertical">
+          <RelativeLayout android:layout_width="wrap_content"
+                          android:layout_height="wrap_content">
+           <TextView android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:id="@+id/tv_recept_name"
+                     android:textColor="@color/text_bg"
+                     android:textSize="14sp"
+                     android:text="习近平"/>
+              <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:textSize="14sp"
+                        android:layout_toRightOf="@+id/tv_recept_name"
+                        android:textColor="@color/important_instance"
+                        android:text="18257193609"/>
+          </RelativeLayout>
+          <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_bg"
+                    android:textSize="14sp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="5dp"
+                    android:text="北京市东城区西长安街1号中南海紫光阁习主席办公室收"
+                    android:lines="2"/>
+      </LinearLayout>
+  </RelativeLayout>
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="10dp"
+               android:background="@color/white_theme"/>
+</LinearLayout>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:background="@color/white">
+<RelativeLayout android:layout_width="match_parent"
+                android:layout_height="100dp">
+    <ImageView android:layout_width="80dp"
+               android:layout_height="80dp"
+               android:id="@+id/iv_goods"
+               android:src="@drawable/meinv"
+               android:scaleType="fitXY"
+               android:layout_alignParentLeft="true"
+               android:layout_marginLeft="15dp"
+               android:layout_centerVertical="true"
+    />
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_centerVertical="true"
+                 android:layout_marginRight="15dp"
+                  android:layout_marginLeft="15dp"
+                  android:layout_toRightOf="@+id/iv_goods"
+                  android:orientation="vertical">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="14sp"
+                  android:id="@+id/tv_title"
+                  android:textColor="@color/text_bg"
+                  android:lines="2"
+                 android:text="友个人信息中若已为好友底部只显示立即聊天，若不为好友底部只显示添加好友，点击三个操作列表都显示还不是好友不能进行此操作"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="@color/tv_price_color"
+                  android:textStyle="bold"
+                  android:layout_marginTop="15dp"
+                  android:textSize="18sp"
+                 android:text="¥186"/>
+    </LinearLayout>
+</RelativeLayout>
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="0.5dp"
+               android:layout_marginLeft="15dp"
+               android:layout_marginRight="15dp"
+               android:background="@color/line_color"/>
+</LinearLayout>

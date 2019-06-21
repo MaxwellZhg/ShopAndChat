@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+           <include layout="@layout/action_bar"/>
+    <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="50dp"
+            android:layout_marginTop="50dp"
+            android:divider="@null"
+            android:scrollbars="none"
+            android:overScrollMode="never"
+            android:id="@+id/lv_order_detail">
+    </ListView>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/white">
+       <TextView android:layout_width="60dp"
+                 android:layout_height="25dp"
+                 android:text="去支付"
+                 android:layout_alignParentRight="true"
+                 android:layout_centerVertical="true"
+                 android:layout_marginRight="15dp"
+                 android:id="@+id/gotopay"
+                 android:textColor="@color/password_tips"
+                 android:textSize="14sp"
+                 android:gravity="center"
+               android:background="@drawable/item_gotopay_bg"/>
+        <TextView android:layout_width="60dp"
+                  android:layout_height="25dp"
+                  android:text="退款"
+                  android:id="@+id/retery"
+                  android:layout_toLeftOf="@+id/gotopay"
+                  android:layout_centerVertical="true"
+                  android:layout_marginRight="15dp"
+                  android:textColor="@color/important_instance"
+                  android:textSize="14sp"
+                  android:gravity="center"
+                  android:background="@drawable/item_default_gotopay_bg"/>
+        <TextView android:layout_width="65dp"
+                  android:layout_height="25dp"
+                  android:text="在线客服"
+                  android:layout_toLeftOf="@+id/retery"
+                  android:layout_centerVertical="true"
+                  android:layout_marginRight="15dp"
+                  android:textColor="@color/important_instance"
+                  android:textSize="14sp"
+                  android:gravity="center"
+                  android:background="@drawable/item_default_gotopay_bg"/>
+    </RelativeLayout>
+</RelativeLayout>

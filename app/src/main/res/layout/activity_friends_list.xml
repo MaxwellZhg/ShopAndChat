@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:orientation="vertical"
+                android:background="@color/white">
+    <include layout="@layout/action_bar"/>
+    <ListView android:id="@+id/lv_friends_list"
+              android:layout_below="@+id/rl_action"
+              android:scrollbars="none"
+              android:overScrollMode="never"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    </ListView>
+    <shopandclient.ssf.com.shopandclient.weiget.bananer.view.QuickIndexBar
+            android:id="@+id/quickindexbar"
+            android:layout_width="25dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="100dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            app:text_normal_color="#858585"
+            app:text_press_color="#000000"
+            app:text_size="12sp" />
+</RelativeLayout>

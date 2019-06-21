@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
+          <include layout="@layout/action_bar"/>
+  <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+              <ImageView android:layout_width="30dp"
+                        android:layout_height="30dp"
+                         android:scaleType="fitXY"
+                         android:layout_gravity="center_vertical"
+                         android:src="@drawable/meinv"/>
+               <TextView android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textColor="@color/text_bg"
+                         android:layout_marginLeft="5dp"
+                         android:textSize="14sp"
+                         android:layout_gravity="center_vertical"
+                         android:text="描述相符"/>
+      <android.support.v7.widget.RecyclerView android:layout_width="0dp"
+                                              android:id="@+id/rv_start"
+                                              android:layout_height="wrap_content"
+                                              android:layout_gravity="center_vertical"
+                                              android:layout_marginLeft="5dp"
+                                              android:layout_marginRight="5dp"
+                                              android:layout_weight="3">
+      </android.support.v7.widget.RecyclerView>
+      <TextView android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:id="@+id/tv_comment"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/important_instance"/>
+  </LinearLayout>
+    <ImageView android:layout_width="match_parent"
+               android:background="@color/white_theme"
+               android:layout_marginLeft="15dp"
+               android:layout_marginRight="15dp"
+               android:layout_marginTop="10dp"
+               android:layout_height="0.5dp"/>
+    <EditText android:layout_width="match_parent"
+              android:hint="输入你对该宝贝的购买心得吧"
+              android:layout_marginLeft="15dp"
+              android:layout_marginRight="15dp"
+              android:textSize="14sp"
+              android:gravity="top"
+              android:background="@null"
+              android:layout_height="90dp"/>
+    <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:overScrollMode="never"
+            android:id="@+id/rv_photo"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

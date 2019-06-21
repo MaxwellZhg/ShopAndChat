@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="text_bg">#000000</color>
+    <color name="theme_bg">#b7f0ee</color>
+    <color name="white">#ffffff</color>
+    <color name="credit_level">#00c1bf</color>
+    <color name="member_ship">#c7c7c7</color>
+    <color name="important_line">#ff8c34</color>
+    <color name="important_instance">#858585</color>
+    <color name="line_color">#dedede</color>
+    <color name="password_tips">#1ac4b7</color>
+    <color name="light_gray_color">#f9f9f9</color>
+    <color name="tv_price_color">#de483c</color>
+    <color name="half_translate">#686566</color>
+    <color name="brands_detail_btn_color">#e76151</color>
+    <color name="attrbute_uncheck_bg">#f7f7fa</color>
+    <color name="add_into_cart_bg">#eb6f60</color>
+    <color name="white_theme">#f5f5f5</color>
+    <color name="swipe_detele">#FF4A57</color>
+    <color name="retery_state_color">#ff7308</color>
+    <color name="blue">#33b5e5</color>
+    <color name="person_center_color">#f2f2f2</color>
+    <color name="level_color">#fdaf3e</color>
+    <color name="chat_like_color">#f46567</color>
+</resources>
