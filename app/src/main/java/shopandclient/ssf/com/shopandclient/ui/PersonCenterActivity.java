@@ -1,6 +1,7 @@
 package shopandclient.ssf.com.shopandclient.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -10,10 +11,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.jaeger.library.StatusBarUtil;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
+import shopandclient.ssf.com.shopandclient.entity.AddUserResult;
+import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
+import shopandclient.ssf.com.shopandclient.net.services.UserService;
+import shopandclient.ssf.com.shopandclient.util.SpConfig;
 
 /**
  * Created by zhg on 2019/6/18.
@@ -85,6 +93,7 @@ public class PersonCenterActivity extends BaseActivity implements BaseBiz {
                 openActivity(AddressActivity.class);
                 break;
             case R.id.rl_login_out:
+                loginOut();
                 break;
             case R.id.rl_btn_back:
                 finish();
@@ -93,6 +102,24 @@ public class PersonCenterActivity extends BaseActivity implements BaseBiz {
                 openActivity(UserCenterActivity.class);
                 break;
         }
+    }
+
+    public void loginOut(){
+        UserService userService = RetrofitHandle.getInstance().retrofit.create(UserService.class);
+        Call<AddUserResult> call=userService.loginOut();
+        call.enqueue(new Callback<AddUserResult>() {
+            @Override
+            public void onResponse(Call<AddUserResult> call, Response<AddUserResult> response) {
+                Log.e("ttttttttt",response.body().getResult().toString());
+                SpConfig.getInstance().putBool("isLogin",false);
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<AddUserResult> call, Throwable t) {
+
+            }
+        });
     }
 
 

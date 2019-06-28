@@ -8,9 +8,17 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.*;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Body;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.entity.Comment;
-import shopandclient.ssf.com.shopandclient.entity.User;
+import shopandclient.ssf.com.shopandclient.entity.CommentParams;
+import shopandclient.ssf.com.shopandclient.entity.CommentUser;
+import shopandclient.ssf.com.shopandclient.entity.PostComment;
+import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
+import shopandclient.ssf.com.shopandclient.net.services.ProductService;
 
 import java.util.ArrayList;
 
@@ -83,8 +91,8 @@ public class CommentFun {
      * 弹出评论对话框
      */
     public static void inputComment(final Activity activity, final ListView listView,
-                                    final View btnComment, final User receiver,
-                                    final InputCommentListener listener) {
+                                    final View btnComment, final CommentUser receiver,
+                                    final InputCommentListener listener, final int proId, final int commentId) {
 
         final ArrayList<Comment> commentList = (ArrayList) btnComment.getTag(KEY_COMMENT_SOURCE_COMMENT_LIST);
 
@@ -118,13 +126,7 @@ public class CommentFun {
                 }
                 btn.setClickable(false);
                 final long receiverId = receiver == null ? -1 : receiver.mId;
-                Comment comment = new Comment(new User(1, "用户自己"), content, receiver);
-                commentList.add(comment);
-                if (listener != null) {
-                    listener.onCommitComment();
-                }
-                dialog.dismiss();
-                Toast.makeText(activity, "评论成功", Toast.LENGTH_SHORT).show();
+                postCommentData(proId,commentId,content,dialog,commentList,listener,receiver,activity);
             }
 
             /**
@@ -211,6 +213,36 @@ public class CommentFun {
         void onShow(int[] inputViewCoordinatesOnScreen);
 
         void onDismiss();
+    }
+    public static void postCommentData(int proId, int commentId, final String commentstr, final Dialog dialog, final ArrayList<Comment> commentList, final InputCommentListener listener, final CommentUser receiver, final Activity activity){
+        ProductService service=RetrofitHandle.getInstance().retrofit.create(ProductService.class);
+        Call<PostComment> call=service.postCommentInfo(new CommentParams(proId,commentstr,commentId));
+        call.enqueue(new Callback<PostComment>() {
+            @Override
+            public void onResponse(Call<PostComment> call, Response<PostComment> response) {
+                if (response.body().getCode() == 200) {
+                    if (!response.body().getResult().contains("不能频繁操作，30分钟后再评论")) {
+                        Comment comment = new Comment(new CommentUser(1, "用户自己"), commentstr, receiver);
+                        commentList.add(comment);
+                        if (listener != null) {
+                            listener.onCommitComment();
+                        }
+                        dialog.dismiss();
+                        Toast.makeText(activity, "评论成功", Toast.LENGTH_SHORT).show();
+
+                    }else{
+                        dialog.dismiss();
+                        Toast.makeText(activity, response.body().getResult(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostComment> call, Throwable t) {
+
+            }
+        });
+
     }
 
 }

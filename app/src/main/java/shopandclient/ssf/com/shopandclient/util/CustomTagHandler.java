@@ -10,7 +10,7 @@ import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import org.xml.sax.XMLReader;
 import shopandclient.ssf.com.shopandclient.R;
-import shopandclient.ssf.com.shopandclient.entity.User;
+import shopandclient.ssf.com.shopandclient.entity.CommentUser;
 
 import java.util.HashMap;
 
@@ -42,7 +42,7 @@ public class CustomTagHandler implements Html.TagHandler {
             @Override
             public void onClick(View widget) {
             /*    if (listener != null) {
-                    User user = (User) widget.getTag(KEY_COMMENTATOR);
+                    CommentUser user = (CommentUser) widget.getTag(KEY_COMMENTATOR);
                     listener.onCommentatorClick(widget, user);
                 }*/
             }
@@ -51,7 +51,7 @@ public class CustomTagHandler implements Html.TagHandler {
             @Override
             public void onClick(View widget) {
              /*   if (listener != null) {
-                    User user = (User) widget.getTag(KEY_RECEIVER);
+                    CommentUser user = (CommentUser) widget.getTag(KEY_RECEIVER);
                     listener.onReceiverClick(widget, user);
                 }*/
             }
@@ -65,8 +65,8 @@ public class CustomTagHandler implements Html.TagHandler {
             @Override
             public void onClick(View widget) {
              /*   if (listener != null) {
-                    User commentator = (User) widget.getTag(KEY_COMMENTATOR);
-                    User receiver = (User) widget.getTag(KEY_RECEIVER);
+                    CommentUser commentator = (CommentUser) widget.getTag(KEY_COMMENTATOR);
+                    CommentUser receiver = (CommentUser) widget.getTag(KEY_RECEIVER);
                     listener.onContentClick(widget, commentator, receiver);
                 }*/
             }
@@ -142,13 +142,13 @@ public class CustomTagHandler implements Html.TagHandler {
 
     public interface OnCommentClickListener {
         // 点击评论者
-        void onCommentatorClick(View view, User commentator);
+        void onCommentatorClick(View view, CommentUser commentator);
 
         // 点击接收者
-        void onReceiverClick(View view, User receiver);
+        void onReceiverClick(View view, CommentUser receiver);
 
         //　点击评论内容
-        void onContentClick(View view, User commentator, User receiver);
+        void onContentClick(View view, CommentUser commentator, CommentUser receiver);
 
     }
 }

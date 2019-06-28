@@ -101,7 +101,7 @@ public class StreetActivity extends BaseActivity implements BaseBiz,AdapterView.
         brandDetails.add(new StreetBean("苍井空2", R.drawable.meinv2));
         brandDetails.add(new StreetBean("苍井空1", R.drawable.meinv3));
         gvStreet.addHeaderView(header);
-        StreetAdapter streetAdapter = new StreetAdapter(this, brandDetails);
+        StreetAdapter streetAdapter = new StreetAdapter(this);
         gvStreet.setAdapter(streetAdapter);
         gvStreet.setOnItemClickListener(this);
     }

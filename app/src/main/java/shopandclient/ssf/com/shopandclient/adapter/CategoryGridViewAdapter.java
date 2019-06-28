@@ -18,11 +18,10 @@ import java.util.ArrayList;
  */
 public class CategoryGridViewAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<BrandDetail> brandDetails;
+    private ArrayList<BrandDetail> brandDetails =new ArrayList<>();
 
-    public CategoryGridViewAdapter(Context context, ArrayList<BrandDetail> brandDetails) {
+    public CategoryGridViewAdapter(Context context) {
         this.context = context;
-        this.brandDetails = brandDetails;
     }
 
     @Override
@@ -59,5 +58,12 @@ public class CategoryGridViewAdapter extends BaseAdapter {
     class ViewHodler{
         private ImageView iv_goods;
         private TextView tv_brands_name;
+    }
+
+    public void getData(ArrayList<BrandDetail> brandDetails){
+        this.brandDetails.addAll(brandDetails);
+    }
+    public void clearData(){
+        brandDetails.clear();
     }
 }

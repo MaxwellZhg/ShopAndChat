@@ -1,3 +1,4 @@
+/*
 package shopandclient.ssf.com.shopandclient.ui;
 
 import android.app.Dialog;
@@ -31,9 +32,11 @@ import shopandclient.ssf.com.shopandclient.util.ScreenDipUtil;
 import java.util.ArrayList;
 import java.util.Timer;
 
+*/
 /**
  * Created by zhg on 2019/6/3.
- */
+ *//*
+
 public class BrandsDetailActivity extends BaseActivity implements BaseBiz, AttrAdapter.OnitemClick {
     @BindView(R.id.rv_brands_detail)
     RecyclerView rvBrandsDetail;
@@ -103,9 +106,11 @@ public class BrandsDetailActivity extends BaseActivity implements BaseBiz, AttrA
         rvBrandsDetail.setAdapter(shopDetailAdapter);
     }
 
-    /**
+    */
+/**
      * 显示弹出框
-     */
+     *//*
+
     private void showDialog() {
         if (mShareDialog == null) {
             initShareDialog();
@@ -113,9 +118,11 @@ public class BrandsDetailActivity extends BaseActivity implements BaseBiz, AttrA
         mShareDialog.show();
     }
 
-    /**
+    */
+/**
      * 初始化分享弹出框
-     */
+     *//*
+
     private void initShareDialog() {
         mShareDialog = new Dialog(this, R.style.dialog_bottom_full);
         mShareDialog.setCanceledOnTouchOutside(false); //手指触碰到外界取消
@@ -162,8 +169,10 @@ public class BrandsDetailActivity extends BaseActivity implements BaseBiz, AttrA
             }
         });
         rv_attr.setLayoutManager(new GridLayoutManager(this, 3));
-        attrAdapter = new AttrAdapter(this, attrs);
-        attrAdapter.setOnitemClickLintener(this);
+       */
+/* attrAdapter = new AttrAdapter(this, attrs);
+        attrAdapter.setOnitemClickLintener(this);*//*
+
         rv_attr.addItemDecoration(new MyPaddingDecoration(this));
         rv_attr.setAdapter(attrAdapter);
         view.findViewById(R.id.cancle).setOnClickListener(new View.OnClickListener() {
@@ -202,3 +211,4 @@ public class BrandsDetailActivity extends BaseActivity implements BaseBiz, AttrA
         }
     }
 }
+*/

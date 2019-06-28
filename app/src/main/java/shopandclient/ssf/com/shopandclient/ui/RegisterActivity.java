@@ -2,10 +2,10 @@ package shopandclient.ssf.com.shopandclient.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,12 +13,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import com.jaeger.library.StatusBarUtil;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
+import shopandclient.ssf.com.shopandclient.entity.AddUser;
+import shopandclient.ssf.com.shopandclient.entity.AddUserResult;
+import shopandclient.ssf.com.shopandclient.entity.SendCodeBean;
+import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
+import shopandclient.ssf.com.shopandclient.net.services.UserService;
+import shopandclient.ssf.com.shopandclient.util.MD5Utils;
+import shopandclient.ssf.com.shopandclient.util.SpConfig;
 import shopandclient.ssf.com.shopandclient.util.ToastUtil;
 
 import java.util.Timer;
@@ -173,6 +182,7 @@ public class RegisterActivity extends BaseActivity implements BaseBiz, TextWatch
                         e.printStackTrace();
                     }
                 }
+                getSendCode();
                 break;
             case R.id.cancle:
                 etPhone.setText("");
@@ -228,6 +238,7 @@ public class RegisterActivity extends BaseActivity implements BaseBiz, TextWatch
                     ToastUtil.showToast(this, "请输入验证码");
                     return;
                 }
+                addUser(mPhone,mPswd,mCode);
                 break;
         }
 
@@ -262,6 +273,48 @@ public class RegisterActivity extends BaseActivity implements BaseBiz, TextWatch
         Intent intent = new Intent();
         intent.setClass(MyApplication.getInstance().mContext, clazz);
         startActivity(intent);
+    }
+
+    public void getSendCode(){
+        UserService userService = RetrofitHandle.getInstance().retrofit.create(UserService.class);
+        Call<SendCodeBean> call = userService.getSendCode(etPhone.getText().toString().trim());
+        call.enqueue(new Callback<SendCodeBean>() {
+            @Override
+            public void onResponse(Call<SendCodeBean> call, Response<SendCodeBean> response) {
+                Log.e("ttttttt",response.body().toString());
+                et_credit_num.setText(response.body().getData().getCode());
+            }
+
+            @Override
+            public void onFailure(Call<SendCodeBean> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void addUser(String phone ,String psw,String code){
+        UserService userService = RetrofitHandle.getInstance().retrofit.create(UserService.class);
+
+        String mdPsw=MD5Utils.MD5Encode(psw,"utf-8");
+
+        SpConfig.getInstance().putString("psw",psw);
+        Call<AddUserResult> call =userService.addRegisteryUser(new AddUser(phone, SpConfig.getInstance().getString("mdpsw"),code));
+        call.enqueue(new Callback<AddUserResult>() {
+            @Override
+            public void onResponse(Call<AddUserResult> call, Response<AddUserResult> response) {
+                if(response.body().getCode()==200) {
+                    ToastUtil.showToast(mContext, "注册成功");
+                    luancherLogin(LoginActivity.class);
+                }else{
+                    ToastUtil.showToast(mContext, "用户已存在");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddUserResult> call, Throwable t) {
+
+            }
+        });
     }
 
 }

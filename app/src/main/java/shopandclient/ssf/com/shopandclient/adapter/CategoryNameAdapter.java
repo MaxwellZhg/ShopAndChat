@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.entity.CatetogryBrandName;
+import shopandclient.ssf.com.shopandclient.entity.ProductListBean;
 
 import java.util.ArrayList;
 
@@ -18,9 +19,9 @@ import java.util.ArrayList;
  */
 public class CategoryNameAdapter extends RecyclerView.Adapter {
     private Context context;
-    private ArrayList<CatetogryBrandName> catetogryBrandNames;
+    private ArrayList<ProductListBean.DataBean.ListBean> catetogryBrandNames;
     private CategoryAdapter.OnitemClick onitemClick;   //定义点击事件接口
-    public CategoryNameAdapter(Context context, ArrayList<CatetogryBrandName> catetogryBrandNames) {
+    public CategoryNameAdapter(Context context, ArrayList<ProductListBean.DataBean.ListBean> catetogryBrandNames) {
         this.context = context;
         this.catetogryBrandNames = catetogryBrandNames;
     }
@@ -59,9 +60,8 @@ public class CategoryNameAdapter extends RecyclerView.Adapter {
             rl_category=(RelativeLayout)itemView.findViewById(R.id.rl_category);
         }
         public void setData(final int position){
-            img_brands.setImageResource(catetogryBrandNames.get(position).getResid());
-            tv_brands_title.setText(catetogryBrandNames.get(position).getBrandsname());
-            tv_brands_tips.setText(catetogryBrandNames.get(position).getTips());
+            tv_brands_title.setText(catetogryBrandNames.get(position).getProName());
+            tv_brands_tips.setText(catetogryBrandNames.get(position).getRemark());
             if (onitemClick != null) {
                 rl_category.setOnClickListener(new View.OnClickListener() {
                     @Override

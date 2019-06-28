@@ -10,6 +10,7 @@ import android.widget.TextView;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.Brands;
+import shopandclient.ssf.com.shopandclient.entity.Prosirers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +20,9 @@ import java.util.List;
  */
 public class CategoryAdapter extends RecyclerView.Adapter {
     private Context context;
-    private ArrayList<Brands> brands;
+    private ArrayList<Prosirers.DataBean> brands;
     private OnitemClick onitemClick;   //定义点击事件接口
-    public CategoryAdapter(Context context, ArrayList<Brands> brands) {
+    public CategoryAdapter(Context context, ArrayList<Prosirers.DataBean> brands) {
         this.context=context;
         this.brands=brands;
     }
@@ -40,14 +41,14 @@ public class CategoryAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if(brands.get(position).getType()==2) {
+        if(brands.get(position).isSelect()==true) {
             ((BrandsViewHolder) holder). tv_category.setTextColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
             ((BrandsViewHolder) holder). iv_cent.setBackgroundColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
         }else{
              ((BrandsViewHolder) holder).tv_category.setTextColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.text_bg));
             ((BrandsViewHolder) holder).iv_cent.setBackgroundColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.white));
         }
-        ((BrandsViewHolder) holder).tv_category.setText(brands.get(position).getName());
+        ((BrandsViewHolder) holder).tv_category.setText(brands.get(position).getTypename());
         if (onitemClick != null) {
             ((BrandsViewHolder) holder).tv_category.setOnClickListener(new View.OnClickListener() {
                 @Override

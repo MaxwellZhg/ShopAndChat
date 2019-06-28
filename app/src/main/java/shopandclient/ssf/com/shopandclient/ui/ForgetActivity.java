@@ -3,18 +3,32 @@ package shopandclient.ssf.com.shopandclient.ui;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.jaeger.library.StatusBarUtil;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
+import shopandclient.ssf.com.shopandclient.entity.AddUser;
+import shopandclient.ssf.com.shopandclient.entity.AddUserResult;
+import shopandclient.ssf.com.shopandclient.entity.SendCodeBean;
+import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
+import shopandclient.ssf.com.shopandclient.net.services.UserService;
+import shopandclient.ssf.com.shopandclient.util.MD5Utils;
+import shopandclient.ssf.com.shopandclient.util.SpConfig;
+import shopandclient.ssf.com.shopandclient.util.ToastUtil;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -31,6 +45,28 @@ public class ForgetActivity extends BaseActivity implements BaseBiz, TextWatcher
     @BindView(R.id.tv_getcredit)
     TextView tvGetcredit;
     Timer timer;
+    @BindView(R.id.iv_back)
+    ImageView ivBack;
+    @BindView(R.id.rl_btn_back)
+    RelativeLayout rlBtnBack;
+    @BindView(R.id.tv_center_title)
+    TextView tvCenterTitle;
+    @BindView(R.id.rl_btn_scope)
+    RelativeLayout rlBtnScope;
+    @BindView(R.id.rl_action)
+    RelativeLayout rlAction;
+    @BindView(R.id.rl_add_tips)
+    TextView rlAddTips;
+    @BindView(R.id.et_phone)
+    EditText etPhone;
+    @BindView(R.id.cancle)
+    TextView cancle;
+    @BindView(R.id.et_password)
+    EditText etPassword;
+    @BindView(R.id.iv_scope)
+    ImageView ivScope;
+    @BindView(R.id.tv_save)
+    TextView tvSave;
     private int recLen = 60;//跳过倒计时提示5秒
     TimerTask task;
 
@@ -104,7 +140,7 @@ public class ForgetActivity extends BaseActivity implements BaseBiz, TextWatcher
         timer.schedule(task, 1000, 1000);
     }
 
-    @OnClick({R.id.rl_btn_back, R.id.tv_getcredit})
+    @OnClick({R.id.rl_btn_back, R.id.tv_getcredit,R.id.btn_ensure})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_btn_back:
@@ -127,7 +163,60 @@ public class ForgetActivity extends BaseActivity implements BaseBiz, TextWatcher
                         e.printStackTrace();
                     }
                 }
+                getSendCode();
+                break;
+            case R.id.btn_ensure:
+                SpConfig.getInstance().putString(Constants.PSW,etPassword.getText().toString());
+                updatePsw(etPhone.getText().toString().trim(),MD5Utils.MD5Encode(etPassword.getText().toString().trim(),"UTF-8"),etCreditNum.getText().toString().trim());
                 break;
         }
     }
+
+    @Override
+    protected void initView() {
+        super.initView();
+        ivBack.setImageResource(R.drawable.back_btn);
+        tvCenterTitle.setVisibility(View.INVISIBLE);
+        rlAction.setBackgroundColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.white));
+        rlBtnScope.setVisibility(View.INVISIBLE);
+    }
+
+    public void getSendCode() {
+        UserService userService = RetrofitHandle.getInstance().retrofit.create(UserService.class);
+        Call<SendCodeBean> call = userService.getSendCode(etPhone.getText().toString().trim());
+        call.enqueue(new Callback<SendCodeBean>() {
+            @Override
+            public void onResponse(Call<SendCodeBean> call, Response<SendCodeBean> response) {
+                Log.e("ttttttt", response.body().toString());
+                etCreditNum.setText(response.body().getData().getCode());
+            }
+
+            @Override
+            public void onFailure(Call<SendCodeBean> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void updatePsw(String phone, String pass,String code){
+        UserService userService = RetrofitHandle.getInstance().retrofit.create(UserService.class);
+        Call<AddUserResult> call=userService.updatePwd(new AddUser(phone,MD5Utils.MD5Encode(pass,"UTF-8"),code));
+        call.enqueue(new Callback<AddUserResult>() {
+            @Override
+            public void onResponse(Call<AddUserResult> call, Response<AddUserResult> response) {
+                if(response.body().getCode()==200) {
+                    ToastUtil.showToast(mContext, "修改成功");
+                    finish();
+                }else{
+                    ToastUtil.showToast(mContext, response.body().getResult());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddUserResult> call, Throwable t) {
+
+            }
+        });
+    }
+
 }

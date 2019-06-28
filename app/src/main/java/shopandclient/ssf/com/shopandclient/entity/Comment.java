@@ -5,10 +5,10 @@ package shopandclient.ssf.com.shopandclient.entity;
  */
 public class Comment {
     public String mContent; // 评论内容
-    public User mCommentator; // 评论者
-    public User mReceiver; // 接收者（即回复谁）
+    public CommentUser mCommentator; // 评论者
+    public CommentUser mReceiver; // 接收者（即回复谁）
 
-    public Comment(User mCommentator, String mContent, User mReceiver) {
+    public Comment(CommentUser mCommentator, String mContent, CommentUser mReceiver) {
         this.mCommentator = mCommentator;
         this.mContent = mContent;
         this.mReceiver = mReceiver;

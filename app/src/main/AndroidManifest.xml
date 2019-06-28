@@ -36,9 +36,6 @@
         <activity android:name=".ui.CategoryNameActivity"
                   android:launchMode="singleTop"
                   android:screenOrientation="portrait"/>
-        <activity android:name=".ui.BrandsDetailActivity"
-                  android:launchMode="singleTop"
-                  android:screenOrientation="portrait"/>
         <activity android:name=".ui.StreetActivity"
                   android:launchMode="singleTop"
                   android:screenOrientation="portrait"/>

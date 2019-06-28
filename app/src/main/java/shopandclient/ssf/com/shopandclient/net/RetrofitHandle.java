@@ -11,10 +11,12 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import shopandclient.ssf.com.shopandclient.BuildConfig;
 import shopandclient.ssf.com.shopandclient.base.Constants;
+import shopandclient.ssf.com.shopandclient.util.NoceStrUtil;
 import shopandclient.ssf.com.shopandclient.util.SpConfig;
 
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 public class RetrofitHandle {
     private static final int DEFAULT_TIMEOUT = 10;
     public static String BASE_URL = "https://api.beautystudio.com.cn";
-
+    public static String ShOP_BASE_URL=" http://xd.xdgia.com";
     public Retrofit retrofit;
 
     //构造方法私有
@@ -50,19 +52,17 @@ public class RetrofitHandle {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request originalRequest = chain.request();
-                String token = SpConfig.getInstance().getString(Constants.SESSIONID_STRING);
+                String token = SpConfig.getInstance().getString(Constants.TOKEN);
                 if (token == null || TextUtils.isEmpty(token)) {
                     return chain.proceed(originalRequest);
                 }
                 Request authorised = originalRequest.newBuilder()
-                        .header("Authorization", "Bearer" + token)//此处的token 是你保存在本地的
+                        .header("x-token",  token)//此处的token 是你保存在本地的
                         .build();
 
 
                 Response response = chain.proceed(authorised);//执行此次请求
-                if (response.code() == 401) {
-                    SpConfig.getInstance().removeData(Constants.SESSIONID_STRING);
-                }
+
                 return response;
             }
         };
@@ -70,12 +70,15 @@ public class RetrofitHandle {
         OkHttpClient.Builder builder = new OkHttpClient.Builder().addInterceptor(loggingInterceptor).addInterceptor(tokenInterceptor).addInterceptor(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
-                String language = SpConfig.getInstance().getString("language");
-                String currency = SpConfig.getInstance().getString("currency");
+                String noncestr = NoceStrUtil.getNonceStr();
+                long timestamp = new Date().getTime();
+                String sign= NoceStrUtil.getSign(SpConfig.getInstance().getString(Constants.TOKEN),noncestr,timestamp);
                 Request request = chain.request()
                         .newBuilder()
-                        .addHeader("allsale-language", language)
-                        .addHeader("allsale-currency", currency)
+                        .addHeader("x-noncestr", noncestr)
+                        .addHeader("x-timestamp", String.valueOf(timestamp))
+                        .addHeader("x-sign", sign)
+                        .addHeader("Content-Type", "application/json;charset=UTF-8")
                         .build();
                 return chain.proceed(request);
             }
@@ -88,8 +91,7 @@ public class RetrofitHandle {
                 .client(builder.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(BASE_URL)
-//                .baseUrl(TextUtils.isEmpty(SpConfig.getInstance().getString(Constants.BASEURL_TEST)) ? BASE_URL : SpConfig.getInstance().getString(Constants.BASEURL_TEST))
+                .baseUrl(ShOP_BASE_URL)
                 .build();
 
     }

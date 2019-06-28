@@ -9,7 +9,6 @@ import shopandclient.ssf.com.shopandclient.base.MyApplication;
 public class SpConfig extends PreferenceUtil {
 
     private static final String YOUR_APP_NAME = "shopcliebt_sp";
-
     public SpConfig() {
         super(YOUR_APP_NAME);
     }

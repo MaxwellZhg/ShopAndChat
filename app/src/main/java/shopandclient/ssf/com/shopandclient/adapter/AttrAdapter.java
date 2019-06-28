@@ -9,9 +9,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import org.greenrobot.eventbus.EventBus;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.Attr;
+import shopandclient.ssf.com.shopandclient.entity.ProductInfo;
+import shopandclient.ssf.com.shopandclient.event.AttrEvent;
 
 import java.util.ArrayList;
 
@@ -20,12 +23,13 @@ import java.util.ArrayList;
  */
 public class AttrAdapter extends RecyclerView.Adapter {
     private Context context;
-    private ArrayList<Attr> attrs;
+    private ArrayList<ProductInfo.DataBean.ProAttrTypeBean.ProAttrTypeValueBean> attrs;
     private OnitemClick onitemClick;   //定义点击事件接口
-
-    public AttrAdapter(Context context, ArrayList<Attr> attrs) {
+    private Attr attr;
+    public AttrAdapter(Context context, ArrayList<ProductInfo.DataBean.ProAttrTypeBean.ProAttrTypeValueBean> attrs,Attr attr) {
         this.context = context;
         this.attrs = attrs;
+        this.attr=attr;
     }
 
     //定义设置点击事件监听的方法
@@ -64,15 +68,15 @@ public class AttrAdapter extends RecyclerView.Adapter {
         }
 
         public void setData(final int position) {
-            tv_attr.setText(attrs.get(position).getAttrStr());
-            if (attrs.get(position).getChecked()) {
+            tv_attr.setText(attrs.get(position).getAttrTypeValue());
+            if (attrs.get(position).isSelect()) {
                 rl_attr.setBackgroundDrawable(MyApplication.getInstance().mContext.getResources().getDrawable(R.drawable.attrbute_check_bg));
                 tv_attr.setTextColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.tv_price_color));
             } else {
                 rl_attr.setBackgroundDrawable(MyApplication.getInstance().mContext.getResources().getDrawable(R.drawable.attrbute_uncheck_bg));
                 tv_attr.setTextColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.text_bg));
             }
-            if (onitemClick != null) {
+          /*  if (onitemClick != null) {
                 rl_attr.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -80,7 +84,26 @@ public class AttrAdapter extends RecyclerView.Adapter {
                         onitemClick.onItemClick(position);
                     }
                 });
-            }
+            }*/
+            rl_attr.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //在TextView的地方进行监听点击事件，并且实现接口
+                    if (!attrs.get(position).isSelect()) {
+                        for (int i = 0; i < attrs.size(); i++) {
+                            attrs.get(i).setSelect(false);
+                        }
+                        attrs.get(position).setSelect(true);
+                        notifyDataSetChanged();
+                        if(attrs.get(position).getPos()==1){
+                          attr.setAttrL1ID(attrs.get(position).getId());
+                        }else if(attrs.get(position).getPos()==2){
+                            attr.setAttrL2ID(attrs.get(position).getId());
+                        }
+                        EventBus.getDefault().post(attr);
+                    }
+                }
+            });
         }
     }
 }

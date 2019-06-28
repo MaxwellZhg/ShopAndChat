@@ -74,10 +74,15 @@
                </RelativeLayout>
            </RelativeLayout>
        </LinearLayout>
+    <com.ajguan.library.EasyRefreshLayout
+            android:id="@+id/erl_obligation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
     <android.support.v7.widget.RecyclerView
                                           android:id="@+id/rv_brands_name"
                                            android:layout_width="match_parent"
                                             android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
+    </com.ajguan.library.EasyRefreshLayout>
 </LinearLayout>

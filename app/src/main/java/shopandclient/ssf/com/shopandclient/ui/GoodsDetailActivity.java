@@ -1,11 +1,12 @@
 package shopandclient.ssf.com.shopandclient.ui;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
@@ -19,16 +20,25 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.jaeger.library.StatusBarUtil;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.AttrAdapter;
-import shopandclient.ssf.com.shopandclient.adapter.MyPaddingDecoration;
+import shopandclient.ssf.com.shopandclient.adapter.AttrInfoAdapter;
 import shopandclient.ssf.com.shopandclient.adapter.SlideFragmentPagerAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
-import shopandclient.ssf.com.shopandclient.entity.Attr;
+import shopandclient.ssf.com.shopandclient.entity.*;
+import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
+import shopandclient.ssf.com.shopandclient.net.services.ProductService;
 import shopandclient.ssf.com.shopandclient.ui.fragment.GoodCommentFragment;
 import shopandclient.ssf.com.shopandclient.ui.fragment.GoodDetailFragment;
+import shopandclient.ssf.com.shopandclient.util.ToastUtil;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.Banner;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.GlideImageLoader;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.view.FlingScrollDetailsLayout;
@@ -39,7 +49,7 @@ import java.util.ArrayList;
 /**
  * Created by zhg on 2019/6/14.
  */
-public class GoodsDetailActivity extends BaseActivity implements BaseBiz,AttrAdapter.OnitemClick {
+public class GoodsDetailActivity extends BaseActivity implements BaseBiz {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
@@ -79,10 +89,20 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz,AttrAda
     RelativeLayout rlCollect;
     @BindView(R.id.limmit_buyer)
     RelativeLayout limmitBuyer;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.tv_price)
+    TextView tvPrice;
+    @BindView(R.id.tv_sale_count)
+    TextView tvSaleCount;
+    @BindView(R.id.rl_islike_goods)
+    RelativeLayout rlIslikeGoods;
+    @BindView(R.id.iv_collect_goods)
+    ImageView ivCollectGoods;
     private GlideImageLoader glideImageLoader;
     ArrayList<String> itemtips = new ArrayList<>();
     ArrayList<Fragment> fragments = new ArrayList<>();
-    private ArrayList<Attr> attrs = new ArrayList<>();
+    private ArrayList<ProductInfo.DataBean.ProAttrTypeBean> attrs = new ArrayList<>();
     private Dialog mShareDialog;
     private TextView tv_reduce;
     private EditText et_count;
@@ -90,6 +110,11 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz,AttrAda
     private int count;
     private AttrAdapter attrAdapter;
     private RelativeLayout rl_ensure;
+    private int id;
+    private TextView tv_price;
+    private TextView tv_title_dailog;
+    private ProductInfo.DataBean data;
+    private GoodCommentFragment fragment;
 
     @Override
     public int getLayoutResourceId() {
@@ -112,11 +137,14 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz,AttrAda
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
+
     }
 
     @Override
     protected void initView() {
         super.initView();
+        Intent intent = getIntent();
+        id = intent.getIntExtra("id", 0);
         rlAction.setBackgroundColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
         ivBack.setBackgroundDrawable(MyApplication.getInstance().mContext.getResources().getDrawable(R.drawable.black));
         tvCenterTitle.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.goods_detail));
@@ -125,7 +153,11 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz,AttrAda
         glideImageLoader = new GlideImageLoader();
         fragments.add(new GoodDetailFragment());
         fragments.add(new GoodDetailFragment());
-        fragments.add(new GoodCommentFragment());
+        fragment = new GoodCommentFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", id);
+        fragment.setArguments(bundle);
+        fragments.add(fragment);
         itemtips.add("商品详情");
         itemtips.add("商品参数");
         itemtips.add("评价");
@@ -134,10 +166,6 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz,AttrAda
         bannerlist.add("http://i6.hexunimg.cn/2013-07-05/155842061.jpg");
         bannerlist.add("http://s10.sinaimg.cn/mw690/006hikKrzy7sly9tEBb49&amp");
         bannerlist.add("http://i6.hexunimg.cn/2013-07-05/155842061.jpg");
-        attrs.add(new Attr("属性一", true));
-        attrs.add(new Attr("属性二", false));
-        attrs.add(new Attr("属性三", false));
-        attrs.add(new Attr("属性四", false));
         banner.setImages(bannerlist).setImageLoader(glideImageLoader).start();
         banner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -192,6 +220,35 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz,AttrAda
 
             }
         });
+        getData(id);
+    }
+
+    private void getData(int id) {
+        ProductService service = RetrofitHandle.getInstance().retrofit.create(ProductService.class);
+        Call<ProductInfo> call = service.getProductInfo(id);
+        call.enqueue(new Callback<ProductInfo>() {
+            @Override
+            public void onResponse(Call<ProductInfo> call, Response<ProductInfo> response) {
+                if (response.body().getCode() == 200) {
+                    data = response.body().getData();
+                    attrs.addAll(response.body().getData().getProAttrType());
+                    tvTitle.setText(response.body().getData().getProName());
+                    tvStoreLike.setText(response.body().getData().getGiveLikeNum() + "人赞过");
+                    tvPrice.setText("¥" + response.body().getData().getPrice());
+                    tvSaleCount.setText("月销量" + response.body().getData().getNum());
+                    if (response.body().getData().isIfCollection()) {
+                      ivCollectGoods.setImageResource(R.drawable.icon_collect);
+                    }else{
+                        ivCollectGoods.setImageResource(R.drawable.icon_uncollect);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProductInfo> call, Throwable t) {
+
+            }
+        });
     }
 
     @OnClick(R.id.rl_btn_back)
@@ -199,7 +256,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz,AttrAda
         finish();
     }
 
-    @OnClick({R.id.rl_add_into_shop, R.id.limmit_buyer})
+    @OnClick({R.id.rl_add_into_shop, R.id.limmit_buyer, R.id.rl_collect, R.id.rl_homeshop, R.id.rl_service, R.id.rl_islike_goods})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_add_into_shop:
@@ -207,6 +264,17 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz,AttrAda
                 break;
             case R.id.limmit_buyer:
                 showContentDialog();
+                break;
+            case R.id.rl_homeshop:
+                Bundle bundle=new Bundle();
+                bundle.putInt("id",id);
+                openActivity(StoreDetailActivity.class,bundle);
+                break;
+            case R.id.rl_collect:
+                setCollect(id);
+                break;
+            case R.id.rl_islike_goods:
+                postLike(id, 2);
                 break;
         }
     }
@@ -233,7 +301,9 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz,AttrAda
         window.setWindowAnimations(R.style.share_animation);
 
         View view = View.inflate(this, R.layout.item_shopcart_dailog, null); //获取布局视图
-        RecyclerView rv_attr = (RecyclerView) view.findViewById(R.id.rv_attr);
+        RecyclerView rv_attr_info = (RecyclerView) view.findViewById(R.id.rv_attr_info);
+        tv_price = (TextView) view.findViewById(R.id.tv_price);
+        tv_title_dailog = (TextView) view.findViewById(R.id.tv_title_dailog);
         tv_reduce = (TextView) view.findViewById(R.id.tv_reduce);
         rl_ensure = (RelativeLayout) view.findViewById(R.id.rl_ensure);
         rl_ensure.setOnClickListener(new View.OnClickListener() {
@@ -261,6 +331,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz,AttrAda
                 }
             }
         });
+
         tv_reduce.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -277,11 +348,13 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz,AttrAda
                 }
             }
         });
-        rv_attr.setLayoutManager(new GridLayoutManager(this, 3));
-        attrAdapter = new AttrAdapter(this, attrs);
-        attrAdapter.setOnitemClickLintener(this);
-        rv_attr.addItemDecoration(new MyPaddingDecoration(this));
-        rv_attr.setAdapter(attrAdapter);
+        tv_price.setText("¥" + data.getPrice());
+        tv_title_dailog.setText(data.getProName());
+        AttrInfoAdapter aia = new AttrInfoAdapter(this);
+        aia.setData(attrs);
+        rv_attr_info.setLayoutManager(new LinearLayoutManager(this));
+        rv_attr_info.setAdapter(aia);
+        aia.notifyDataSetChanged();
         view.findViewById(R.id.cancle).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -294,15 +367,78 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz,AttrAda
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);//设置横向全屏
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
     @Override
-    public void onItemClick(int position) {
-        if (!attrs.get(position).getChecked()) {
-            for (int i = 0; i < attrs.size(); i++) {
-                attrs.get(i).setChecked(false);
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(Attr event) {
+        ProductService service = RetrofitHandle.getInstance().retrofit.create(ProductService.class);
+        Call<AttrSelectBean> call = service.getAttrSelectInfo(event.getAttrL1ID(), event.getAttrL2ID());
+        call.enqueue(new Callback<AttrSelectBean>() {
+            @Override
+            public void onResponse(Call<AttrSelectBean> call, Response<AttrSelectBean> response) {
+                if (response.body().getCode() == 200) {
+                    tv_price.setText("¥" + response.body().getData().getNewPrice());
+                }
             }
-            attrs.get(position).setChecked(true);
-            attrAdapter.notifyDataSetChanged();
-        }
+
+            @Override
+            public void onFailure(Call<AttrSelectBean> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    public void setCollect(int id) {
+        ProductService service = RetrofitHandle.getInstance().retrofit.create(ProductService.class);
+        Call<PostComment> call = service.setCollect(new CollectParams(id));
+        call.enqueue(new Callback<PostComment>() {
+            @Override
+            public void onResponse(Call<PostComment> call, Response<PostComment> response) {
+                if (response.body().getCode() == 200) {
+                    if(response.body().getResult().equals("收藏成功")){
+                        ivCollectGoods.setImageResource(R.drawable.icon_collect);
+                    }else{
+                        ivCollectGoods.setImageResource(R.drawable.icon_uncollect);
+                    }
+                    ToastUtil.showToast(GoodsDetailActivity.this, response.body().getResult());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostComment> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void postLike(int id, int type) {
+        ProductService service = RetrofitHandle.getInstance().retrofit.create(ProductService.class);
+        Call<PostComment> call = service.setGiveLike(new PostLikeParams(id, type));
+        call.enqueue(new Callback<PostComment>() {
+            @Override
+            public void onResponse(Call<PostComment> call, Response<PostComment> response) {
+                if (response.body().getCode() == 200) {
+                    ToastUtil.showToast(GoodsDetailActivity.this, response.body().getResult());
+                } else {
+                    ToastUtil.showToast(GoodsDetailActivity.this, response.body().getResult());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostComment> call, Throwable t) {
+
+            }
+        });
     }
 }

@@ -12,6 +12,7 @@ import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
+import shopandclient.ssf.com.shopandclient.util.SpConfig;
 
 
 /**
@@ -52,22 +53,22 @@ public class MainActivity extends BaseActivity implements BaseBiz {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_chat:
-                openActivity(InfomationActivity.class);
+                chooseLuacher(InfomationActivity.class);
                 break;
             case R.id.rl_run_rabitts:
-                openActivity(InfomationActivity.class);
+                chooseLuacher(InfomationActivity.class);
                 break;
             case R.id.rl_friends:
-                openActivity(FriendsListActivity.class);
+                chooseLuacher(FriendsListActivity.class);
                 break;
             case R.id.rl_person_center:
-                openActivity(PersonCenterActivity.class);
+                chooseLuacher(PersonCenterActivity.class);
                 break;
             case R.id.iv_mykitchen:
-                openActivity(CategoryActivity.class);
+                chooseLuacher(CategoryActivity.class);
                 break;
             case R.id.iv_street:
-                openActivity(StreetActivity.class);
+                chooseLuacher(StreetActivity.class);
                 break;
         }
     }
@@ -91,5 +92,11 @@ public class MainActivity extends BaseActivity implements BaseBiz {
     public void onViewClicked() {
         openActivity(LoginActivity.class);
     }*/
-
+   public void chooseLuacher(Class clazz){
+       if(SpConfig.getInstance().getBool("isLogin")){
+           openActivity(clazz);
+       }else{
+           openActivity(LoginActivity.class);
+       }
+   }
 }
