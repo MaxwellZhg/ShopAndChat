@@ -187,8 +187,10 @@ public class ForgetActivity extends BaseActivity implements BaseBiz, TextWatcher
         call.enqueue(new Callback<SendCodeBean>() {
             @Override
             public void onResponse(Call<SendCodeBean> call, Response<SendCodeBean> response) {
-                Log.e("ttttttt", response.body().toString());
-                etCreditNum.setText(response.body().getData().getCode());
+                if(response.body().getCode()==200&&response!=null) {
+                    Log.e("ttttttt", response.body().toString());
+                    etCreditNum.setText(response.body().getData().getCode());
+                }
             }
 
             @Override

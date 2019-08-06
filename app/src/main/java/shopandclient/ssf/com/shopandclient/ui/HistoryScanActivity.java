@@ -1,5 +1,6 @@
 package shopandclient.ssf.com.shopandclient.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -42,6 +43,8 @@ public class HistoryScanActivity extends BaseActivity implements BaseBiz ,TabLay
     ArrayList<Fragment> fragments = new ArrayList<>();
     ArrayList<String> itemtips = new ArrayList<>();
     private TabLayoutAdapter tla;
+    private Intent intent;
+    private int scantype;
 
     @Override
     public int getLayoutResourceId() {
@@ -61,24 +64,41 @@ public class HistoryScanActivity extends BaseActivity implements BaseBiz ,TabLay
     @Override
     protected void initView() {
         super.initView();
+        intent = getIntent();
+        scantype = intent.getIntExtra("scantype",0);
         rlAction.setBackgroundColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
         ivBack.setBackgroundDrawable(MyApplication.getInstance().mContext.getResources().getDrawable(R.drawable.black));
         tvCenterTitle.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.history_scan));
         tvCenterTitle.setTextColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.white));
         rlBtnScope.setVisibility(View.INVISIBLE);
-        fragments.add(new AllHistoryScanFragment());
-        fragments.add(new AllHistoryScanFragment());
-        fragments.add(new AllHistoryScanFragment());
-        itemtips.add("全部");
-        itemtips.add("批发商品/店铺");
-        itemtips.add("零售商品/店铺");
+        if(scantype==1) {
+            fragments.add(AllHistoryScanFragment.newInstance(0, scantype));
+            fragments.add(AllHistoryScanFragment.newInstance(1, scantype));
+            fragments.add(AllHistoryScanFragment.newInstance(2, scantype));
+        }else{
+            fragments.add(AllHistoryScanFragment.newInstance(1, scantype));
+            fragments.add(AllHistoryScanFragment.newInstance(2, scantype));
+        }
+        if(scantype==1) {
+            itemtips.add("全部");
+            itemtips.add("批发商品/店铺");
+            itemtips.add("零售商品/店铺");
+        }else{
+            itemtips.add("收藏店铺");
+            itemtips.add("收藏商品");
+        }
         tla = new TabLayoutAdapter(getSupportFragmentManager(), fragments);
         vpMain.setAdapter(tla);
         vpMain.setOffscreenPageLimit(3);
         tabMain.setupWithViewPager(vpMain);
-        tabMain.getTabAt(0).setText(itemtips.get(0));
-        tabMain.getTabAt(1).setText(itemtips.get(1));
-        tabMain.getTabAt(2).setText(itemtips.get(2));
+        if(scantype==1) {
+            tabMain.getTabAt(0).setText(itemtips.get(0));
+            tabMain.getTabAt(1).setText(itemtips.get(1));
+            tabMain.getTabAt(2).setText(itemtips.get(2));
+        }else{
+            tabMain.getTabAt(0).setText(itemtips.get(0));
+            tabMain.getTabAt(1).setText(itemtips.get(1));
+        }
         vpMain.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabMain));
 
     }

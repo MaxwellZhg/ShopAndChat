@@ -28,6 +28,20 @@ public class MyOrderActivity extends BaseActivity implements BaseBiz {
     RelativeLayout rlAction;
     @BindView(R.id.iv_back)
     ImageView ivBack;
+    @BindView(R.id.rl_order_all)
+    RelativeLayout rlOrderAll;
+    @BindView(R.id.rl_order_nopay)
+    RelativeLayout rlOrderNopay;
+    @BindView(R.id.rl_order_nodelivery)
+    RelativeLayout rlOrderNodelivery;
+    @BindView(R.id.rl_order_delivery)
+    RelativeLayout rlOrderDelivery;
+    @BindView(R.id.rl_shopcart)
+    RelativeLayout rlShopcart;
+    @BindView(R.id.rl_history_scan)
+    RelativeLayout rlHistoryScan;
+    @BindView(R.id.rl_store_collection)
+    RelativeLayout rlStoreCollection;
 
     @Override
     public int getLayoutResourceId() {
@@ -57,7 +71,7 @@ public class MyOrderActivity extends BaseActivity implements BaseBiz {
         super.initView();
         rlAction.setBackgroundColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
         ivBack.setBackgroundDrawable(MyApplication.getInstance().mContext.getResources().getDrawable(R.drawable.back_white));
-        tvCenterTitle.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.street_walk));
+        tvCenterTitle.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.my_order));
         tvCenterTitle.setTextColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.white));
         rlBtnScope.setVisibility(View.INVISIBLE);
     }
@@ -65,5 +79,34 @@ public class MyOrderActivity extends BaseActivity implements BaseBiz {
     @OnClick(R.id.rl_btn_back)
     public void onViewClicked() {
         finish();
+    }
+
+    @OnClick({R.id.rl_btn_back, R.id.rl_order_all, R.id.rl_order_nopay, R.id.rl_order_nodelivery, R.id.rl_order_delivery, R.id.rl_shopcart, R.id.rl_history_scan, R.id.rl_store_collection})
+    public void onViewClicked(View view) {
+        Bundle bundle=new Bundle();
+        switch (view.getId()) {
+            case R.id.rl_btn_back:
+                finish();
+                break;
+            case R.id.rl_order_all:
+                break;
+            case R.id.rl_order_nopay:
+                break;
+            case R.id.rl_order_nodelivery:
+                break;
+            case R.id.rl_order_delivery:
+                break;
+            case R.id.rl_shopcart:
+                openActivity(ShopCartActivity.class);
+                break;
+            case R.id.rl_history_scan:
+                bundle.putInt("scantype",1);
+                openActivity(HistoryScanActivity.class,bundle);
+                break;
+            case R.id.rl_store_collection:
+                bundle.putInt("scantype",2);
+                openActivity(HistoryScanActivity.class,bundle);
+                break;
+        }
     }
 }

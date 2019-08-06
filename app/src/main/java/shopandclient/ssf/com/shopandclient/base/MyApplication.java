@@ -3,6 +3,7 @@ package shopandclient.ssf.com.shopandclient.base;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import com.zhy.autolayout.config.AutoLayoutConifg;
 
 /**
  * Created by zhg on 2019/5/27.
@@ -17,6 +18,7 @@ public class MyApplication extends MultiDexApplication {
         instance = this;
         mContext = this;
         MultiDex.install(this);
+        AutoLayoutConifg.getInstance().useDeviceSize().init(this);
     }
 
     /**

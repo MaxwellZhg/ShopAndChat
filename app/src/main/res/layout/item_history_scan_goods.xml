@@ -33,6 +33,7 @@
                   android:layout_height="wrap_content"
                   android:textColor="@color/tv_price_color"
                   android:textStyle="bold"
+                  android:id="@+id/tv_price_count"
                   android:layout_marginTop="15dp"
                   android:textSize="18sp"
                  android:text="¥186"/>

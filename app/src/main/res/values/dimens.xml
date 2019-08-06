@@ -3,4 +3,5 @@
     <dimen name="divider">10dp</dimen>
     <dimen name="common_navigator_height">45dp</dimen>
     <dimen name="navigator_margin_top">5dp</dimen>
+    <dimen name="nav_title_text_size">20sp</dimen>
 </resources>

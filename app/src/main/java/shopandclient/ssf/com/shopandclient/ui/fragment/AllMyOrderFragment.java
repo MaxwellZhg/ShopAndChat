@@ -56,8 +56,8 @@ public class AllMyOrderFragment extends BaseFragment implements BaseBiz {
         list1.add(new OrderInStoreBean("淘宝小店", orderDetailBeans3));
         myList.add(new MyAllOrderBean("订单号码：011111111111111111111101",list));
         myList.add(new MyAllOrderBean("订单号码：011111111111111111111102",list1));
-        AllMyOrderAdapter adapter=new AllMyOrderAdapter(MyApplication.getInstance().mContext,myList);
-        lv_my_all_order.setAdapter(adapter);
+       // AllMyOrderAdapter adapter=new AllMyOrderAdapter(MyApplication.getInstance().mContext,myList);
+       // lv_my_all_order.setAdapter(adapter);
 
     }
 }

@@ -8,12 +8,6 @@ import java.util.List;
  */
 public class StoreInfoBean {
 
-    /**
-     * Code : 200
-     * Result : 请求成功
-     * Data : {"id":1,"userID":1,"storeName":"跑腿兔旗舰店","img":"/img/paotui.jpg","regName":"刘秀兰","Contact":"19878349087","address":"中国上海市浦东新区浦建路168号","level":5,"CID":"43252436746357890X","state":1,"times":"2019-01-01 12:00:00","endTime":"2020-01-01 12:00:00","CollectionNum":1,"ProList":{"totalNum":1,"list":[{"id":1,"barcode":"B001","proName":"国产血橙4粒装750g","seriesID":1,"cateGoryID":8,"Img":"/orange.jpg","price":41,"discount":0.9,"amount":5000,"storeID":1,"proType":2,"ifXJ":0,"courierFees":0,"paraInfo":"产地：中国四川","remark":"橙子红了一口爆汁，超新鲜营养价值高","content":"好好吃的橙子","giveLikeNum":2349,"Num":151,"ifCollection":false}]}}
-     */
-
     private int Code;
     private String Result;
     private DataBean Data;
@@ -43,23 +37,6 @@ public class StoreInfoBean {
     }
 
     public static class DataBean {
-        /**
-         * id : 1
-         * userID : 1
-         * storeName : 跑腿兔旗舰店
-         * img : /img/paotui.jpg
-         * regName : 刘秀兰
-         * Contact : 19878349087
-         * address : 中国上海市浦东新区浦建路168号
-         * level : 5
-         * CID : 43252436746357890X
-         * state : 1
-         * times : 2019-01-01 12:00:00
-         * endTime : 2020-01-01 12:00:00
-         * CollectionNum : 1
-         * ProList : {"totalNum":1,"list":[{"id":1,"barcode":"B001","proName":"国产血橙4粒装750g","seriesID":1,"cateGoryID":8,"Img":"/orange.jpg","price":41,"discount":0.9,"amount":5000,"storeID":1,"proType":2,"ifXJ":0,"courierFees":0,"paraInfo":"产地：中国四川","remark":"橙子红了一口爆汁，超新鲜营养价值高","content":"好好吃的橙子","giveLikeNum":2349,"Num":151,"ifCollection":false}]}
-         */
-
         private int id;
         private int userID;
         private String storeName;
@@ -188,11 +165,6 @@ public class StoreInfoBean {
         }
 
         public static class ProListBean {
-            /**
-             * totalNum : 1
-             * list : [{"id":1,"barcode":"B001","proName":"国产血橙4粒装750g","seriesID":1,"cateGoryID":8,"Img":"/orange.jpg","price":41,"discount":0.9,"amount":5000,"storeID":1,"proType":2,"ifXJ":0,"courierFees":0,"paraInfo":"产地：中国四川","remark":"橙子红了一口爆汁，超新鲜营养价值高","content":"好好吃的橙子","giveLikeNum":2349,"Num":151,"ifCollection":false}]
-             */
-
             private int totalNum;
             private ArrayList<ListBean> list;
 
@@ -213,41 +185,19 @@ public class StoreInfoBean {
             }
 
             public static class ListBean {
-                /**
-                 * id : 1
-                 * barcode : B001
-                 * proName : 国产血橙4粒装750g
-                 * seriesID : 1
-                 * cateGoryID : 8
-                 * Img : /orange.jpg
-                 * price : 41
-                 * discount : 0.9
-                 * amount : 5000
-                 * storeID : 1
-                 * proType : 2
-                 * ifXJ : 0
-                 * courierFees : 0
-                 * paraInfo : 产地：中国四川
-                 * remark : 橙子红了一口爆汁，超新鲜营养价值高
-                 * content : 好好吃的橙子
-                 * giveLikeNum : 2349
-                 * Num : 151
-                 * ifCollection : false
-                 */
-
                 private int id;
                 private String barcode;
                 private String proName;
                 private int seriesID;
                 private int cateGoryID;
                 private String Img;
-                private int price;
+                private double price;
                 private double discount;
                 private int amount;
                 private int storeID;
                 private int proType;
                 private int ifXJ;
-                private int courierFees;
+                private double courierFees;
                 private String paraInfo;
                 private String remark;
                 private String content;
@@ -303,11 +253,11 @@ public class StoreInfoBean {
                     this.Img = Img;
                 }
 
-                public int getPrice() {
+                public double getPrice() {
                     return price;
                 }
 
-                public void setPrice(int price) {
+                public void setPrice(double price) {
                     this.price = price;
                 }
 
@@ -351,11 +301,11 @@ public class StoreInfoBean {
                     this.ifXJ = ifXJ;
                 }
 
-                public int getCourierFees() {
+                public double getCourierFees() {
                     return courierFees;
                 }
 
-                public void setCourierFees(int courierFees) {
+                public void setCourierFees(double courierFees) {
                     this.courierFees = courierFees;
                 }
 

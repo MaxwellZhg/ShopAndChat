@@ -10,20 +10,29 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.ajguan.library.EasyRefreshLayout;
+import com.ajguan.library.LoadModel;
 import com.jaeger.library.StatusBarUtil;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.CommonCityAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
-import shopandclient.ssf.com.shopandclient.entity.OrderDetailBean;
+import shopandclient.ssf.com.shopandclient.entity.*;
+import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
+import shopandclient.ssf.com.shopandclient.net.services.ChatCenterService;
+import shopandclient.ssf.com.shopandclient.net.services.ProductService;
+import shopandclient.ssf.com.shopandclient.util.ToastUtil;
 
 import java.util.ArrayList;
 
 /**
  * Created by zhg on 2019/6/19.
  */
-public class CommonCityActivity extends BaseActivity implements BaseBiz,CommonCityAdapter.onItemFriendClick {
+public class CommonCityActivity extends BaseActivity implements BaseBiz, CommonCityAdapter.onItemFriendClick {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
@@ -36,9 +45,13 @@ public class CommonCityActivity extends BaseActivity implements BaseBiz,CommonCi
     RelativeLayout rlAction;
     @BindView(R.id.rv_common_city)
     RecyclerView rvCommonCity;
-    ArrayList<OrderDetailBean> arrayList = new ArrayList<>();
+    @BindView(R.id.erl_obligation)
+    EasyRefreshLayout erlObligation;
     private CommonCityAdapter cca;
-
+    private int pageNum = 1;
+    private int count = 8;
+    ArrayList<LocalUserBean.DataBean.ListBean> brandDetails;
+    ArrayList<LocalUserBean.DataBean.ListBean> allList=new ArrayList<>();
     @Override
     public int getLayoutResourceId() {
         return R.layout.activity_common_city;
@@ -70,25 +83,10 @@ public class CommonCityActivity extends BaseActivity implements BaseBiz,CommonCi
         tvCenterTitle.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.common_city));
         tvCenterTitle.setTextColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.white));
         rlBtnScope.setVisibility(View.INVISIBLE);
-        arrayList.add(new OrderDetailBean(R.drawable.meinv, "美女1"));
-        arrayList.add(new OrderDetailBean(R.drawable.meinv, "美女2"));
-        arrayList.add(new OrderDetailBean(R.drawable.meinv, "美女3"));
-        arrayList.add(new OrderDetailBean(R.drawable.meinv, "美女4"));
-        arrayList.add(new OrderDetailBean(R.drawable.meinv, "美女5"));
-        arrayList.add(new OrderDetailBean(R.drawable.meinv, "美女1"));
-        arrayList.add(new OrderDetailBean(R.drawable.meinv, "美女2"));
-        arrayList.add(new OrderDetailBean(R.drawable.meinv, "美女3"));
-        arrayList.add(new OrderDetailBean(R.drawable.meinv, "美女4"));
-        arrayList.add(new OrderDetailBean(R.drawable.meinv, "美女5"));
-        arrayList.add(new OrderDetailBean(R.drawable.meinv, "美女1"));
-        arrayList.add(new OrderDetailBean(R.drawable.meinv, "美女2"));
-        arrayList.add(new OrderDetailBean(R.drawable.meinv, "美女3"));
-        arrayList.add(new OrderDetailBean(R.drawable.meinv, "美女4"));
-        arrayList.add(new OrderDetailBean(R.drawable.meinv, "美女5"));
-        cca = new CommonCityAdapter(this, arrayList);
+        cca = new CommonCityAdapter(this);
         cca.setOnItemFriendClick(this);
         rvCommonCity.setLayoutManager(new LinearLayoutManager(this));
-        rvCommonCity.setAdapter(cca);
+        getData("深圳",1);
     }
 
     @OnClick(R.id.rl_btn_back)
@@ -99,5 +97,56 @@ public class CommonCityActivity extends BaseActivity implements BaseBiz,CommonCi
     @Override
     public void fiendClick() {
         openActivity(FriendsCenterActivity.class);
+    }
+
+    @Override
+    protected void initEvent() {
+        super.initEvent();
+        erlObligation.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
+            @Override
+            public void onLoadMore() {
+                if (count <brandDetails.size()) {
+                    pageNum++;
+                    getData("深圳", pageNum);
+                } else {
+                    ToastUtil.showToast(CommonCityActivity.this, getString(R.string.no_more));
+                    erlObligation.loadMoreComplete();
+                    erlObligation.setLoadMoreModel(LoadModel.NONE);
+                }
+            }
+
+            @Override
+            public void onRefreshing() {
+                pageNum = 1;
+                allList.clear();
+                cca.clearData();
+                getData("深圳", pageNum);
+                erlObligation.setLoadMoreModel(LoadModel.COMMON_MODEL);
+                erlObligation.refreshComplete();
+            }
+        });
+    }
+
+    public void getData(String city, int pageNum) {
+        ChatCenterService service = RetrofitHandle.getInstance().retrofit.create(ChatCenterService.class);
+        Call<LocalUserBean> call = service.getLocalUser(new LocalUserParams("深圳",1));
+        call.enqueue(new Callback<LocalUserBean>() {
+            @Override
+            public void onResponse(Call<LocalUserBean> call, Response<LocalUserBean> response) {
+                if (response.body().getCode() == 200) {
+                    brandDetails = response.body().getData().getList();
+                    if(brandDetails.size()>0) {
+                        allList.addAll(brandDetails);
+                        cca.addData(brandDetails);
+                        rvCommonCity.setAdapter(cca);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LocalUserBean> call, Throwable t) {
+
+            }
+        });
     }
 }

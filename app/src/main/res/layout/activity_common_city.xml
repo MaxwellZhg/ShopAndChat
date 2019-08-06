@@ -5,10 +5,15 @@
               android:background="@color/white_theme"
               android:orientation="vertical">
    <include layout="@layout/action_bar"/>
+    <com.ajguan.library.EasyRefreshLayout
+            android:id="@+id/erl_obligation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
     <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_common_city"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
+    </com.ajguan.library.EasyRefreshLayout>
 </LinearLayout>

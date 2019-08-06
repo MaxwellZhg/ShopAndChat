@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import shopandclient.ssf.com.shopandclient.R;
+import shopandclient.ssf.com.shopandclient.entity.LocalUserBean;
 import shopandclient.ssf.com.shopandclient.entity.OrderDetailBean;
+import shopandclient.ssf.com.shopandclient.entity.StreetInfoBean;
 
 import java.util.ArrayList;
 
@@ -17,11 +19,10 @@ import java.util.ArrayList;
  */
 public class CommonCityAdapter extends RecyclerView.Adapter {
     private Context context;
-    private ArrayList<OrderDetailBean> arrayList;
+    private ArrayList<LocalUserBean.DataBean.ListBean> beans=new ArrayList<>();
     private onItemFriendClick onItemFriendClick;
-    public CommonCityAdapter(Context context, ArrayList<OrderDetailBean> arrayList) {
+    public CommonCityAdapter(Context context) {
         this.context = context;
-        this.arrayList = arrayList;
     }
 
     public void setOnItemFriendClick(onItemFriendClick onItemFriendClick){
@@ -40,7 +41,7 @@ public class CommonCityAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return arrayList.size();
+        return beans.size();
     }
 
     class CommonCityViewHolder extends RecyclerView.ViewHolder{
@@ -52,7 +53,7 @@ public class CommonCityAdapter extends RecyclerView.Adapter {
             ll_content=(LinearLayout)itemView.findViewById(R.id.ll_content);
         }
         public void setData(int position){
-           tv_host_name.setText(arrayList.get(position).getPrice());
+           tv_host_name.setText(beans.get(position).getUserName());
            ll_content.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
@@ -65,5 +66,13 @@ public class CommonCityAdapter extends RecyclerView.Adapter {
     }
     public interface onItemFriendClick{
         void fiendClick();
+    }
+    public void addData(ArrayList<LocalUserBean.DataBean.ListBean> beans){
+        this.beans.addAll(beans);
+        notifyDataSetChanged();
+    }
+
+    public void clearData(){
+        this.beans.clear();
     }
 }

@@ -86,4 +86,7 @@ public class AttrInfoAdapter extends RecyclerView.Adapter implements AttrAdapter
         this.arrayList.addAll(arrayList);
         notifyDataSetChanged();
     }
+    public void clearData(){
+        this.arrayList.clear();
+    }
 }

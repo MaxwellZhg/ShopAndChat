@@ -33,4 +33,9 @@ public interface ProductService {
     Call<StoreInfoBean> getStoreInfo(@Query("id") int id,@Query("page") int page);
     @POST("/api/product/StoreCollection")
     Call<PostComment> setStoreCollect(@Body CollectParams params);
+    @POST("/api/product/AddToCart")
+    Call<PostComment> postShopCart(@Body AddShopParams params);
+    @POST("/api/product/GetProductListOfType")
+    Call<StreetInfoBean> postStreetInfo(@Body ProductTypeInfoParams params);
+
 }

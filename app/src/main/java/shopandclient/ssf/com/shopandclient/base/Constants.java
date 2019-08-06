@@ -11,4 +11,5 @@ public class Constants {
     public static final  String PSW ="psw";
     public static final String ISLOGIN="isLogin";
     public static final String TOKEN="token";
+    public static final String USERID="userid";
 }

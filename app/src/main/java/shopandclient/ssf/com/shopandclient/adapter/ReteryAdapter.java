@@ -53,9 +53,9 @@ public class ReteryAdapter extends BaseAdapter {
         }else{
             hodler=(ViewHodler)convertView.getTag();
         }
-        ReteryGoodsAdapter goodsAdapter=new ReteryGoodsAdapter(context,orderDetailBeans.get(position).getOrderDetailBeans());
+       // ReteryGoodsAdapter goodsAdapter=new ReteryGoodsAdapter(context,orderDetailBeans.get(position).getOrderDetailBeans());
         hodler.rv_store.setLayoutManager(new LinearLayoutManager(context));
-        hodler.rv_store.setAdapter(goodsAdapter);
+       // hodler.rv_store.setAdapter(goodsAdapter);
         //hodler.tv_store_name.setImageResource(beans.get(position).getResId());
         hodler.tv_store_name.setText(orderDetailBeans.get(position).getStoreName());
         return convertView;

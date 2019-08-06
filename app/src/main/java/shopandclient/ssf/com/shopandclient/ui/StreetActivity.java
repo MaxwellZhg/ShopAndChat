@@ -11,15 +11,23 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.ajguan.library.EasyRefreshLayout;
+import com.ajguan.library.LoadModel;
 import com.jaeger.library.StatusBarUtil;
 import in.srain.cube.views.GridViewWithHeaderAndFooter;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
-import shopandclient.ssf.com.shopandclient.adapter.StreetAdapter;
+import shopandclient.ssf.com.shopandclient.adapter.StreetInfoAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
-import shopandclient.ssf.com.shopandclient.entity.StreetBean;
+import shopandclient.ssf.com.shopandclient.entity.ProductTypeInfoParams;
+import shopandclient.ssf.com.shopandclient.entity.StreetInfoBean;
+import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
-import shopandclient.ssf.com.shopandclient.net.inter.OnItemClickListener;
+import shopandclient.ssf.com.shopandclient.net.services.ProductService;
+import shopandclient.ssf.com.shopandclient.util.ToastUtil;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.Banner;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.BannerConfig;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.GlideImageLoader;
@@ -30,10 +38,11 @@ import java.util.ArrayList;
 /**
  * Created by zhg on 2019/6/4.
  */
-public class StreetActivity extends BaseActivity implements BaseBiz,AdapterView.OnItemClickListener {
+public class StreetActivity extends BaseActivity implements BaseBiz, AdapterView.OnItemClickListener {
     @BindView(R.id.gv_street)
     GridViewWithHeaderAndFooter gvStreet;
-    ArrayList<StreetBean> brandDetails = new ArrayList<>();
+    ArrayList<StreetInfoBean.DataBean.ListBean> brandDetails;
+    ArrayList<StreetInfoBean.DataBean.ListBean> allList=new ArrayList<>();
     ArrayList<String> banner = new ArrayList<>();
     @BindView(R.id.tv_center_title)
     TextView tvCenterTitle;
@@ -43,9 +52,14 @@ public class StreetActivity extends BaseActivity implements BaseBiz,AdapterView.
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
     RelativeLayout rlBtnBack;
+    @BindView(R.id.erl_obligation)
+    EasyRefreshLayout erlObligation;
     private GlideImageLoader glideImageLoader;
     private View header;
     private Banner bannerview;
+    private int pageNum = 1;
+    private int count = 8;
+    private StreetInfoAdapter streetAdapter;
 
     @Override
     public int getLayoutResourceId() {
@@ -91,19 +105,10 @@ public class StreetActivity extends BaseActivity implements BaseBiz,AdapterView.
         bannerview.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         bannerview.setIndicatorGravity(BannerConfig.CENTER);
         bannerview.setImages(banner).setImageLoader(glideImageLoader).start();
-        brandDetails.add(new StreetBean("苍井空", R.drawable.meinv1));
-        brandDetails.add(new StreetBean("苍井空1", R.drawable.meinv2));
-        brandDetails.add(new StreetBean("苍井空1", R.drawable.meinv3));
-        brandDetails.add(new StreetBean("苍井空", R.drawable.meinv));
-        brandDetails.add(new StreetBean("苍井空1", R.drawable.meinv2));
-        brandDetails.add(new StreetBean("苍井空2", R.drawable.meinv3));
-        brandDetails.add(new StreetBean("苍井空", R.drawable.meinv1));
-        brandDetails.add(new StreetBean("苍井空2", R.drawable.meinv2));
-        brandDetails.add(new StreetBean("苍井空1", R.drawable.meinv3));
         gvStreet.addHeaderView(header);
-        StreetAdapter streetAdapter = new StreetAdapter(this);
-        gvStreet.setAdapter(streetAdapter);
-        gvStreet.setOnItemClickListener(this);
+        streetAdapter = new StreetInfoAdapter(MyApplication.getInstance().mContext);
+        gvStreet.setOnItemClickListener(StreetActivity.this);
+        getData(1, 1);
     }
 
     @OnClick(R.id.rl_btn_back)
@@ -113,6 +118,59 @@ public class StreetActivity extends BaseActivity implements BaseBiz,AdapterView.
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        openActivity(StoreDetailActivity.class);
+        Bundle bundle=new Bundle();
+        bundle.putInt("id",allList.get(position).getStoreID());
+        openActivity(StoreDetailActivity.class,bundle);
+    }
+
+    public void getData(int type, int pageNum) {
+        ProductService service = RetrofitHandle.getInstance().retrofit.create(ProductService.class);
+        Call<StreetInfoBean> call = service.postStreetInfo(new ProductTypeInfoParams(type, "", 1));
+        call.enqueue(new Callback<StreetInfoBean>() {
+            @Override
+            public void onResponse(Call<StreetInfoBean> call, Response<StreetInfoBean> response) {
+                if (response.body().getCode() == 200) {
+                    brandDetails = response.body().getData().getList();
+                    if(brandDetails.size()>0) {
+                        allList.addAll(brandDetails);
+                        streetAdapter.addData(brandDetails);
+                        gvStreet.setAdapter(streetAdapter);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StreetInfoBean> call, Throwable t) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void initEvent() {
+        super.initEvent();
+        erlObligation.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
+            @Override
+            public void onLoadMore() {
+                if (count <brandDetails.size()) {
+                    pageNum++;
+                    getData(1, pageNum);
+                } else {
+                    ToastUtil.showToast(StreetActivity.this, getString(R.string.no_more));
+                    erlObligation.loadMoreComplete();
+                    erlObligation.setLoadMoreModel(LoadModel.NONE);
+                }
+            }
+
+            @Override
+            public void onRefreshing() {
+                pageNum = 1;
+                allList.clear();
+                streetAdapter.clearData();
+                getData(1, pageNum);
+                erlObligation.setLoadMoreModel(LoadModel.COMMON_MODEL);
+                erlObligation.refreshComplete();
+            }
+        });
     }
 }

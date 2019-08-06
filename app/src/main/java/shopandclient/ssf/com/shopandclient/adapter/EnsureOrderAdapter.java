@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import shopandclient.ssf.com.shopandclient.R;
+import shopandclient.ssf.com.shopandclient.entity.LimmitBuyBean;
 import shopandclient.ssf.com.shopandclient.entity.OrderInStoreBean;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.view.MyRecycleview;
 
@@ -18,9 +19,9 @@ import java.util.ArrayList;
  */
 public class EnsureOrderAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<OrderInStoreBean> arrayList;
+    private ArrayList<LimmitBuyBean.DataBean.BuyProBean> arrayList;
 
-    public EnsureOrderAdapter(Context context, ArrayList<OrderInStoreBean> arrayList) {
+    public EnsureOrderAdapter(Context context, ArrayList<LimmitBuyBean.DataBean.BuyProBean> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
     }
@@ -51,7 +52,7 @@ public class EnsureOrderAdapter extends BaseAdapter {
         }else{
             hodler=(ViewHodler)convertView.getTag();
         }
-        ReteryGoodsAdapter goodsAdapter=new ReteryGoodsAdapter(context,arrayList.get(position).getOrderDetailBeans());
+        ReteryGoodsAdapter goodsAdapter=new ReteryGoodsAdapter(context,arrayList.get(position).getListPro());
         hodler.rv_store.setLayoutManager(new LinearLayoutManager(context));
         hodler.rv_store.setAdapter(goodsAdapter);
         //hodler.tv_store_name.setImageResource(beans.get(position).getResId());

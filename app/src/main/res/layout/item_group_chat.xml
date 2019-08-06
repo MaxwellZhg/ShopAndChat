@@ -17,6 +17,7 @@
       <TextView android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/iv_friends"
+                android:id="@+id/tv_name"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
                 android:textColor="@color/text_bg"
@@ -26,6 +27,7 @@
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:id="@+id/cb_into_group"
                 android:layout_marginRight="15dp"
                 android:button="@drawable/select_chat_group"/>
   </RelativeLayout>

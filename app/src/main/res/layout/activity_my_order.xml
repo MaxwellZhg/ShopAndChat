@@ -14,6 +14,7 @@
                   android:orientation="horizontal">
         <RelativeLayout android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:id="@+id/rl_order_all"
                        android:layout_weight="1">
                   <LinearLayout android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -33,6 +34,7 @@
         </RelativeLayout>
         <RelativeLayout android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:id="@+id/rl_order_nopay"
                         android:layout_weight="1">
             <LinearLayout android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
@@ -53,6 +55,7 @@
         </RelativeLayout>
         <RelativeLayout android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:id="@+id/rl_order_nodelivery"
                         android:layout_weight="1">
             <LinearLayout android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
@@ -73,6 +76,7 @@
         </RelativeLayout>
         <RelativeLayout android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:id="@+id/rl_order_delivery"
                         android:layout_weight="1">
             <LinearLayout android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
@@ -99,6 +103,7 @@
                   android:orientation="vertical"
                   android:background="@color/white">
         <RelativeLayout android:layout_width="match_parent"
+                        android:id="@+id/rl_shopcart"
                         android:layout_height="40dp">
             <ImageView android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
@@ -128,6 +133,7 @@
                    android:layout_marginRight="15dp"
                    android:background="@color/line_color"/>
         <RelativeLayout android:layout_width="match_parent"
+                        android:id="@+id/rl_history_scan"
                         android:layout_height="40dp">
             <ImageView android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
@@ -157,6 +163,7 @@
                    android:layout_marginRight="15dp"
                    android:background="@color/line_color"/>
         <RelativeLayout android:layout_width="match_parent"
+                        android:id="@+id/rl_store_collection"
                         android:layout_height="40dp">
             <ImageView android:layout_width="wrap_content"
                        android:layout_height="wrap_content"

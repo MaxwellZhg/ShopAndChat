@@ -5,6 +5,10 @@
               android:background="@color/white_theme"
               android:orientation="vertical">
         <include layout="@layout/action_bar"/>
+        <com.ajguan.library.EasyRefreshLayout
+                android:id="@+id/erl_obligation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
         <in.srain.cube.views.GridViewWithHeaderAndFooter
                 android:id="@+id/gv_street"
                 android:layout_width="match_parent"
@@ -13,4 +17,5 @@
                   android:numColumns="2">
 
         </in.srain.cube.views.GridViewWithHeaderAndFooter>
+        </com.ajguan.library.EasyRefreshLayout>
 </LinearLayout>

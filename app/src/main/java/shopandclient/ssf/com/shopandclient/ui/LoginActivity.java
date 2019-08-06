@@ -162,16 +162,15 @@ public class LoginActivity extends BaseActivity implements BaseBiz, TextWatcher,
                     ToastUtil.showToast(this, "密码不正确");
                     return;
                 }
-                Log.e("tttttttt----1",SpConfig.getInstance().getString(Constants.MDPSW));
                 UserService userService = RetrofitHandle.getInstance().retrofit.create(UserService.class);
                 Call<UserLoginBean> call = userService.postUserLogin(new User(etPhone.getText().toString().trim(),SpConfig.getInstance().getString(Constants.MDPSW),2));
                 call.enqueue(new Callback<UserLoginBean>() {
                     @Override
                     public void onResponse(Call<UserLoginBean> call, Response<UserLoginBean> response) {
                         if(response.body().getCode()==200) {
-                            Log.e("ttttttttt", response.body().getResult().toString());
                             SpConfig.getInstance().putBool(Constants.ISLOGIN, true);
                             SpConfig.getInstance().putString(Constants.TOKEN,response.body().getData().getUserToken());
+                            SpConfig.getInstance().putInt(Constants.USERID,response.body().getData().getUserID());
                             finish();
                         }else{
                             ToastUtil.showToast(mContext,response.body().getResult().toString());

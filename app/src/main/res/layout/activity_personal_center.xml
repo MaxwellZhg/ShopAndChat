@@ -19,6 +19,7 @@
                         android:scaleType="fitXY"
                         android:background="@drawable/person_center_img_bg"/>
         <RelativeLayout android:layout_width="match_parent"
+                        android:layout_marginTop="50dp"
                         android:layout_height="50dp">
             <RelativeLayout android:layout_width="55dp"
                             android:id="@+id/rl_btn_back"

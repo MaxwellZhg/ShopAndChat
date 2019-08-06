@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
+    <include layout="@layout/action_bar"/>
+    <EditText android:layout_width="match_parent"
+              android:id="@+id/et_password"
+              android:lines="1"
+              android:hint="@string/input_group_name"
+              android:layout_marginLeft="15dp"
+              android:layout_marginRight="15dp"
+              android:inputType="text"
+              android:layout_below="@+id/rl_action"
+              android:background="@null"
+              android:layout_height="35dp"/>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                   android:layout_alignParentBottom="true"
+                  android:layout_marginBottom="35dp">
+        <Button android:layout_width="match_parent"
+                android:id="@+id/btn_register"
+                android:background="@drawable/login_btn_bg"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="40dp"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="@string/ensure"
+                android:layout_height="45dp"/>
+    </RelativeLayout>
+</RelativeLayout>

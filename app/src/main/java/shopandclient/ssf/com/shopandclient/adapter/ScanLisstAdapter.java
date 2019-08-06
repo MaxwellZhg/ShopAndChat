@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import shopandclient.ssf.com.shopandclient.R;
+import shopandclient.ssf.com.shopandclient.entity.BrandDetail;
 import shopandclient.ssf.com.shopandclient.entity.OrderDetailBean;
+import shopandclient.ssf.com.shopandclient.entity.ScanListBean;
 
 import java.util.ArrayList;
 
@@ -17,12 +19,13 @@ import java.util.ArrayList;
  */
 public class ScanLisstAdapter extends RecyclerView.Adapter {
     private Context context;
-    private ArrayList<OrderDetailBean> orderDetailBeans;
+    private ArrayList<ScanListBean.DataBean.ListBean> brandDetails;
+    private int scantype;
 
-
-    public ScanLisstAdapter(Context context, ArrayList<OrderDetailBean> orderDetailBeans) {
+    public ScanLisstAdapter(Context context, ArrayList<ScanListBean.DataBean.ListBean> brandDetails,int scantype) {
         this.context = context;
-        this.orderDetailBeans = orderDetailBeans;
+        this.brandDetails = brandDetails;
+        this.scantype=scantype;
     }
 
     @Override
@@ -37,19 +40,26 @@ public class ScanLisstAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return orderDetailBeans.size();
+        return brandDetails.size();
     }
     class GoodsViewHolder extends RecyclerView.ViewHolder{
         private ImageView iv_goods;
         private TextView tv_title;
+        private TextView tv_price_count;
         public GoodsViewHolder(View itemView) {
             super(itemView);
             iv_goods= (ImageView) itemView.findViewById(R.id.iv_goods);
             tv_title =(TextView) itemView.findViewById(R.id.tv_title);
+            tv_price_count=(TextView)itemView.findViewById(R.id.tv_price_count);
         }
         public void setData(int position){
-            iv_goods.setImageResource(orderDetailBeans.get(position).getResId());
-            tv_title.setText(orderDetailBeans.get(position).getPrice());
+            tv_title.setText(brandDetails.get(position).getProName());
+            if(scantype==2) {
+                tv_price_count.setText("¥" + brandDetails.get(position).getUprice());
+            }else{
+                tv_price_count.setVisibility(View.INVISIBLE);
+            }
         }
     }
+
 }

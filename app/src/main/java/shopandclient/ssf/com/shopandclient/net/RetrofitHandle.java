@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 public class RetrofitHandle {
     private static final int DEFAULT_TIMEOUT = 10;
     public static String BASE_URL = "https://api.beautystudio.com.cn";
-    public static String ShOP_BASE_URL=" http://xd.xdgia.com";
+    public static String ShOP_BASE_URL="http://xd.xdgia.com";
     public Retrofit retrofit;
 
     //构造方法私有

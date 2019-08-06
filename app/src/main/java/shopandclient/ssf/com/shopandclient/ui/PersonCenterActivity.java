@@ -1,5 +1,7 @@
 package shopandclient.ssf.com.shopandclient.ui;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -71,8 +73,12 @@ public class PersonCenterActivity extends BaseActivity implements BaseBiz {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        if (Build.VERSION.SDK_INT >= 21){
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
         ButterKnife.bind(this);
-        StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
     }
 
     @Override
@@ -82,6 +88,7 @@ public class PersonCenterActivity extends BaseActivity implements BaseBiz {
 
     @OnClick({R.id.rl_city_user, R.id.rl_my_order, R.id.rl_my_address, R.id.rl_login_out, R.id.rl_btn_back,R.id.iv_center})
     public void onViewClicked(View view) {
+        Bundle bundle=new Bundle();
         switch (view.getId()) {
             case R.id.rl_city_user:
                 openActivity(CommonCityActivity.class);
@@ -90,7 +97,8 @@ public class PersonCenterActivity extends BaseActivity implements BaseBiz {
                 openActivity(MyOrderActivity.class);
                 break;
             case R.id.rl_my_address:
-                openActivity(AddressActivity.class);
+                bundle.putInt("type",1);
+                openActivity(AddressActivity.class,bundle);
                 break;
             case R.id.rl_login_out:
                 loginOut();

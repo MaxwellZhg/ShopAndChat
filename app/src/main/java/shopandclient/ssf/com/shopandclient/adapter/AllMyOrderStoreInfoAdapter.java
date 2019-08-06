@@ -56,9 +56,9 @@ public class AllMyOrderStoreInfoAdapter extends RecyclerView.Adapter {
                 iv_cent.setVisibility(View.GONE);
             }
             if(rv_shop.getAdapter()==null){
-               ReteryGoodsAdapter goodsAdapter=new ReteryGoodsAdapter(context,list.get(position).getOrderDetailBeans());
-                rv_shop.setLayoutManager(new LinearLayoutManager(context));
-                rv_shop.setAdapter(goodsAdapter);
+              // ReteryGoodsAdapter goodsAdapter=new ReteryGoodsAdapter(context,list.get(position).getOrderDetailBeans());
+               // rv_shop.setLayoutManager(new LinearLayoutManager(context));
+               // rv_shop.setAdapter(goodsAdapter);
             }
         }
     }

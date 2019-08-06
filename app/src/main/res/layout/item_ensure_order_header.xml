@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:background="@color/white"
+              android:id="@+id/ll_addresss"
               android:orientation="vertical"
               android:layout_height="wrap_content">
 <RelativeLayout android:layout_width="match_parent"
@@ -25,6 +26,7 @@
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_below="@+id/tv_recivier"
+              android:id="@+id/tv_reciver_phone"
               android:textColor="@color/important_instance"
               android:text="18251793609"/>
 </RelativeLayout>
@@ -32,6 +34,7 @@
            android:layout_height="wrap_content"
            android:layout_marginBottom="10dp"
            android:layout_marginLeft="15dp"
+           android:id="@+id/tv_reciver_address"
            android:textColor="@color/text_bg"
            android:layout_marginRight="15dp"
            android:text="北京市东城区西长安街一号中南海紫光阁习主席住所"/>

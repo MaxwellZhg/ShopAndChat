@@ -53,9 +53,9 @@ public class LogicticsGoodsInfoAdapter extends BaseAdapter {
         }else{
             hodler=(LogicticViewHolder)convertView.getTag();
         }
-        ReteryGoodsAdapter goodsAdapter=new ReteryGoodsAdapter(context,arrayLists.get(position).getOrderDetailBeans());
-        hodler.rv_store.setLayoutManager(new LinearLayoutManager(context));
-        hodler.rv_store.setAdapter(goodsAdapter);
+       // ReteryGoodsAdapter goodsAdapter=new ReteryGoodsAdapter(context,arrayLists.get(position).getOrderDetailBeans());
+       // hodler.rv_store.setLayoutManager(new LinearLayoutManager(context));
+       // hodler.rv_store.setAdapter(goodsAdapter);
         //hodler.tv_store_name.setImageResource(beans.get(position).getResId());
         hodler.tv_store_name.setText(arrayLists.get(position).getStoreName());
         return convertView;

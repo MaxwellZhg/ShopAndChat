@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:background="@color/white">
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="50dp">
+        <ImageView android:layout_width="36dp"
+                   android:layout_height="36dp"
+                   android:scaleType="fitXY"
+                   android:id="@+id/iv_friends"
+                   android:layout_alignParentLeft="true"
+                   android:layout_centerVertical="true"
+                   android:layout_marginLeft="15dp"
+                   android:src="@drawable/meinv"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_toRightOf="@+id/iv_friends"
+                  android:id="@+id/tv_name"
+                  android:layout_centerVertical="true"
+                  android:layout_marginLeft="15dp"
+                  android:textColor="@color/text_bg"
+                  android:textSize="14sp"
+                  android:text="美女"/>
+        <ImageView android:layout_width="20dp"
+                  android:layout_height="20dp"
+                  android:layout_alignParentRight="true"
+                  android:layout_centerVertical="true"
+                  android:id="@+id/cb_into_group"
+                  android:layout_marginRight="15dp"
+                  android:background="@drawable/icon_caht_nocheck"/>
+    </RelativeLayout>
+    <ImageView android:layout_width="match_parent"
+               android:background="@color/white_theme"
+               android:layout_height="0.5dp"/>
+</LinearLayout>

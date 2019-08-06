@@ -14,10 +14,12 @@
            </android.support.v7.widget.RecyclerView>
     <RelativeLayout android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:id="@+id/rl_limmit_create"
                     android:layout_alignParentBottom="true"
                     android:background="@color/password_tips">
           <TextView android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/tv_tips"
                     android:textColor="@color/white"
                     android:layout_centerInParent="true"
                     android:textSize="16sp"

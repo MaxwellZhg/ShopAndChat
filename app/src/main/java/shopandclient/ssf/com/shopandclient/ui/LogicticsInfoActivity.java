@@ -96,12 +96,12 @@ public class LogicticsInfoActivity extends BaseActivity implements BaseBiz {
         View tips = LayoutInflater.from(this).inflate(R.layout.item_retery_header, null);
         View bottom = LayoutInflater.from(this).inflate(R.layout.item_logictics_info, null);
         lvLogistics.addHeaderView(tips);
-        LogicticsGoodsInfoAdapter laia = new LogicticsGoodsInfoAdapter(this, list);
+       // LogicticsGoodsInfoAdapter laia = new LogicticsGoodsInfoAdapter(this, list);
         LogicticsTrackInfoAdapter ltia = new LogicticsTrackInfoAdapter(this, arrayList);
         rv_logictics = (MyRecycleview) bottom.findViewById(R.id.rv_logictics);
         rv_logictics.setLayoutManager(new LinearLayoutManager(this));
         rv_logictics.setAdapter(ltia);
-        lvLogistics.setAdapter(laia);
+       // lvLogistics.setAdapter(laia);
         lvLogistics.addFooterView(bottom);
 
     }

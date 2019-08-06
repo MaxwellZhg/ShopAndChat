@@ -21,6 +21,7 @@
                        android:layout_marginLeft="5dp"
                        android:src="@drawable/nav_search1"/>
                <EditText android:layout_width="match_parent"
+                         android:id="@+id/et_search"
                          android:background="@null"
                          android:hint="搜索好友"
                          android:textSize="14sp"

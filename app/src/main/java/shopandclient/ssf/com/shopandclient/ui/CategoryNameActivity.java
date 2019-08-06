@@ -78,7 +78,7 @@ public class CategoryNameActivity extends BaseActivity implements BaseBiz, Categ
     boolean isselectTime = false;
     boolean isselectNum = false;
     boolean isselectPrice = false;
-    private int pageNum = 2;
+    private int pageNum = 1;
     private int orderType=0;
     private int count=8;
     private int seriersId;
@@ -205,6 +205,7 @@ public class CategoryNameActivity extends BaseActivity implements BaseBiz, Categ
             @Override
             public void onRefreshing() {
                 pageNum = 1;
+                alllist.clear();
                 getData(orderType,pageNum);
                 erlObligation.setLoadMoreModel(LoadModel.COMMON_MODEL);
                 erlObligation.refreshComplete();

@@ -115,6 +115,10 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz {
     private TextView tv_title_dailog;
     private ProductInfo.DataBean data;
     private GoodCommentFragment fragment;
+    private int addtype =0;
+    private Attr attrevent;
+    private int typevalue1;
+    private int typevalue2;
 
     @Override
     public int getLayoutResourceId() {
@@ -232,6 +236,8 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz {
                 if (response.body().getCode() == 200) {
                     data = response.body().getData();
                     attrs.addAll(response.body().getData().getProAttrType());
+                    typevalue1 = response.body().getData().getProAttrType().get(0).getProAttrTypeValue().get(0).getId();
+                    typevalue2 = response.body().getData().getProAttrType().get(1).getProAttrTypeValue().get(0).getId();
                     tvTitle.setText(response.body().getData().getProName());
                     tvStoreLike.setText(response.body().getData().getGiveLikeNum() + "人赞过");
                     tvPrice.setText("¥" + response.body().getData().getPrice());
@@ -260,10 +266,10 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_add_into_shop:
-
+                   showContentDialog(1);
                 break;
             case R.id.limmit_buyer:
-                showContentDialog();
+                showContentDialog(2);
                 break;
             case R.id.rl_homeshop:
                 Bundle bundle=new Bundle();
@@ -282,10 +288,11 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz {
     /**
      * 显示弹出框
      */
-    public void showContentDialog() {
+    public void showContentDialog(int type) {
         if (mShareDialog == null) {
             initShareDialog();
         }
+        addtype =type;
         mShareDialog.show();
     }
 
@@ -310,8 +317,24 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz {
             @Override
             public void onClick(View v) {
                 mShareDialog.dismiss();
-                openActivity(EnsureOrderActivity.class);
-
+                if(addtype==2) {
+                    Bundle bundle=new Bundle();
+                    bundle.putInt("type",1);
+                    bundle.putInt("id",id);
+                    bundle.putInt("account",Integer.valueOf(et_count.getText().toString().trim()));
+                    if(attrevent!=null){
+                        bundle.putInt("attr1",attrevent.getAttrL1ID());
+                        bundle.putInt("attr2",attrevent.getAttrL2ID());
+                    }else{
+                        bundle.putInt("attr1",typevalue1);
+                        bundle.putInt("attr2",typevalue2);
+                    }
+                    openActivity(EnsureOrderActivity.class,bundle);
+                }else if(addtype==1&&attrevent!=null){
+                    addintoShopCart(id,Integer.valueOf(et_count.getText().toString().trim()),attrevent.getAttrL1ID(),attrevent.getAttrL2ID(),mShareDialog);
+                }else if(addtype==1&&attrevent==null){
+                    addintoShopCart(id,Integer.valueOf(et_count.getText().toString().trim()),typevalue1,typevalue2,mShareDialog);
+                }
             }
         });
         et_count = (EditText) view.findViewById(R.id.et_count);
@@ -367,6 +390,25 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);//设置横向全屏
     }
 
+    private void addintoShopCart(int id, Integer valueOf, int attrL1ID, int attrL2ID, final Dialog dialog) {
+        ProductService service = RetrofitHandle.getInstance().retrofit.create(ProductService.class);
+        Call<PostComment> call = service.postShopCart(new AddShopParams(id,valueOf,attrL1ID,attrL2ID));
+        call.enqueue(new Callback<PostComment>() {
+            @Override
+            public void onResponse(Call<PostComment> call, Response<PostComment> response) {
+                if(response.body().getCode()==200){
+                    dialog.dismiss();
+                    ToastUtil.showToast(GoodsDetailActivity.this, response.body().getResult());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostComment> call, Throwable t) {
+
+            }
+        });
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -381,6 +423,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(Attr event) {
+        attrevent=event;
         ProductService service = RetrofitHandle.getInstance().retrofit.create(ProductService.class);
         Call<AttrSelectBean> call = service.getAttrSelectInfo(event.getAttrL1ID(), event.getAttrL2ID());
         call.enqueue(new Callback<AttrSelectBean>() {

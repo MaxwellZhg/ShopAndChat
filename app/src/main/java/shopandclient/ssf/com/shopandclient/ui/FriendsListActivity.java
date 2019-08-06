@@ -1,5 +1,6 @@
 package shopandclient.ssf.com.shopandclient.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,13 +11,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.jaeger.library.StatusBarUtil;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
+import shopandclient.ssf.com.shopandclient.adapter.AddFriendsAdapter;
+import shopandclient.ssf.com.shopandclient.adapter.AddNewFriendsAdapter;
 import shopandclient.ssf.com.shopandclient.adapter.SortAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.Friend;
+import shopandclient.ssf.com.shopandclient.entity.FriendListBean;
 import shopandclient.ssf.com.shopandclient.entity.PinyinComparator;
+import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
+import shopandclient.ssf.com.shopandclient.net.services.ChatCenterService;
+import shopandclient.ssf.com.shopandclient.net.services.ProductService;
 import shopandclient.ssf.com.shopandclient.util.ScreenDipUtil;
 
 import java.util.ArrayList;
@@ -25,7 +35,7 @@ import java.util.Collections;
 /**
  * Created by zhg on 2019/6/21.
  */
-public class FriendsListActivity extends BaseActivity implements BaseBiz,View.OnClickListener {
+public class FriendsListActivity extends BaseActivity implements BaseBiz,View.OnClickListener,AddNewFriendsAdapter.OnitemClick {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
@@ -38,7 +48,9 @@ public class FriendsListActivity extends BaseActivity implements BaseBiz,View.On
     RelativeLayout rlAction;
     @BindView(R.id.lv_friends_list)
     ListView lvFriendsList;
-    ArrayList<Friend> list = new ArrayList<>();
+    ArrayList<FriendListBean.DataBean.MyFriendBean> list;
+    ArrayList<FriendListBean.DataBean.MyFriendBean> myfriendList=new ArrayList<>();
+    ArrayList<FriendListBean.DataBean.NewFriendBean> newfriendsList=new ArrayList<>();
     @BindView(R.id.iv_scope)
     ImageView ivScope;
     @BindView(R.id.tv_save)
@@ -48,6 +60,12 @@ public class FriendsListActivity extends BaseActivity implements BaseBiz,View.On
     private RelativeLayout rl_add_friends;
     private RelativeLayout rl_add_group;
     private RelativeLayout rl_scan;
+    private SortAdapter sa;
+    private View headerTop;
+    private ListView lv_news_friends;
+    private AddNewFriendsAdapter anfa;
+    private TextView tv_first_word;
+    private RelativeLayout rl_group;
 
     @Override
     public int getLayoutResourceId() {
@@ -82,43 +100,14 @@ public class FriendsListActivity extends BaseActivity implements BaseBiz,View.On
         tvCenterTitle.setTextColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.white));
         tvSave.setVisibility(View.INVISIBLE);
         ivScope.setImageResource(R.drawable.function);
-        // 虚拟数据
-        list.add(new Friend("李伟"));
-        list.add(new Friend("张三"));
-        list.add(new Friend("张三"));
-        list.add(new Friend("步惊云"));
-        list.add(new Friend("步惊云"));
-        list.add(new Friend("张三"));
-        list.add(new Friend("阿三"));
-        list.add(new Friend("阿四"));
-        list.add(new Friend("段誉"));
-        list.add(new Friend("段正淳"));
-        list.add(new Friend("张三丰"));
-        list.add(new Friend("陈坤"));
-        list.add(new Friend("林俊杰1"));
-        list.add(new Friend("陈坤2"));
-        list.add(new Friend("王二a"));
-        list.add(new Friend("林俊杰a"));
-        list.add(new Friend("张四"));
-        list.add(new Friend("林俊杰"));
-        list.add(new Friend("王二"));
-        list.add(new Friend("王二b"));
-        list.add(new Friend("赵四"));
-        list.add(new Friend("杨坤"));
-        list.add(new Friend("赵子龙"));
-        list.add(new Friend("杨坤1"));
-        list.add(new Friend("李伟1"));
-        list.add(new Friend("宋江"));
-        list.add(new Friend("宋江1"));
-        list.add(new Friend("李伟3"));
-        list.add(new Friend("#宋江1"));
-        list.add(new Friend("#$$$李伟3"));
-        Collections.sort(list, new PinyinComparator());
-        Log.e("ttttttttt", list.toString());
-        SortAdapter sa = new SortAdapter(this, list);
-        lvFriendsList.setAdapter(sa);
-        sa.notifyDataSetChanged();
+        getData();
+        headerTop = LayoutInflater.from(MyApplication.getInstance()).inflate(R.layout.item_friends_list_header,null);
+        lv_news_friends = (ListView)headerTop.findViewById(R.id.lv_news_friends);
+        tv_first_word = (TextView)headerTop.findViewById(R.id.tv_first_word);
+        rl_group = (RelativeLayout) headerTop.findViewById(R.id.rl_group);
+        rl_group.setOnClickListener(this);
     }
+
 
     private void initPop() {
         pop = new PopupWindow();
@@ -174,6 +163,7 @@ public class FriendsListActivity extends BaseActivity implements BaseBiz,View.On
 
     @Override
     public void onClick(View v) {
+        Bundle bundle=new Bundle();
         switch (v.getId()){
             case R.id.rl_add_friends:
                 state=false;
@@ -187,10 +177,64 @@ public class FriendsListActivity extends BaseActivity implements BaseBiz,View.On
                 if(pop.isShowing()){
                     pop.dismiss();
                 }
-                openActivity(AddGroupChatActivity.class);
+                bundle.putInt("type",1);
+                openActivity(AddGroupChatActivity.class,bundle);
                 break;
             case R.id.rl_scan:
                 break;
+            case R.id.rl_group:
+                openActivity(MyGroupActivity.class);
+                break;
         }
+    }
+    private void getData() {
+        ChatCenterService service= RetrofitHandle.getInstance().retrofit.create(ChatCenterService.class);
+        Call<FriendListBean> call=service.getFriendList();
+        call.enqueue(new Callback<FriendListBean>() {
+            @Override
+            public void onResponse(Call<FriendListBean> call, Response<FriendListBean> response) {
+                   if(response.body().getCode()==200){
+                       list=response.body().getData().getMyFriend();
+                       myfriendList.clear();
+                       for(int i=0;i<list.size();i++){
+                           myfriendList.add(new FriendListBean.DataBean.MyFriendBean(list.get(i).getFriendID(),list.get(i).getFriendName(),list.get(i).getImg(),list.get(i).getState()));
+                       }
+                       Collections.sort(myfriendList, new PinyinComparator());
+                       sa = new SortAdapter(FriendsListActivity.this, myfriendList);
+                       newfriendsList.clear();
+                       newfriendsList.addAll(response.body().getData().getNewFriend());
+                       if(newfriendsList.size()>0) {
+                           anfa = new AddNewFriendsAdapter(FriendsListActivity.this, newfriendsList);
+                           anfa.setOnitemClickLintener(FriendsListActivity.this);
+                           lv_news_friends.setAdapter(anfa);
+                           ScreenDipUtil.setListViewHeightBasedOnChildren(lv_news_friends);
+                       }else{
+                           lv_news_friends.setVisibility(View.GONE);
+                           tv_first_word.setVisibility(View.GONE);
+                       }
+                       if(lvFriendsList.getHeaderViewsCount()==0) {
+                           lvFriendsList.addHeaderView(headerTop);
+                       }
+                       lvFriendsList.setAdapter(sa);
+                       sa.notifyDataSetChanged();
+                   }
+            }
+
+            @Override
+            public void onFailure(Call<FriendListBean> call, Throwable t) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onItemClick() {
+        getData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();
     }
 }
