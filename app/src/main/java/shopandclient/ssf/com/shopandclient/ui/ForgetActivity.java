@@ -166,8 +166,7 @@ public class ForgetActivity extends BaseActivity implements BaseBiz, TextWatcher
                 getSendCode();
                 break;
             case R.id.btn_ensure:
-                SpConfig.getInstance().putString(Constants.PSW,etPassword.getText().toString());
-                updatePsw(etPhone.getText().toString().trim(),MD5Utils.MD5Encode(etPassword.getText().toString().trim(),"UTF-8"),etCreditNum.getText().toString().trim());
+                updatePsw(etPhone.getText().toString().trim(),MD5Utils.getMd5Str(etPassword.getText().toString().trim()),etCreditNum.getText().toString().trim());
                 break;
         }
     }
@@ -202,7 +201,7 @@ public class ForgetActivity extends BaseActivity implements BaseBiz, TextWatcher
 
     public void updatePsw(String phone, String pass,String code){
         UserService userService = RetrofitHandle.getInstance().retrofit.create(UserService.class);
-        Call<AddUserResult> call=userService.updatePwd(new AddUser(phone,MD5Utils.MD5Encode(pass,"UTF-8"),code));
+        Call<AddUserResult> call=userService.updatePwd(new AddUser(phone,MD5Utils.getMd5Str(pass),code));
         call.enqueue(new Callback<AddUserResult>() {
             @Override
             public void onResponse(Call<AddUserResult> call, Response<AddUserResult> response) {

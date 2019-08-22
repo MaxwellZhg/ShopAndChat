@@ -158,12 +158,8 @@ public class LoginActivity extends BaseActivity implements BaseBiz, TextWatcher,
                     ToastUtil.showToast(this, "密码至少为6位数");
                     return;
                 }
-                if(!mPswd.equals(SpConfig.getInstance().getString(Constants.PSW))){
-                    ToastUtil.showToast(this, "密码不正确");
-                    return;
-                }
                 UserService userService = RetrofitHandle.getInstance().retrofit.create(UserService.class);
-                Call<UserLoginBean> call = userService.postUserLogin(new User(etPhone.getText().toString().trim(),SpConfig.getInstance().getString(Constants.MDPSW),2));
+                Call<UserLoginBean> call = userService.postUserLogin(new User(etPhone.getText().toString().trim(),MD5Utils.getMd5Str(mPswd),2));
                 call.enqueue(new Callback<UserLoginBean>() {
                     @Override
                     public void onResponse(Call<UserLoginBean> call, Response<UserLoginBean> response) {

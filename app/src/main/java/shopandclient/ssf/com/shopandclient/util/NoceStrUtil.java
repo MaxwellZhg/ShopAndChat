@@ -19,7 +19,7 @@ public class NoceStrUtil {
     }
     public static String getSign(String token,String noneStr, long timestamp){
         String str = "nonce=" + noneStr + "&timestamp=" + timestamp + "&token=" + token;
-        String sign = MD5Utils.MD5Encode(str,"UTF-8").toUpperCase();
+        String sign = MD5Utils.getMd5Str(str).toUpperCase();
         return sign;
     }
 }

@@ -294,11 +294,7 @@ public class RegisterActivity extends BaseActivity implements BaseBiz, TextWatch
 
     public void addUser(String phone ,String psw,String code){
         UserService userService = RetrofitHandle.getInstance().retrofit.create(UserService.class);
-
-        String mdPsw=MD5Utils.MD5Encode(psw,"utf-8");
-
-        SpConfig.getInstance().putString("psw",psw);
-        Call<AddUserResult> call =userService.addRegisteryUser(new AddUser(phone, SpConfig.getInstance().getString("mdpsw"),code));
+        Call<AddUserResult> call =userService.addRegisteryUser(new AddUser(phone,MD5Utils.getMd5Str(psw),code));
         call.enqueue(new Callback<AddUserResult>() {
             @Override
             public void onResponse(Call<AddUserResult> call, Response<AddUserResult> response) {
