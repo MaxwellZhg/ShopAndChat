@@ -29,13 +29,15 @@
                                       android:textSize="22sp"
                                       android:layout_alignParentLeft="true"
                                       android:textStyle="bold"
+                                      android:id="@+id/tv_user_name"
                                       android:layout_marginLeft="8dp"
                                       android:textColor="@color/text_bg"
                                       android:text="Maxwell"/>
                           <RelativeLayout android:layout_width="wrap_content"
                                           android:layout_height="wrap_content"
                                           android:padding="5dp"
-                                          android:layout_alignParentRight="true"
+                                          android:layout_marginLeft="5dp"
+                                          android:layout_toRightOf="@+id/tv_user_name"
                                           android:layout_marginRight="15dp"
                                           android:background="@drawable/favorite_bg">
                                     <ImageView android:id="@+id/iv_praise"
@@ -52,6 +54,12 @@
                                                android:layout_height="wrap_content"
                                                android:text="1.27万人点赞"/>
                           </RelativeLayout>
+                         <ImageView android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentRight="true"
+                                    android:background="@drawable/arrived"/>
                      </RelativeLayout>
             <TextView android:layout_below="@+id/rl_name"
                       android:layout_width="wrap_content"
@@ -121,6 +129,7 @@
                         android:layout_centerVertical="true">
               <RelativeLayout android:layout_width="85dp"
                               android:layout_height="30dp"
+                              android:id="@+id/rl_credit_info"
                              android:background="@drawable/tips_bg">
                            <RelativeLayout android:layout_width="wrap_content"
                                            android:layout_centerInParent="true"
@@ -132,6 +141,7 @@
                                           android:src="@drawable/icon_creditrating_green"/>
                                <TextView android:layout_toRightOf="@+id/iv_credit"
                                          android:textSize="14sp"
+                                         android:id="@+id/tv_credit"
                                          android:layout_marginLeft="5dp"
                                          android:layout_width="wrap_content"
                                          android:layout_height="wrap_content"
@@ -142,6 +152,7 @@
               <RelativeLayout android:layout_width="85dp"
                               android:layout_marginTop="10dp"
                               android:layout_height="30dp"
+                              android:id="@+id/rl_level_info"
                               android:background="@drawable/tips_bg">
                   <RelativeLayout android:layout_width="wrap_content"
                                   android:layout_centerInParent="true"
@@ -153,6 +164,7 @@
                                  android:src="@drawable/icon_membership_gray"/>
                       <TextView android:layout_toRightOf="@+id/iv_vip"
                                 android:textSize="14sp"
+                                android:id="@+id/tv_member"
                                 android:layout_marginLeft="5dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -183,6 +195,21 @@
                                             android:layout_height="wrap_content"
                                             android:layout_below="@+id/iv_chat"
                                             android:text="@string/chat"/>
+                           <RelativeLayout android:layout_width="18dp"
+                                           android:layout_height="18dp"
+                                           android:id="@+id/rl_tv_info"
+                                           android:visibility="invisible"
+                                           android:layout_centerHorizontal="true"
+                                           android:background="@drawable/info_tips_bg">
+                               <TextView android:layout_width="wrap_content"
+                                         android:layout_height="wrap_content"
+                                         android:layout_centerInParent="true"
+                                         android:textColor="@color/white"
+                                         android:id="@+id/tv_info_tips"
+                                         android:textSize="13sp"
+                                         android:text="1"
+                               />
+                           </RelativeLayout>
                        </RelativeLayout>
           </RelativeLayout>
         <RelativeLayout android:layout_width="0dp"

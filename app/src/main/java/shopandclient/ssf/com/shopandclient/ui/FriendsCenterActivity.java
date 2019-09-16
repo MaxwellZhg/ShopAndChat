@@ -18,6 +18,7 @@ import shopandclient.ssf.com.shopandclient.base.BaseActivity;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.ConfrimParams;
 import shopandclient.ssf.com.shopandclient.entity.PostComment;
+import shopandclient.ssf.com.shopandclient.im.ui.ChatActivity;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.ChatCenterService;
@@ -98,7 +99,7 @@ public class FriendsCenterActivity extends BaseActivity implements BaseBiz {
             rlScanChatRecord.setVisibility(View.VISIBLE);
             rlBlackName.setVisibility(View.VISIBLE);
             rlDeteleFriends.setVisibility(View.VISIBLE);
-            tvAddOrChat.setText("添加好友/立即聊天");
+            tvAddOrChat.setText("立即聊天");
         }
     }
 
@@ -144,6 +145,9 @@ public class FriendsCenterActivity extends BaseActivity implements BaseBiz {
             case R.id.add_friends:
                 if (type == 1) {
                     AddFriend(id);
+                }else{
+                    startActivity(new Intent(FriendsCenterActivity.this, ChatActivity.class).putExtra("userId", "13625843690"));
+
                 }
                 break;
         }

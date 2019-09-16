@@ -120,7 +120,7 @@ public class StreetActivity extends BaseActivity implements BaseBiz, AdapterView
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Bundle bundle=new Bundle();
         bundle.putInt("id",allList.get(position).getStoreID());
-        openActivity(StoreDetailActivity.class,bundle);
+        openActivity(GoodsDetailActivity.class,bundle);
     }
 
     public void getData(int type, int pageNum) {

@@ -6,13 +6,15 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.EMError;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.exceptions.HyphenateException;
 import com.jaeger.library.StatusBarUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,9 +22,11 @@ import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
 import shopandclient.ssf.com.shopandclient.base.Constants;
+import shopandclient.ssf.com.shopandclient.base.DemoHelper;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.User;
 import shopandclient.ssf.com.shopandclient.entity.UserLoginBean;
+import shopandclient.ssf.com.shopandclient.im.db.DemoDBManager;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.UserService;
@@ -35,7 +39,7 @@ import shopandclient.ssf.com.shopandclient.util.ToastUtil;
  */
 public class LoginActivity extends BaseActivity implements BaseBiz, TextWatcher,View.OnClickListener {
 
-
+  public static final String TAG=LoginActivity.class.getSimpleName();
     @BindView(R.id.tv_register)
     TextView tvRegister;
     @BindView(R.id.tv_forget)
@@ -121,6 +125,9 @@ public class LoginActivity extends BaseActivity implements BaseBiz, TextWatcher,
         super.initView();
         btnLogin=(Button)findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(this);
+        if (DemoHelper.getInstance().getCurrentUsernName() != null) {
+            etPhone.setText(DemoHelper.getInstance().getCurrentUsernName());
+        }
     }
 
 
@@ -130,6 +137,10 @@ public class LoginActivity extends BaseActivity implements BaseBiz, TextWatcher,
         mPswd = etPassword.getText().toString();
         switch (v.getId()){
             case R.id.btn_login:
+                if (!EaseCommonUtils.isNetWorkConnected(this)) {
+                    Toast.makeText(this, R.string.network_isnot_available, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (mPhone == null) {
                     ToastUtil.showToast(this, "请先填写账号，获取验证码");
                     return;
@@ -158,6 +169,12 @@ public class LoginActivity extends BaseActivity implements BaseBiz, TextWatcher,
                     ToastUtil.showToast(this, "密码至少为6位数");
                     return;
                 }
+                // After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
+                // close it before login to make sure DemoDB not overlap
+                DemoDBManager.getInstance().closeDB();
+
+                // reset current user name before login
+                DemoHelper.getInstance().setCurrentUserName(mPhone);
                 UserService userService = RetrofitHandle.getInstance().retrofit.create(UserService.class);
                 Call<UserLoginBean> call = userService.postUserLogin(new User(etPhone.getText().toString().trim(),MD5Utils.getMd5Str(mPswd),2));
                 call.enqueue(new Callback<UserLoginBean>() {
@@ -166,8 +183,9 @@ public class LoginActivity extends BaseActivity implements BaseBiz, TextWatcher,
                         if(response.body().getCode()==200) {
                             SpConfig.getInstance().putBool(Constants.ISLOGIN, true);
                             SpConfig.getInstance().putString(Constants.TOKEN,response.body().getData().getUserToken());
+                            SpConfig.getInstance().putString(Constants.USERNAME,response.body().getData().getUserName());
                             SpConfig.getInstance().putInt(Constants.USERID,response.body().getData().getUserID());
-                            finish();
+                             loginIm(mPhone,mPswd);
                         }else{
                             ToastUtil.showToast(mContext,response.body().getResult().toString());
                         }
@@ -181,4 +199,88 @@ public class LoginActivity extends BaseActivity implements BaseBiz, TextWatcher,
                 break;
         }
     }
+
+    public void loginIm(String name,String  psw){
+        EMClient.getInstance().login(name, psw, new EMCallBack() {
+
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "login: onSuccess");
+
+
+                // ** manually load all local groups and conversation
+                EMClient.getInstance().groupManager().loadAllGroups();
+                EMClient.getInstance().chatManager().loadAllConversations();
+
+                // update current user's display name for APNs
+                boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
+                        MyApplication.currentUserNick.trim());
+                if (!updatenick) {
+                    Log.e("LoginActivity", "update current user nick fail");
+                }
+                // get user's info (this should be get from App's server or 3rd party service)
+                DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
+                Intent intent = new Intent();
+                intent.putExtra("username",SpConfig.getInstance().getString(Constants.USERNAME));
+                setResult(RESULT_OK,intent);
+                finish();
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+                Log.d(TAG, "login: onProgress");
+            }
+
+            @Override
+            public void onError(final int code, final String message) {
+                Log.d(TAG, "login: onError: " + code);
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), getString(R.string.Login_failed) + message,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    public void registerIm(String name,String pass){
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    // call method in SDK
+                    EMClient.getInstance().createAccount(name, pass);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            DemoHelper.getInstance().setCurrentUserName(name);
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registered_successfully), Toast.LENGTH_SHORT).show();
+                            luancherLogin(LoginActivity.class);
+                            finish();
+                        }
+                    });
+                } catch (final HyphenateException e) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            int errorCode=e.getErrorCode();
+                            if(errorCode== EMError.NETWORK_ERROR){
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_anomalies), Toast.LENGTH_SHORT).show();
+                            }else if(errorCode == EMError.USER_ALREADY_EXIST){
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.User_already_exists), Toast.LENGTH_SHORT).show();
+                            }else if(errorCode == EMError.USER_AUTHENTICATION_FAILED){
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.registration_failed_without_permission), Toast.LENGTH_SHORT).show();
+                            }else if(errorCode == EMError.USER_ILLEGAL_ARGUMENT){
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.illegal_user_name),Toast.LENGTH_SHORT).show();
+                            }else if(errorCode == EMError.EXCEED_SERVICE_LIMIT){
+                                Toast.makeText(LoginActivity.this, getResources().getString(R.string.register_exceed_service_limit), Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registration_failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            }
+        }).start();
+
+    }
+
 }

@@ -17,11 +17,11 @@
                                android:layout_height="wrap_content"
                                android:layout_marginLeft="15dp"
                                android:layout_marginRight="15dp"
+                               android:layout_marginTop="10dp"
                                android:id="@+id/tv_address"
                                android:textColor="@color/text_bg"
                                android:textSize="16sp"
-                               android:text="北京市西长安街一号中南海紫光阁习主席住所"
-                               android:lines="2"/>
+                               android:text="北京市西长安街一号中南海紫光阁习主席住所"/>
                      <RelativeLayout android:layout_width="match_parent"
                                      android:layout_height="wrap_content"
                                      android:layout_marginLeft="15dp"
@@ -50,6 +50,8 @@
                      </RelativeLayout>
                      <ImageView android:layout_width="match_parent"
                                 android:layout_height="1dp"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginRight="15dp"
                                 android:background="@color/line_color"/>
                  </RelativeLayout>
                  <LinearLayout

@@ -1,23 +1,24 @@
 package shopandclient.ssf.com.shopandclient.ui;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.hyphenate.EMCallBack;
 import com.jaeger.library.StatusBarUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
+import shopandclient.ssf.com.shopandclient.base.DemoHelper;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.AddUserResult;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
@@ -120,12 +121,48 @@ public class PersonCenterActivity extends BaseActivity implements BaseBiz {
             public void onResponse(Call<AddUserResult> call, Response<AddUserResult> response) {
                 Log.e("ttttttttt",response.body().getResult().toString());
                 SpConfig.getInstance().putBool("isLogin",false);
-                finish();
+                SpConfig.getInstance().putString(Constants.TOKEN,"");
+                SpConfig.getInstance().putString(Constants.USERNAME,"");
+                SpConfig.getInstance().putInt(Constants.USERID,0);
+                loginOutIm();
             }
 
             @Override
             public void onFailure(Call<AddUserResult> call, Throwable t) {
 
+            }
+        });
+    }
+
+    public void loginOutIm(){
+        DemoHelper.getInstance().logout(true,new EMCallBack() {
+
+            @Override
+            public void onSuccess() {
+             runOnUiThread(new Runnable() {
+                    public void run() {
+                        // show login screen
+                        finish();
+
+                    }
+                });
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        Toast.makeText(MyApplication.getInstance().mContext, "unbind devicetokens failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }

@@ -8,7 +8,7 @@ public class Constants {
     public static final String SESSIONID_STRING = "sessionId";
     public static final String IM_TOKEN = "ImToken";
     public static final  String MDPSW ="mdpsw";
-    public static final  String PSW ="psw";
+    public static final  String USERNAME ="usernaem";
     public static final String ISLOGIN="isLogin";
     public static final String TOKEN="token";
     public static final String USERID="userid";

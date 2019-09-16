@@ -7,18 +7,19 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.hyphenate.EMError;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.exceptions.HyphenateException;
 import com.jaeger.library.StatusBarUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.DemoHelper;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.AddUser;
 import shopandclient.ssf.com.shopandclient.entity.AddUserResult;
@@ -299,8 +300,8 @@ public class RegisterActivity extends BaseActivity implements BaseBiz, TextWatch
             @Override
             public void onResponse(Call<AddUserResult> call, Response<AddUserResult> response) {
                 if(response.body().getCode()==200) {
-                    ToastUtil.showToast(mContext, "注册成功");
-                    luancherLogin(LoginActivity.class);
+                   // ToastUtil.showToast(mContext, "注册成功");
+                    registerIm(phone,psw);
                 }else{
                     ToastUtil.showToast(mContext, "用户已存在");
                 }
@@ -313,4 +314,48 @@ public class RegisterActivity extends BaseActivity implements BaseBiz, TextWatch
         });
     }
 
+    public void registerIm(String name,String pass){
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    // call method in SDK
+                    EMClient.getInstance().createAccount(name, pass);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            DemoHelper.getInstance().setCurrentUserName(name);
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registered_successfully), Toast.LENGTH_SHORT).show();
+                            luancherLogin(LoginActivity.class);
+                            finish();
+                        }
+                    });
+                } catch (final HyphenateException e) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            int errorCode=e.getErrorCode();
+                            if(errorCode== EMError.NETWORK_ERROR){
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_anomalies), Toast.LENGTH_SHORT).show();
+                            }else if(errorCode == EMError.USER_ALREADY_EXIST){
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.User_already_exists), Toast.LENGTH_SHORT).show();
+                            }else if(errorCode == EMError.USER_AUTHENTICATION_FAILED){
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.registration_failed_without_permission), Toast.LENGTH_SHORT).show();
+                            }else if(errorCode == EMError.USER_ILLEGAL_ARGUMENT){
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.illegal_user_name),Toast.LENGTH_SHORT).show();
+                            }else if(errorCode == EMError.EXCEED_SERVICE_LIMIT){
+                                Toast.makeText(RegisterActivity.this, getResources().getString(R.string.register_exceed_service_limit), Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registration_failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            }
+        }).start();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }
