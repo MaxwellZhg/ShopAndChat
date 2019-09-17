@@ -185,7 +185,7 @@ public class LoginActivity extends BaseActivity implements BaseBiz, TextWatcher,
                             SpConfig.getInstance().putString(Constants.TOKEN,response.body().getData().getUserToken());
                             SpConfig.getInstance().putString(Constants.USERNAME,response.body().getData().getUserName());
                             SpConfig.getInstance().putInt(Constants.USERID,response.body().getData().getUserID());
-                             loginIm(mPhone,mPswd);
+                             loginIm(response.body().getData().getGuidNO(),mPswd);
                         }else{
                             ToastUtil.showToast(mContext,response.body().getResult().toString());
                         }

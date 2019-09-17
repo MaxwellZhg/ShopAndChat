@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
-        android:background="@drawable/meinv">
+        android:background="@drawable/splash">
 
     <LinearLayout
             android:gravity="center_horizontal"

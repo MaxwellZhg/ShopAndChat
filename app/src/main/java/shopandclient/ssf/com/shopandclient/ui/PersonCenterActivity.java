@@ -142,6 +142,9 @@ public class PersonCenterActivity extends BaseActivity implements BaseBiz {
              runOnUiThread(new Runnable() {
                     public void run() {
                         // show login screen
+                        Intent intent = new Intent();
+                        intent.putExtra("username",SpConfig.getInstance().getString(Constants.USERNAME));
+                        setResult(RESULT_OK,intent);
                         finish();
 
                     }

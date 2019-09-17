@@ -300,8 +300,8 @@ public class RegisterActivity extends BaseActivity implements BaseBiz, TextWatch
             @Override
             public void onResponse(Call<AddUserResult> call, Response<AddUserResult> response) {
                 if(response.body().getCode()==200) {
-                   // ToastUtil.showToast(mContext, "注册成功");
-                    registerIm(phone,psw);
+                    ToastUtil.showToast(mContext, "注册成功");
+                    registerIm(response.body().getData().getGuidNo(),psw);
                 }else{
                     ToastUtil.showToast(mContext, "用户已存在");
                 }

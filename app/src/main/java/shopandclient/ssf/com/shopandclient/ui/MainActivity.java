@@ -74,6 +74,8 @@ public class MainActivity extends BaseActivity implements BaseBiz {
     TextView tvMember;
     @BindView(R.id.rl_level_info)
     RelativeLayout rlLevelInfo;
+    @BindView(R.id.iv_img)
+    ImageView ivImg;
     private InviteMessgeDao inviteMessgeDao;
     private BroadcastReceiver internalDebugReceiver;
     private BroadcastReceiver broadcastReceiver;
@@ -112,14 +114,14 @@ public class MainActivity extends BaseActivity implements BaseBiz {
 
     }
 
-    @OnClick({R.id.rl_chat, R.id.rl_run_rabitts, R.id.rl_friends, R.id.rl_person_center, R.id.iv_mykitchen, R.id.iv_street,R.id.rl_credit_info, R.id.rl_level_info})
+    @OnClick({R.id.rl_chat, R.id.rl_run_rabitts, R.id.rl_friends, R.id.rl_person_center, R.id.iv_mykitchen, R.id.iv_street, R.id.rl_credit_info, R.id.rl_level_info,R.id.iv_img})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_chat:
                 chooseLuacher(InfomationActivity.class);
                 break;
             case R.id.rl_run_rabitts:
-                ToastUtil.showToast(this,"正在开发，敬请关注");
+                ToastUtil.showToast(this, "正在开发，敬请关注");
                 break;
             case R.id.rl_friends:
                 chooseLuacher(FriendsListActivity.class);
@@ -144,6 +146,9 @@ public class MainActivity extends BaseActivity implements BaseBiz {
                 tvCredit.setTextColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.member_ship));
                 ivVip.setImageResource(R.drawable.icon_membership_green);
                 tvMember.setTextColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.credit_level));
+                break;
+            case R.id.iv_img:
+                chooseLuacher(PersonCenterActivity.class);
                 break;
         }
     }
@@ -188,7 +193,12 @@ public class MainActivity extends BaseActivity implements BaseBiz {
 
     public void chooseLuacher(Class clazz) {
         if (SpConfig.getInstance().getBool("isLogin")) {
-            openActivity(clazz);
+            if(clazz!=PersonCenterActivity.class) {
+                openActivity(clazz);
+            }else{
+                Intent intent = new Intent(MainActivity.this, PersonCenterActivity.class);
+                startActivityForResult(intent, 1);
+            }
         } else {
             luanchLogin();
         }
@@ -458,5 +468,11 @@ public class MainActivity extends BaseActivity implements BaseBiz {
 
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(internalDebugReceiver);
     }
 }

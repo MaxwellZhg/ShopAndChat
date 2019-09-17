@@ -71,7 +71,7 @@ public class UserLoginBean {
         private String area;
         private int UserState;
         private String UserToken;
-
+        private String GuidNO;
         public int getUserID() {
             return UserID;
         }
@@ -182,6 +182,14 @@ public class UserLoginBean {
 
         public void setUserToken(String UserToken) {
             this.UserToken = UserToken;
+        }
+
+        public String getGuidNO() {
+            return GuidNO;
+        }
+
+        public void setGuidNO(String guidNO) {
+            GuidNO = guidNO;
         }
     }
 }

@@ -102,10 +102,11 @@
                       android:text="+"/>
         </LinearLayout>
         <RelativeLayout android:layout_width="80dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="25dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
                         android:id="@+id/rl_ensure"
+                        android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="15dp"
                         android:background="@drawable/add_into_cart_ensure">

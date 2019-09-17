@@ -79,7 +79,7 @@ public class ShopCartGoodsAdapter extends RecyclerView.Adapter {
         public void setData(final int position) {
             tv_title.setText(orderDetailBeans.get(position).getProName());
             tv_attrs.setText("已选：" + orderDetailBeans.get(position).getL1Name() + orderDetailBeans.get(position).getL2Name());
-            tv_price.setText("" + orderDetailBeans.get(position).getuPrice());
+            tv_price.setText("¥" + orderDetailBeans.get(position).getuPrice());
             et_count.setText("" + orderDetailBeans.get(position).getAmount());
             tv_add.setOnClickListener(new View.OnClickListener() {
                 @Override

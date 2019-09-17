@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">ShopAndClient</string>
+    <string name="app_name">乐淘淘</string>
     <string name="jump_over">%d 跳过</string>
     <string name="credit_level">信用等级</string>
     <string name="membership_level">会员等级</string>
     <string name="important_instance">划重点：</string>
     <string name="credit_tips_one">每个月6号信用等级会重新对用</string>
-    <string name="credit_tips_two">户的信用状况进行评估。1、信用历史：过往信用账户还款记录及信用账户历史；2、行为偏好：在购物、转账、缴费、理财等活动中的偏好及稳定性；3、履约能力：稳定的.....</string>
+    <string name="credit_tips_two">户的信用状况进行评估。1、信用历史：过往信\n用账户还款记录及信用账户历史；2、行为偏\n好：在购物、转账、缴费、理财等活动中的偏好\n及稳定性；3、履约能力：稳定的.....</string>
     <string name="chat">聊聊</string>
     <string name="run_err">跑腿兔</string>
     <string name="friend">好友</string>
@@ -65,7 +65,7 @@
     <string name="limimit_create">立即创建</string>
     <string name="limimit_addinto">立即添加</string>
     <string name="change_manager">移交管理</string>
-
+    <string name="pro_search">商品搜索</string>
 
     <string name="text_ack_msg">已读</string>
     <string name="text_delivered_msg">送达</string>

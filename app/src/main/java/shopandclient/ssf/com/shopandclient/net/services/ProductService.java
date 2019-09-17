@@ -37,5 +37,6 @@ public interface ProductService {
     Call<PostComment> postShopCart(@Body AddShopParams params);
     @POST("/api/product/GetProductListOfType")
     Call<StreetInfoBean> postStreetInfo(@Body ProductTypeInfoParams params);
-
+    @POST("/api/product/GetProductListOfType")
+    Call<StreetInfoBean> postSearchPro(@Body ProPara params);
 }

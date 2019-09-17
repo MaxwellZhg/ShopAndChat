@@ -42,7 +42,7 @@ public class StreetActivity extends BaseActivity implements BaseBiz, AdapterView
     @BindView(R.id.gv_street)
     GridViewWithHeaderAndFooter gvStreet;
     ArrayList<StreetInfoBean.DataBean.ListBean> brandDetails;
-    ArrayList<StreetInfoBean.DataBean.ListBean> allList=new ArrayList<>();
+    ArrayList<StreetInfoBean.DataBean.ListBean> allList = new ArrayList<>();
     ArrayList<String> banner = new ArrayList<>();
     @BindView(R.id.tv_center_title)
     TextView tvCenterTitle;
@@ -54,6 +54,10 @@ public class StreetActivity extends BaseActivity implements BaseBiz, AdapterView
     RelativeLayout rlBtnBack;
     @BindView(R.id.erl_obligation)
     EasyRefreshLayout erlObligation;
+    @BindView(R.id.iv_scope)
+    ImageView ivScope;
+    @BindView(R.id.rl_btn_scope)
+    RelativeLayout rlBtnScope;
     private GlideImageLoader glideImageLoader;
     private View header;
     private Banner bannerview;
@@ -111,16 +115,26 @@ public class StreetActivity extends BaseActivity implements BaseBiz, AdapterView
         getData(1, 1);
     }
 
-    @OnClick(R.id.rl_btn_back)
-    public void onViewClicked() {
-        finish();
+    @OnClick({R.id.rl_btn_back,R.id.rl_btn_scope})
+    public void onViewClicked(View view) {
+        Bundle bundle=new Bundle();
+        switch (view.getId()) {
+            case R.id.rl_btn_back:
+                finish();
+                break;
+            case R.id.rl_btn_scope:
+                bundle.putInt("type",1);
+                openActivity(SearchProActivity.class,bundle);
+                break;
+        }
+
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Bundle bundle=new Bundle();
-        bundle.putInt("id",allList.get(position).getStoreID());
-        openActivity(GoodsDetailActivity.class,bundle);
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", allList.get(position).getStoreID());
+        openActivity(GoodsDetailActivity.class, bundle);
     }
 
     public void getData(int type, int pageNum) {
@@ -131,7 +145,7 @@ public class StreetActivity extends BaseActivity implements BaseBiz, AdapterView
             public void onResponse(Call<StreetInfoBean> call, Response<StreetInfoBean> response) {
                 if (response.body().getCode() == 200) {
                     brandDetails = response.body().getData().getList();
-                    if(brandDetails.size()>0) {
+                    if (brandDetails.size() > 0) {
                         allList.addAll(brandDetails);
                         streetAdapter.addData(brandDetails);
                         gvStreet.setAdapter(streetAdapter);
@@ -152,7 +166,7 @@ public class StreetActivity extends BaseActivity implements BaseBiz, AdapterView
         erlObligation.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
             @Override
             public void onLoadMore() {
-                if (count <brandDetails.size()) {
+                if (count < brandDetails.size()) {
                     pageNum++;
                     getData(1, pageNum);
                 } else {
