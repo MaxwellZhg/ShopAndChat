@@ -61,6 +61,7 @@ public class AddressAdapter extends RecyclerView.Adapter {
         private TextView tv_address;
         private TextView tv_holder;
         private TextView tv_phone;
+        private TextView tv_default;
         public AddressViewHolder(View itemView) {
             super(itemView);
             rl_left=(RelativeLayout)itemView.findViewById(R.id.rl_left);
@@ -68,11 +69,17 @@ public class AddressAdapter extends RecyclerView.Adapter {
             tv_address=(TextView)itemView.findViewById(R.id.tv_address);
             tv_holder=(TextView)itemView.findViewById(R.id.tv_holder);
             tv_phone=(TextView)itemView.findViewById(R.id.tv_phone);
+            tv_default=(TextView)itemView.findViewById(R.id.tv_default);
         }
         public void setData(final int position) {
             tv_address.setText(list.get(position).getAddress()+list.get(position).getAddressInfo());
             tv_holder.setText(list.get(position).getUserName());
             tv_phone.setText(list.get(position).getPhone());
+            if(list.get(position).getIsDefault()==1){
+                tv_default.setVisibility(View.VISIBLE);
+            }else{
+                tv_default.setVisibility(View.INVISIBLE);
+            }
             tv_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

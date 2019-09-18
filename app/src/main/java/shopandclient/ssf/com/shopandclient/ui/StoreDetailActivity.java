@@ -71,6 +71,8 @@ public class StoreDetailActivity extends BaseActivity implements BaseBiz {
     LinearLayout llStoreLevel;
     @BindView(R.id.ll_addinto_collect)
     LinearLayout llAddintoCollect;
+    @BindView(R.id.iv_collect_goods)
+    ImageView ivCollectGoods;
     private View header;
     private int storeId;
     private int pageNum = 1;
@@ -143,13 +145,15 @@ public class StoreDetailActivity extends BaseActivity implements BaseBiz {
     }
 
 
-    @OnClick({R.id.rl_btn_back,R.id.ll_addinto_collect})
+    @OnClick({R.id.rl_btn_back, R.id.ll_addinto_collect,R.id.iv_collect_goods})
     public void onViewClicked(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.rl_btn_back:
                 finish();
                 break;
             case R.id.ll_addinto_collect:
+                break;
+            case R.id.iv_collect_goods:
                 setCollectStore(storeId);
                 break;
         }
@@ -192,6 +196,21 @@ public class StoreDetailActivity extends BaseActivity implements BaseBiz {
             @Override
             public void onResponse(Call<PostComment> call, Response<PostComment> response) {
                 if (response.body().getCode() == 200) {
+                    if(response.body().getResult().equals(MyApplication.getInstance().mContext.getResources().getString(R.string.collect_success))){
+                      runOnUiThread(new Runnable() {
+                          @Override
+                          public void run() {
+                              ivCollectGoods.setImageResource(R.drawable.icon_collect);
+                          }
+                      });
+                    }else{
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ivCollectGoods.setImageResource(R.drawable.icon_uncollect);
+                            }
+                        });
+                    }
                     ToastUtil.showToast(StoreDetailActivity.this, response.body().getResult());
                 }
             }

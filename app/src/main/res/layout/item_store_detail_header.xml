@@ -33,6 +33,11 @@
                                  android:textSize="16sp"
                                  android:textColor="@color/text_bg"
                                  android:text="跑腿兔旗舰店"/>
+                       <ImageView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:id="@+id/iv_collect_goods"
+                                  android:layout_marginLeft="15dp"
+                                  android:src="@drawable/icon_collect"/>
                    </LinearLayout>
                    <LinearLayout android:layout_width="wrap_content"
                                  android:layout_height="wrap_content"

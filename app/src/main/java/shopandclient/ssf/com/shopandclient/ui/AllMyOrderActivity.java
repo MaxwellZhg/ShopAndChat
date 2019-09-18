@@ -1,5 +1,7 @@
 package shopandclient.ssf.com.shopandclient.ui;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,8 +14,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.jaeger.library.StatusBarUtil;
+import net.lucode.hackware.magicindicator.MagicIndicator;
+import net.lucode.hackware.magicindicator.ViewPagerHelper;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.TabLayoutAdapter;
+import shopandclient.ssf.com.shopandclient.adapter.ViewPagerAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
@@ -33,15 +44,15 @@ public class AllMyOrderActivity extends BaseActivity implements BaseBiz {
     RelativeLayout rlBtnScope;
     @BindView(R.id.rl_action)
     RelativeLayout rlAction;
-    @BindView(R.id.tab_main)
-    TabLayout tabMain;
     @BindView(R.id.vp_main)
     ViewPager vpMain;
     @BindView(R.id.iv_back)
     ImageView ivBack;
     ArrayList<Fragment> fragments = new ArrayList<>();
     ArrayList<String> itemtips = new ArrayList<>();
-    private TabLayoutAdapter tla;
+    @BindView(R.id.magic_indicator)
+    MagicIndicator magicIndicator;
+    private CommonNavigator commonNavigator;
 
     @Override
     public int getLayoutResourceId() {
@@ -74,7 +85,8 @@ public class AllMyOrderActivity extends BaseActivity implements BaseBiz {
         itemtips.add("未支付");
         itemtips.add("未发货");
         itemtips.add("已发货");
-        tla = new TabLayoutAdapter(getSupportFragmentManager(), fragments);
+        initPageIndecator();
+    /*    tla = new TabLayoutAdapter(getSupportFragmentManager(), fragments);
         vpMain.setAdapter(tla);
         vpMain.setOffscreenPageLimit(3);
         tabMain.setupWithViewPager(vpMain);
@@ -82,7 +94,63 @@ public class AllMyOrderActivity extends BaseActivity implements BaseBiz {
         tabMain.getTabAt(1).setText(itemtips.get(1));
         tabMain.getTabAt(2).setText(itemtips.get(2));
         tabMain.getTabAt(3).setText(itemtips.get(3));
-        vpMain.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabMain));
+        vpMain.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabMain));*/
+    }
+    private void initPageIndecator() {
+        // 设置viewpager指示器
+        commonNavigator = new CommonNavigator(this);
+        commonNavigator.setAdjustMode(true);
+        commonNavigator.setAdapter(new CommonNavigatorAdapter() {
+
+            @Override
+            public int getCount() {
+                return itemtips == null ? 0 : itemtips.size();
+            }
+
+            @Override
+            public IPagerTitleView getTitleView(Context context, final int index) {
+                ColorTransitionPagerTitleView colorTransitionPagerTitleView = new ColorTransitionPagerTitleView(context);
+                colorTransitionPagerTitleView.setNormalColor(Color.GRAY);
+                colorTransitionPagerTitleView.setSelectedColor(Color.BLACK);
+                colorTransitionPagerTitleView.setText(itemtips.get(index));
+                colorTransitionPagerTitleView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        vpMain.setCurrentItem(index);
+                    }
+                });
+                return colorTransitionPagerTitleView;
+            }
+
+            @Override
+            public IPagerIndicator getIndicator(Context context) {
+                LinePagerIndicator indicator = new LinePagerIndicator(context);
+                indicator.setMode(LinePagerIndicator.MODE_WRAP_CONTENT);
+                return indicator;
+            }
+        });
+        // 设置viewpager页面缓存数量
+        vpMain.setOffscreenPageLimit(fragments.size());
+        vpMain.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(),fragments));
+        vpMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                magicIndicator.onPageScrolled(position,positionOffset,positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                magicIndicator.onPageSelected(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                magicIndicator.onPageScrollStateChanged(state);
+            }
+        });
+        // 指示器绑定viewpager
+        magicIndicator.setNavigator(commonNavigator);
+        ViewPagerHelper.bind(magicIndicator, vpMain);
     }
 
     @Override

@@ -66,7 +66,8 @@
     <string name="limimit_addinto">立即添加</string>
     <string name="change_manager">移交管理</string>
     <string name="pro_search">商品搜索</string>
-
+    <string name="collect_success">收藏成功</string>
+    <string name="collect_cancle">取消收藏</string>
     <string name="text_ack_msg">已读</string>
     <string name="text_delivered_msg">送达</string>
     <string name="back">返回</string>
