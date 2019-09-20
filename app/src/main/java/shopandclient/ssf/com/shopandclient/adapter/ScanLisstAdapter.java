@@ -54,11 +54,7 @@ public class ScanLisstAdapter extends RecyclerView.Adapter {
         }
         public void setData(int position){
             tv_title.setText(brandDetails.get(position).getProName());
-            if(scantype==2) {
-                tv_price_count.setText("¥" + brandDetails.get(position).getUprice());
-            }else{
-                tv_price_count.setVisibility(View.INVISIBLE);
-            }
+            tv_price_count.setText("¥" + brandDetails.get(position).getUprice());
         }
     }
 

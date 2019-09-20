@@ -129,8 +129,8 @@ public class HistoryScanActivity extends BaseActivity implements BaseBiz, TabLay
             @Override
             public IPagerTitleView getTitleView(Context context, final int index) {
                 ColorTransitionPagerTitleView colorTransitionPagerTitleView = new ColorTransitionPagerTitleView(context);
-                colorTransitionPagerTitleView.setNormalColor(Color.GRAY);
-                colorTransitionPagerTitleView.setSelectedColor(Color.BLACK);
+                colorTransitionPagerTitleView.setNormalColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.important_instance));
+                colorTransitionPagerTitleView.setSelectedColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
                 colorTransitionPagerTitleView.setText(itemtips.get(index));
                 colorTransitionPagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -144,6 +144,7 @@ public class HistoryScanActivity extends BaseActivity implements BaseBiz, TabLay
             @Override
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator indicator = new LinePagerIndicator(context);
+                indicator.setColors(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
                 indicator.setMode(LinePagerIndicator.MODE_WRAP_CONTENT);
                 return indicator;
             }

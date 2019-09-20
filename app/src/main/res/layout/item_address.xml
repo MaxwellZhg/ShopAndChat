@@ -29,7 +29,7 @@
                                android:id="@+id/tv_default"
                                android:layout_toRightOf="@+id/tv_address"
                                android:textStyle="bold"
-                               android:textSize="16sp"
+                               android:textSize="14sp"
                                android:layout_marginRight="10dp"
                                android:layout_marginTop="10dp"
                                android:layout_alignParentRight="true"

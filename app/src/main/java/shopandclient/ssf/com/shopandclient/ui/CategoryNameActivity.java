@@ -123,7 +123,7 @@ public class CategoryNameActivity extends BaseActivity implements BaseBiz, Categ
     }
 
 
-    @OnClick({R.id.rl_select_time, R.id.rl_select_sale_num, R.id.rl_select_sale_price})
+    @OnClick({R.id.rl_select_time, R.id.rl_select_sale_num, R.id.rl_select_sale_price,R.id.rl_btn_scope})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_select_time:
@@ -182,6 +182,9 @@ public class CategoryNameActivity extends BaseActivity implements BaseBiz, Categ
                 ivSelectTime.setImageResource(R.drawable.little_down);
                 selectSaleNum.setTextColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.text_bg));
                 ivSelectSaleNum.setImageResource(R.drawable.little_down);
+                break;
+            case R.id.rl_btn_scope:
+                openActivity(SearchProActivity.class);
                 break;
         }
     }
