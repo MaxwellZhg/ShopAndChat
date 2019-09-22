@@ -59,6 +59,7 @@ public class FriendListBean {
             private int friendID;
             private String friendName;
             private String Img;
+            private String GuidNO;
             private int state;
 
             public int getFriendID() {
@@ -93,6 +94,14 @@ public class FriendListBean {
                 this.state = state;
             }
 
+            public String getGuidNO() {
+                return GuidNO;
+            }
+
+            public void setGuidNO(String guidNO) {
+                GuidNO = guidNO;
+            }
+
             @Override
             public String toString() {
                 return "NewFriendBean{" +
@@ -109,14 +118,16 @@ public class FriendListBean {
             private String friendName;
             private String Img;
             private int state;
+            private String GuidNO;
             private String sortLetters;//显示数据拼音的首字母
             private boolean isChooseGroup=false;
 
-            public MyFriendBean(int friendID, String friendName, String img, int state) {
+            public MyFriendBean(int friendID, String friendName, String img, String GuidNO,int state) {
                 this.friendID = friendID;
                 this.friendName = friendName;
                 Img = img;
                 this.state = state;
+                this.GuidNO=GuidNO;
                 String pinyin = PinyinUtils.getPingYin(friendName);
                 String sortString = pinyin.substring(0, 1).toUpperCase();
                 setSortLetters(sortString);
@@ -168,6 +179,14 @@ public class FriendListBean {
 
             public void setSortLetters(String sortLetters) {
                 this.sortLetters = sortLetters;
+            }
+
+            public String getGuidNO() {
+                return GuidNO;
+            }
+
+            public void setGuidNO(String guidNO) {
+                GuidNO = guidNO;
             }
 
             @Override

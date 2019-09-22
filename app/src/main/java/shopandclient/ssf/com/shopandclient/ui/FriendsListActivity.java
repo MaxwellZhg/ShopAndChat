@@ -197,7 +197,7 @@ public class FriendsListActivity extends BaseActivity implements BaseBiz,View.On
                        list=response.body().getData().getMyFriend();
                        myfriendList.clear();
                        for(int i=0;i<list.size();i++){
-                           myfriendList.add(new FriendListBean.DataBean.MyFriendBean(list.get(i).getFriendID(),list.get(i).getFriendName(),list.get(i).getImg(),list.get(i).getState()));
+                           myfriendList.add(new FriendListBean.DataBean.MyFriendBean(list.get(i).getFriendID(),list.get(i).getFriendName(),list.get(i).getImg(),list.get(i).getGuidNO(),list.get(i).getState()));
                        }
                        Collections.sort(myfriendList, new PinyinComparator());
                        sa = new SortAdapter(FriendsListActivity.this, myfriendList);

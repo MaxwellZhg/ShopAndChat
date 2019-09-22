@@ -144,7 +144,7 @@ public class HistoryScanActivity extends BaseActivity implements BaseBiz, TabLay
             @Override
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator indicator = new LinePagerIndicator(context);
-                indicator.setColors(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
+                indicator.setColors(getResources().getColor(R.color.password_tips));
                 indicator.setMode(LinePagerIndicator.MODE_WRAP_CONTENT);
                 return indicator;
             }

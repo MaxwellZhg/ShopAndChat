@@ -431,4 +431,5 @@
     <string name="registration_failed_without_permission">Registration failed, without permission!</string>
     <string name="Registration_failed">Registration failed</string>
     <string name="register_exceed_service_limit">You have exceeded the limit of the community edition,Please upgrade to the enterprise edition</string>
+    <string name="invite_join_group">邀请加入群组</string>
 </resources>

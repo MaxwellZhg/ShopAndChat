@@ -8,9 +8,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroupManager;
+import com.hyphenate.chat.EMGroupOptions;
+import com.hyphenate.exceptions.HyphenateException;
 import com.jaeger.library.StatusBarUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,6 +53,7 @@ public class AddGroupChatActivity extends BaseActivity implements BaseBiz {
     ArrayList<FriendListBean.DataBean.MyFriendBean> arrayList = new ArrayList<>();
     ArrayList<CreateGroupParams.ListBean> list = new ArrayList<>();
     ArrayList<AddIntpGroupParams.ListBean> addlist = new ArrayList<>();
+    ArrayList<String> listuser=new ArrayList<>();
     @BindView(R.id.rl_limmit_create)
     RelativeLayout rlLimmitCreate;
     @BindView(R.id.tv_tips)
@@ -126,10 +132,12 @@ public class AddGroupChatActivity extends BaseActivity implements BaseBiz {
             case R.id.rl_limmit_create:
                 list.clear();
                 addlist.clear();
+                listuser.clear();
                 if (type == 1) {
                     for (int i = 0; i < arrayList.size(); i++) {
                         if (arrayList.get(i).isChooseGroup() == true) {
                             list.add(new CreateGroupParams.ListBean(arrayList.get(i).getFriendID(), arrayList.get(i).getFriendName()));
+                            listuser.add(arrayList.get(i).getGuidNO());
                         }
                     }
                     createGroup(list);
@@ -137,6 +145,7 @@ public class AddGroupChatActivity extends BaseActivity implements BaseBiz {
                     for (int i = 0; i < arrayList.size(); i++) {
                         if (arrayList.get(i).isChooseGroup() == true) {
                             addlist.add(new AddIntpGroupParams.ListBean(arrayList.get(i).getFriendID(), arrayList.get(i).getFriendName(), groupid));
+                            listuser.add(arrayList.get(i).getGuidNO());
                         }
                     }
                     addMemberIntoGroup(addlist);
@@ -155,7 +164,7 @@ public class AddGroupChatActivity extends BaseActivity implements BaseBiz {
             @Override
             public void onResponse(Call<PostComment> call, Response<PostComment> response) {
                 if (response.body().getCode()==200) {
-                    finish();
+                    creatImGroup(listuser.toArray(new String[listuser.size()]));
                 }
             }
 
@@ -173,7 +182,7 @@ public class AddGroupChatActivity extends BaseActivity implements BaseBiz {
             @Override
             public void onResponse(Call<PostComment> call, Response<PostComment> response) {
                 if (response.body().getCode() == 200) {
-                    finish();
+                    creatImGroup(listuser.toArray(new String[listuser.size()]));
                 }
             }
 
@@ -182,6 +191,42 @@ public class AddGroupChatActivity extends BaseActivity implements BaseBiz {
 
             }
         });
+    }
+
+    private void creatImGroup(String[] members){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    EMGroupOptions option = new EMGroupOptions();
+                    option.maxUsers = 200;
+                    option.inviteNeedConfirm = true;
+
+                    String reason = AddGroupChatActivity.this.getString(R.string.invite_join_group);
+                    reason  = EMClient.getInstance().getCurrentUser() + reason + "群组";
+                    option.style =  EMGroupManager.EMGroupStyle.EMGroupStylePublicOpenJoin;
+                /*    if(publibCheckBox.isChecked()){
+                        option.style = memberCheckbox.isChecked() ? EMGroupManager.EMGroupStyle.EMGroupStylePublicJoinNeedApproval : EMGroupManager.EMGroupStyle.EMGroupStylePublicOpenJoin;
+                    }else{
+                        option.style = memberCheckbox.isChecked()? EMGroupManager.EMGroupStyle.EMGroupStylePrivateMemberCanInvite: EMGroupManager.EMGroupStyle.EMGroupStylePrivateOnlyOwnerInvite;
+                    }*/
+                    EMClient.getInstance().groupManager().createGroup("群组", "创建的群组", members, reason, option);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            //setResult(RESULT_OK);
+                            finish();
+                        }
+                    });
+                } catch (final HyphenateException e) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(AddGroupChatActivity.this, "群组"+ e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+
+            }
+        }).start();
     }
 
 }

@@ -8,6 +8,7 @@ import com.hyphenate.push.EMPushHelper;
 import com.hyphenate.push.EMPushType;
 import com.hyphenate.push.PushListener;
 import com.hyphenate.util.EMLog;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.zhy.autolayout.config.AutoLayoutConifg;
 
 /**
@@ -45,6 +46,7 @@ public class MyApplication extends MultiDexApplication {
                 }
             });
         }
+        CrashReport.initCrashReport(getApplicationContext(), "ac128a5102", false);
     }
 
     /**
