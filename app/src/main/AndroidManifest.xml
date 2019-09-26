@@ -268,6 +268,62 @@
             </intent-filter>
         </receiver>
         <!-- Mi推送配置 end-->
+
+        <!-- VIVO推送配置 start -->
+        <service
+                android:name="com.vivo.push.sdk.service.CommandClientService"
+                android:exported="true" />
+        <activity
+                android:name="com.vivo.push.sdk.LinkProxyClientActivity"
+                android:exported="false"
+                android:screenOrientation="portrait"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!--推送配置项-->
+        <meta-data
+                android:name="com.vivo.push.api_key"
+                android:value="9b74dbfc-55c4-4441-9d0a-561ff21addc7" />
+        <meta-data
+                android:name="com.vivo.push.app_id"
+                android:value="11025" />
+
+        <receiver android:name="com.hyphenate.push.platform.vivo.EMVivoMsgReceiver" >
+            <intent-filter>
+                <!-- 接收 push 消息 -->
+                <action android:name="com.vivo.pushclient.action.RECEIVE" />
+            </intent-filter>
+        </receiver>
+        <!-- VIVO推送配置 end -->
+
+        <!-- MEIZU推送配置 start -->
+        <receiver android:name="com.hyphenate.push.platform.meizu.EMMzMsgReceiver">
+            <intent-filter>
+                <!-- 接收 push 消息 -->
+                <action android:name="com.meizu.flyme.push.intent.MESSAGE"
+                />
+                <!-- 接收 register 消息 -->
+                <action
+                        android:name="com.meizu.flyme.push.intent.REGISTER.FEEDBACK" />
+                <!-- 接收 unregister 消息-->
+                <action
+                        android:name="com.meizu.flyme.push.intent.UNREGISTER.FEEDBACK"/>
+                <!-- 兼容低版本 Flyme3 推送服务配置 -->
+                <action android:name="com.meizu.c2dm.intent.REGISTRATION"
+                />
+                <action android:name="com.meizu.c2dm.intent.RECEIVE" />
+                <category android:name="${applicationId}"></category>
+            </intent-filter>
+        </receiver>
+        <!-- MEIZU推送配置 end -->
+
+        <!-- Oppo推送配置 start -->
+        <service
+                android:name="com.coloros.mcssdk.PushService"
+                android:permission="com.coloros.mcs.permission.SEND_MCS_MESSAGE">
+            <intent-filter>
+                <action android:name="com.coloros.mcs.action.RECEIVE_MCS_MESSAGE" />
+            </intent-filter>
+        </service>
+        <!-- Oppo推送配置 end -->
     </application>
 
 </manifest>

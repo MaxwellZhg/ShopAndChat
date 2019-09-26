@@ -54,6 +54,7 @@ public class FriendsCenterActivity extends BaseActivity implements BaseBiz {
     private int id;
     private int type;
     private int state;
+    private String guidNo;
 
     @Override
     public int getLayoutResourceId() {
@@ -85,6 +86,7 @@ public class FriendsCenterActivity extends BaseActivity implements BaseBiz {
         id = intent.getIntExtra("id", -1);
         type = intent.getIntExtra("type", -1);
         state = intent.getIntExtra("state", -1);
+        guidNo = intent.getStringExtra("GuidNo");
         rlAction.setBackgroundColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
         ivBack.setBackgroundDrawable(MyApplication.getInstance().mContext.getResources().getDrawable(R.drawable.black));
         tvCenterTitle.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.friend_center));
@@ -146,7 +148,7 @@ public class FriendsCenterActivity extends BaseActivity implements BaseBiz {
                 if (type == 1) {
                     AddFriend(id);
                 }else{
-                    startActivity(new Intent(FriendsCenterActivity.this, ChatActivity.class).putExtra("userId", "13625843690"));
+                    startActivity(new Intent(FriendsCenterActivity.this, ChatActivity.class).putExtra("userId",guidNo ));
 
                 }
                 break;

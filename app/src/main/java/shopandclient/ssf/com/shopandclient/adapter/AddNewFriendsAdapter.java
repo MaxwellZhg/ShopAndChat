@@ -1,8 +1,6 @@
 package shopandclient.ssf.com.shopandclient.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +14,9 @@ import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.entity.ConfrimParams;
 import shopandclient.ssf.com.shopandclient.entity.FriendListBean;
 import shopandclient.ssf.com.shopandclient.entity.PostComment;
-import shopandclient.ssf.com.shopandclient.entity.SearchFriend;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.services.ChatCenterService;
-import shopandclient.ssf.com.shopandclient.ui.FriendsCenterActivity;
 import shopandclient.ssf.com.shopandclient.util.ActionSheetDialog;
-import shopandclient.ssf.com.shopandclient.weiget.bananer.view.MyRecycleview;
 
 import java.util.ArrayList;
 

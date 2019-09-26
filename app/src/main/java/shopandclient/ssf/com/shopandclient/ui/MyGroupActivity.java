@@ -1,11 +1,14 @@
 package shopandclient.ssf.com.shopandclient.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroup;
 import com.jaeger.library.StatusBarUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -15,10 +18,13 @@ import shopandclient.ssf.com.shopandclient.adapter.MyGroupAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.MyGroupBean;
+import shopandclient.ssf.com.shopandclient.im.Constant;
+import shopandclient.ssf.com.shopandclient.im.ui.ChatActivity;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.services.ChatCenterService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyGroupActivity extends BaseActivity implements AdapterView.OnItemClickListener {
     @BindView(R.id.rl_btn_back)
@@ -35,7 +41,7 @@ public class MyGroupActivity extends BaseActivity implements AdapterView.OnItemC
     ImageView ivBack;
     ArrayList<MyGroupBean.DataBean> arrayList;
     private MyGroupAdapter mga;
-
+    private List<EMGroup> grouplist;
     @Override
     public int getLayoutResourceId() {
         return R.layout.activity_my_group;
@@ -59,6 +65,7 @@ public class MyGroupActivity extends BaseActivity implements AdapterView.OnItemC
         rlBtnScope.setVisibility(View.INVISIBLE);
         lvFriendsList.setOnItemClickListener(this);
         getMyGroupData();
+        grouplist = EMClient.getInstance().groupManager().getAllGroups();
     }
 
     private void getMyGroupData() {
@@ -83,10 +90,18 @@ public class MyGroupActivity extends BaseActivity implements AdapterView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Bundle bundle=new Bundle();
+     /*   Bundle bundle=new Bundle();
         bundle.putInt("groupId",arrayList.get(position).getGroupID());
         bundle.putInt("groupAdminID",arrayList.get(position).getGroupAdminID());
-        openActivity(ManagerGroupActivity.class,bundle);
+        openActivity(ManagerGroupActivity.class,bundle);*/
+        // enter group chat
+        Intent intent = new Intent(MyGroupActivity.this, ChatActivity.class);
+        // it is group chat
+        intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
+        intent.putExtra("userId",grouplist.get(position).getGroupId());
+        intent.putExtra("groupId",arrayList.get(position).getGroupID());
+        intent.putExtra("groupAdminID",arrayList.get(position).getGroupAdminID());
+        startActivityForResult(intent, 0);
     }
 
     @OnClick(R.id.rl_btn_back)

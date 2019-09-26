@@ -83,6 +83,7 @@ public class SortAdapter extends BaseAdapter {
                 intent.putExtra("id",list.get(position).getFriendID());
                 intent.putExtra("type",2);
                 intent.putExtra("state",list.get(position).getState());
+                intent.putExtra("GuidNo",list.get(position).getGuidNO());
                 intent.setClass(context, FriendsCenterActivity.class);
                 context.startActivity(intent);
             }

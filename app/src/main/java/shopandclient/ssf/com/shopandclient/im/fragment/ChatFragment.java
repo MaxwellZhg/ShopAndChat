@@ -40,6 +40,7 @@ import shopandclient.ssf.com.shopandclient.im.widget.ChatRowLivePresenter;
 import shopandclient.ssf.com.shopandclient.im.widget.EaseChatRecallPresenter;
 import shopandclient.ssf.com.shopandclient.im.widget.EaseChatVoiceCallPresenter;
 import shopandclient.ssf.com.shopandclient.ui.MainActivity;
+import shopandclient.ssf.com.shopandclient.ui.ManagerGroupActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -70,7 +71,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     private static final int MESSAGE_TYPE_CONFERENCE_INVITE = 5;
     private static final int MESSAGE_TYPE_LIVE_INVITE = 6;
     private static final int MESSAGE_TYPE_RECALL = 9;
-
+    private int  groupId;
+    private int  groupAdminID;
     /**
      * if it is chatBot
      */
@@ -96,6 +98,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
                 isRobot = true;
             }
         }
+        Bundle intent=getArguments();
+        groupId = intent.getInt("groupId",-1);
+        groupAdminID = intent.getInt("groupAdminID",-1);
         super.setUpView();
         // set click listener
         titleBar.setLeftLayoutClickListener(new View.OnClickListener() {
@@ -274,8 +279,13 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
                 Toast.makeText(getActivity(), R.string.gorup_not_found, Toast.LENGTH_SHORT).show();
                 return;
             }
+           /* startActivityForResult(
+                    (new Intent(getActivity(), ManagerGroupActivity.class).putExtra("groupId", toChatUsername)),
+                    REQUEST_CODE_GROUP_DETAIL);*/
             startActivityForResult(
-                    (new Intent(getActivity(), GroupDetailsActivity.class).putExtra("groupId", toChatUsername)),
+                    (new Intent(getActivity(), ManagerGroupActivity.class)
+                            .putExtra("groupId", groupId))
+                            .putExtra("groupAdminID",groupAdminID),
                     REQUEST_CODE_GROUP_DETAIL);
         }else if(chatType == Constant.CHATTYPE_CHATROOM){
             startActivityForResult(new Intent(getActivity(), ChatRoomDetailsActivity.class).putExtra("roomId", toChatUsername), REQUEST_CODE_GROUP_DETAIL);
