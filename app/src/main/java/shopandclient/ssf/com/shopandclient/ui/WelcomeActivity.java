@@ -33,6 +33,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if(SpConfig.getInstance().getBool("isLogin")){
             Intent intent =new Intent();
             intent.setClass(MyApplication.getInstance().mContext,MainActivity.class);

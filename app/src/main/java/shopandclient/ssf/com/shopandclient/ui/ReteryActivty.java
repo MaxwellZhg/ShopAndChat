@@ -16,17 +16,22 @@ import com.jaeger.library.StatusBarUtil;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.ReteryAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.OrderDetailBean;
 import shopandclient.ssf.com.shopandclient.entity.OrderInStoreBean;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
+import shopandclient.ssf.com.shopandclient.util.Observer;
+import shopandclient.ssf.com.shopandclient.util.SpConfig;
+import shopandclient.ssf.com.shopandclient.util.Subject;
+import shopandclient.ssf.com.shopandclient.util.TokenManager;
 
 import java.util.ArrayList;
 
 /**
  * Created by zhg on 2019/6/12.
  */
-public class ReteryActivty extends BaseActivity implements BaseBiz,View.OnClickListener {
+public class ReteryActivty extends BaseActivity implements BaseBiz,View.OnClickListener, Observer {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
@@ -49,6 +54,8 @@ public class ReteryActivty extends BaseActivity implements BaseBiz,View.OnClickL
     private OptionsPickerView pvOptions1;
     private ArrayList<String> type = new ArrayList<>();
     private ArrayList<String> reason = new ArrayList<>();
+    private TokenManager tokenManager;
+
     @Override
     public int getLayoutResourceId() {
         return R.layout.activity_retery_goods;
@@ -68,8 +75,15 @@ public class ReteryActivty extends BaseActivity implements BaseBiz,View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 
     @Override

@@ -30,14 +30,12 @@ import shopandclient.ssf.com.shopandclient.im.db.DemoDBManager;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.UserService;
-import shopandclient.ssf.com.shopandclient.util.MD5Utils;
-import shopandclient.ssf.com.shopandclient.util.SpConfig;
-import shopandclient.ssf.com.shopandclient.util.ToastUtil;
+import shopandclient.ssf.com.shopandclient.util.*;
 
 /**
  * Created by zhg on 2019/5/27.
  */
-public class LoginActivity extends BaseActivity implements BaseBiz, TextWatcher,View.OnClickListener {
+public class LoginActivity extends BaseActivity implements BaseBiz, TextWatcher,View.OnClickListener, Observer {
 
   public static final String TAG=LoginActivity.class.getSimpleName();
     @BindView(R.id.tv_register)
@@ -57,6 +55,7 @@ public class LoginActivity extends BaseActivity implements BaseBiz, TextWatcher,
     Button btnLogin;
     private String mPhone;
     private String mPswd;
+    private TokenManager tokenManager;
 
     @Override
     public int getLayoutResourceId() {
@@ -223,6 +222,9 @@ public class LoginActivity extends BaseActivity implements BaseBiz, TextWatcher,
                 Intent intent = new Intent();
                 intent.putExtra("username",SpConfig.getInstance().getString(Constants.USERNAME));
                 setResult(RESULT_OK,intent);
+                tokenManager =  TokenManager.newInstance();
+                tokenManager.registerObserver(LoginActivity.this);
+                tokenManager.TimeSchecher();
                 finish();
             }
 
@@ -283,4 +285,8 @@ public class LoginActivity extends BaseActivity implements BaseBiz, TextWatcher,
 
     }
 
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
+    }
 }

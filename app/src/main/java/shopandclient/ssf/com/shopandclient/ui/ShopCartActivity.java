@@ -23,6 +23,7 @@ import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.AttrInfoAdapter;
 import shopandclient.ssf.com.shopandclient.adapter.ShopCartAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.*;
 import shopandclient.ssf.com.shopandclient.event.CartAttrEvent;
@@ -31,13 +32,17 @@ import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.PesronnalService;
 import shopandclient.ssf.com.shopandclient.net.services.ProductService;
+import shopandclient.ssf.com.shopandclient.util.Observer;
+import shopandclient.ssf.com.shopandclient.util.SpConfig;
+import shopandclient.ssf.com.shopandclient.util.Subject;
+import shopandclient.ssf.com.shopandclient.util.TokenManager;
 
 import java.util.ArrayList;
 
 /**
  * Created by zhg on 2019/6/12.
  */
-public class ShopCartActivity extends BaseActivity implements BaseBiz {
+public class ShopCartActivity extends BaseActivity implements BaseBiz , Observer {
     @BindView(R.id.lv_shop_cart)
     ListView lvShopCart;
     ArrayList<OrderDetailBean> orderDetailBeans1 = new ArrayList<>();
@@ -71,6 +76,7 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz {
     private CartAttrEvent attrEvent;
     private Attr attrselect;
     private AttrInfoAdapter aia;
+    private TokenManager tokenManager;
 
     @Override
     public int getLayoutResourceId() {
@@ -91,8 +97,15 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 
     @Override

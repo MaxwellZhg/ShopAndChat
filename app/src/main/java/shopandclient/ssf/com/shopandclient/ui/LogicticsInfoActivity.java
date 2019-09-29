@@ -16,11 +16,16 @@ import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.LogicticsGoodsInfoAdapter;
 import shopandclient.ssf.com.shopandclient.adapter.LogicticsTrackInfoAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.LogicticsBean;
 import shopandclient.ssf.com.shopandclient.entity.OrderDetailBean;
 import shopandclient.ssf.com.shopandclient.entity.OrderInStoreBean;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
+import shopandclient.ssf.com.shopandclient.util.Observer;
+import shopandclient.ssf.com.shopandclient.util.SpConfig;
+import shopandclient.ssf.com.shopandclient.util.Subject;
+import shopandclient.ssf.com.shopandclient.util.TokenManager;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.view.MyRecycleview;
 
 import java.util.ArrayList;
@@ -28,7 +33,7 @@ import java.util.ArrayList;
 /**
  * Created by zhg on 2019/6/13.
  */
-public class LogicticsInfoActivity extends BaseActivity implements BaseBiz {
+public class LogicticsInfoActivity extends BaseActivity implements BaseBiz, Observer {
     @BindView(R.id.rl_btn_back)
     RelativeLayout rlBtnBack;
     @BindView(R.id.tv_center_title)
@@ -47,6 +52,7 @@ public class LogicticsInfoActivity extends BaseActivity implements BaseBiz {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     private MyRecycleview rv_logictics;
+    private TokenManager tokenManager;
 
     @Override
     public int getLayoutResourceId() {
@@ -67,6 +73,8 @@ public class LogicticsInfoActivity extends BaseActivity implements BaseBiz {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
     }
@@ -109,5 +117,10 @@ public class LogicticsInfoActivity extends BaseActivity implements BaseBiz {
     @OnClick(R.id.rl_btn_back)
     public void onViewClicked() {
         finish();
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 }

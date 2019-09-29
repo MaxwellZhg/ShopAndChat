@@ -27,16 +27,21 @@ import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.TabLayoutAdapter;
 import shopandclient.ssf.com.shopandclient.adapter.ViewPagerAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.ui.fragment.AllHistoryScanFragment;
+import shopandclient.ssf.com.shopandclient.util.Observer;
+import shopandclient.ssf.com.shopandclient.util.SpConfig;
+import shopandclient.ssf.com.shopandclient.util.Subject;
+import shopandclient.ssf.com.shopandclient.util.TokenManager;
 
 import java.util.ArrayList;
 
 /**
  * Created by zhg on 2019/6/12.
  */
-public class HistoryScanActivity extends BaseActivity implements BaseBiz, TabLayout.OnTabSelectedListener {
+public class HistoryScanActivity extends BaseActivity implements BaseBiz, TabLayout.OnTabSelectedListener, Observer {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
@@ -56,6 +61,7 @@ public class HistoryScanActivity extends BaseActivity implements BaseBiz, TabLay
     private Intent intent;
     private int scantype;
     private CommonNavigator commonNavigator;
+    private TokenManager tokenManager;
 
     @Override
     public int getLayoutResourceId() {
@@ -177,6 +183,8 @@ public class HistoryScanActivity extends BaseActivity implements BaseBiz, TabLay
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
     }
@@ -199,5 +207,10 @@ public class HistoryScanActivity extends BaseActivity implements BaseBiz, TabLay
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
         vpMain.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 }

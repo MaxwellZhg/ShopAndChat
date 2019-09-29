@@ -20,18 +20,19 @@ import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.ChangeGroupManagerAdapter;
 import shopandclient.ssf.com.shopandclient.adapter.ForbinGroupMemberAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.*;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.ChatCenterService;
-import shopandclient.ssf.com.shopandclient.util.ToastUtil;
+import shopandclient.ssf.com.shopandclient.util.*;
 
 import java.util.ArrayList;
 
 import static com.hyphenate.chat.core.EMDBManager.a;
 
-public class ChangeGroupManegerActivity extends BaseActivity implements BaseBiz {
+public class ChangeGroupManegerActivity extends BaseActivity implements BaseBiz, Observer {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
@@ -58,6 +59,8 @@ public class ChangeGroupManegerActivity extends BaseActivity implements BaseBiz 
     private String unStr="";
     private String a="";
     private String b="";
+    private TokenManager tokenManager;
+
     @Override
     public int getLayoutResourceId() {
         return R.layout.activity_create_group_chat;
@@ -77,8 +80,15 @@ public class ChangeGroupManegerActivity extends BaseActivity implements BaseBiz 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 
     @Override

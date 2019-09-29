@@ -18,18 +18,23 @@ import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.AddressAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.AddressBean;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.PesronnalService;
+import shopandclient.ssf.com.shopandclient.util.Observer;
+import shopandclient.ssf.com.shopandclient.util.SpConfig;
+import shopandclient.ssf.com.shopandclient.util.Subject;
+import shopandclient.ssf.com.shopandclient.util.TokenManager;
 
 import java.util.ArrayList;
 
 /**
  * Created by zhg on 2019/6/6.
  */
-public class AddressActivity extends BaseActivity implements BaseBiz,AddressAdapter.OnitemClick {
+public class AddressActivity extends BaseActivity implements BaseBiz,AddressAdapter.OnitemClick, Observer {
     @BindView(R.id.rl_btn_back)
     RelativeLayout rlBtnBack;
     @BindView(R.id.tv_center_title)
@@ -47,6 +52,7 @@ public class AddressActivity extends BaseActivity implements BaseBiz,AddressAdap
     ArrayList<AddressBean.DataBean> list;
     private AddressAdapter adressAdapter;
     private int type;
+    private TokenManager tokenManager;
 
     @Override
     public int getLayoutResourceId() {
@@ -67,6 +73,8 @@ public class AddressActivity extends BaseActivity implements BaseBiz,AddressAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
     }
@@ -135,5 +143,10 @@ public class AddressActivity extends BaseActivity implements BaseBiz,AddressAdap
             setResult(2,intent);
         }
         finish();
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 }

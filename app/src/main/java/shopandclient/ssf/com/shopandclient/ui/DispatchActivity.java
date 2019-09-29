@@ -24,11 +24,11 @@ import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.CommentStarAdapter;
 import shopandclient.ssf.com.shopandclient.adapter.ImagePickerAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.CommentStarBean;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
-import shopandclient.ssf.com.shopandclient.util.GlideImageLoader;
-import shopandclient.ssf.com.shopandclient.util.SelectDialog;
+import shopandclient.ssf.com.shopandclient.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * Created by zhg on 2019/6/17.
  */
-public class DispatchActivity extends BaseActivity implements BaseBiz, CommentStarAdapter.OnitemClick, ImagePickerAdapter.OnRecyclerViewItemClickListener,ImagePickerAdapter.OnDeteleCancelClick {
+public class DispatchActivity extends BaseActivity implements BaseBiz, CommentStarAdapter.OnitemClick, ImagePickerAdapter.OnRecyclerViewItemClickListener,ImagePickerAdapter.OnDeteleCancelClick, Observer {
     public static final int IMAGE_ITEM_ADD = -1;
     public static final int REQUEST_CODE_SELECT = 100;
     public static final int REQUEST_CODE_PREVIEW = 101;
@@ -65,6 +65,7 @@ public class DispatchActivity extends BaseActivity implements BaseBiz, CommentSt
     private int maxImgCount = 5;
     private ImagePickerAdapter adapter;
     private ArrayList<ImageItem> selImageList = new ArrayList<>();
+    private TokenManager tokenManager;
     ; //当前选择的所有图片
 
     @Override
@@ -114,6 +115,8 @@ public class DispatchActivity extends BaseActivity implements BaseBiz, CommentSt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
     }
@@ -259,5 +262,10 @@ public class DispatchActivity extends BaseActivity implements BaseBiz, CommentSt
                 startActivityForResult(intentPreview, REQUEST_CODE_PREVIEW);*/
                 break;
         }
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 }

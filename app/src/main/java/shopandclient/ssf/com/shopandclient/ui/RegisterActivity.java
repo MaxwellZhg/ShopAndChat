@@ -19,6 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.DemoHelper;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.AddUser;
@@ -27,9 +28,7 @@ import shopandclient.ssf.com.shopandclient.entity.SendCodeBean;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.UserService;
-import shopandclient.ssf.com.shopandclient.util.MD5Utils;
-import shopandclient.ssf.com.shopandclient.util.SpConfig;
-import shopandclient.ssf.com.shopandclient.util.ToastUtil;
+import shopandclient.ssf.com.shopandclient.util.*;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,7 +36,7 @@ import java.util.TimerTask;
 /**
  * Created by zhg on 2019/5/29.
  */
-public class RegisterActivity extends BaseActivity implements BaseBiz, TextWatcher,View.OnClickListener {
+public class RegisterActivity extends BaseActivity implements BaseBiz, TextWatcher,View.OnClickListener,Observer {
 
     @BindView(R.id.et_phone)
     EditText etPhone;
@@ -62,6 +61,7 @@ public class RegisterActivity extends BaseActivity implements BaseBiz, TextWatch
     private String mPswd;
     private String mCode;
     private String mPswagain;
+    private TokenManager tokenManager;
 
     @Override
     public void onSuccess(Object object) {
@@ -76,6 +76,8 @@ public class RegisterActivity extends BaseActivity implements BaseBiz, TextWatch
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this,MyApplication.getInstance().mContext.getResources().getColor(R.color.white),0);
         etPhone.addTextChangedListener(this);
@@ -116,6 +118,11 @@ public class RegisterActivity extends BaseActivity implements BaseBiz, TextWatch
                 }
             }
         });
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 
     @Override

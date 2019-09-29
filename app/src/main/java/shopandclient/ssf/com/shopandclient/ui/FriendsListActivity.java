@@ -19,6 +19,7 @@ import shopandclient.ssf.com.shopandclient.adapter.AddFriendsAdapter;
 import shopandclient.ssf.com.shopandclient.adapter.AddNewFriendsAdapter;
 import shopandclient.ssf.com.shopandclient.adapter.SortAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.Friend;
 import shopandclient.ssf.com.shopandclient.entity.FriendListBean;
@@ -27,7 +28,7 @@ import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.ChatCenterService;
 import shopandclient.ssf.com.shopandclient.net.services.ProductService;
-import shopandclient.ssf.com.shopandclient.util.ScreenDipUtil;
+import shopandclient.ssf.com.shopandclient.util.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,7 +36,7 @@ import java.util.Collections;
 /**
  * Created by zhg on 2019/6/21.
  */
-public class FriendsListActivity extends BaseActivity implements BaseBiz,View.OnClickListener,AddNewFriendsAdapter.OnitemClick {
+public class FriendsListActivity extends BaseActivity implements BaseBiz,View.OnClickListener,AddNewFriendsAdapter.OnitemClick, Observer {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
@@ -66,6 +67,7 @@ public class FriendsListActivity extends BaseActivity implements BaseBiz,View.On
     private AddNewFriendsAdapter anfa;
     private TextView tv_first_word;
     private RelativeLayout rl_group;
+    private TokenManager tokenManager;
 
     @Override
     public int getLayoutResourceId() {
@@ -86,6 +88,8 @@ public class FriendsListActivity extends BaseActivity implements BaseBiz,View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
     }
@@ -236,5 +240,10 @@ public class FriendsListActivity extends BaseActivity implements BaseBiz,View.On
     protected void onResume() {
         super.onResume();
         getData();
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 }

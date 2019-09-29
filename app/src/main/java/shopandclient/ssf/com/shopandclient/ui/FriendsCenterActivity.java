@@ -15,6 +15,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.ConfrimParams;
 import shopandclient.ssf.com.shopandclient.entity.PostComment;
@@ -22,12 +23,12 @@ import shopandclient.ssf.com.shopandclient.im.ui.ChatActivity;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.ChatCenterService;
-import shopandclient.ssf.com.shopandclient.util.ToastUtil;
+import shopandclient.ssf.com.shopandclient.util.*;
 
 /**
  * Created by zhg on 2019/6/19.
  */
-public class FriendsCenterActivity extends BaseActivity implements BaseBiz {
+public class FriendsCenterActivity extends BaseActivity implements BaseBiz, Observer {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
@@ -55,6 +56,7 @@ public class FriendsCenterActivity extends BaseActivity implements BaseBiz {
     private int type;
     private int state;
     private String guidNo;
+    private TokenManager tokenManager;
 
     @Override
     public int getLayoutResourceId() {
@@ -75,6 +77,8 @@ public class FriendsCenterActivity extends BaseActivity implements BaseBiz {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
     }
@@ -196,5 +200,10 @@ public class FriendsCenterActivity extends BaseActivity implements BaseBiz {
 
             }
         });
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 }

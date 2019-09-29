@@ -24,12 +24,15 @@ import shopandclient.ssf.com.shopandclient.entity.AddUserResult;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.UserService;
+import shopandclient.ssf.com.shopandclient.util.Observer;
 import shopandclient.ssf.com.shopandclient.util.SpConfig;
+import shopandclient.ssf.com.shopandclient.util.Subject;
+import shopandclient.ssf.com.shopandclient.util.TokenManager;
 
 /**
  * Created by zhg on 2019/6/18.
  */
-public class PersonCenterActivity extends BaseActivity implements BaseBiz {
+public class PersonCenterActivity extends BaseActivity implements BaseBiz , Observer {
     @BindView(R.id.iv_center)
     ImageView ivCenter;
     @BindView(R.id.tv_name)
@@ -54,6 +57,7 @@ public class PersonCenterActivity extends BaseActivity implements BaseBiz {
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
     RelativeLayout rlBtnBack;
+    private TokenManager tokenManager;
 
     @Override
     public int getLayoutResourceId() {
@@ -74,12 +78,19 @@ public class PersonCenterActivity extends BaseActivity implements BaseBiz {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         if (Build.VERSION.SDK_INT >= 21){
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
         ButterKnife.bind(this);
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 
     @Override

@@ -26,16 +26,21 @@ import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.TabLayoutAdapter;
 import shopandclient.ssf.com.shopandclient.adapter.ViewPagerAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.ui.fragment.AllMyOrderFragment;
+import shopandclient.ssf.com.shopandclient.util.Observer;
+import shopandclient.ssf.com.shopandclient.util.SpConfig;
+import shopandclient.ssf.com.shopandclient.util.Subject;
+import shopandclient.ssf.com.shopandclient.util.TokenManager;
 
 import java.util.ArrayList;
 
 /**
  * Created by zhg on 2019/6/13.
  */
-public class AllMyOrderActivity extends BaseActivity implements BaseBiz {
+public class AllMyOrderActivity extends BaseActivity implements BaseBiz, Observer {
     @BindView(R.id.rl_btn_back)
     RelativeLayout rlBtnBack;
     @BindView(R.id.tv_center_title)
@@ -53,6 +58,7 @@ public class AllMyOrderActivity extends BaseActivity implements BaseBiz {
     @BindView(R.id.magic_indicator)
     MagicIndicator magicIndicator;
     private CommonNavigator commonNavigator;
+    private TokenManager tokenManager;
 
     @Override
     public int getLayoutResourceId() {
@@ -157,6 +163,8 @@ public class AllMyOrderActivity extends BaseActivity implements BaseBiz {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
     }
@@ -164,5 +172,9 @@ public class AllMyOrderActivity extends BaseActivity implements BaseBiz {
     @OnClick(R.id.rl_btn_back)
     public void onViewClicked() {
         finish();
+    }
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 }

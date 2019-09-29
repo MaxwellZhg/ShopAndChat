@@ -23,6 +23,7 @@ import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.CategoryAdapter;
 import shopandclient.ssf.com.shopandclient.adapter.CategoryGridViewAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.BrandDetail;
 import shopandclient.ssf.com.shopandclient.entity.Brands;
@@ -32,6 +33,10 @@ import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.ProductService;
 import shopandclient.ssf.com.shopandclient.net.services.UserService;
+import shopandclient.ssf.com.shopandclient.util.Observer;
+import shopandclient.ssf.com.shopandclient.util.SpConfig;
+import shopandclient.ssf.com.shopandclient.util.Subject;
+import shopandclient.ssf.com.shopandclient.util.TokenManager;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.Banner;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.GlideImageLoader;
 
@@ -40,7 +45,7 @@ import java.util.ArrayList;
 /**
  * Created by zhg on 2019/5/30.
  */
-public class CategoryActivity extends BaseActivity implements BaseBiz, CategoryAdapter.OnitemClick, AdapterView.OnItemClickListener {
+public class CategoryActivity extends BaseActivity implements BaseBiz, CategoryAdapter.OnitemClick, AdapterView.OnItemClickListener, Observer {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
@@ -67,6 +72,8 @@ public class CategoryActivity extends BaseActivity implements BaseBiz, CategoryA
     private ArrayList<CategoryBean.DataBean> list;
     private int  seriesId=0;
     private int  categroyid=0;
+    private TokenManager tokenManager;
+
     @Override
     public int getLayoutResourceId() {
         return R.layout.activity_category;
@@ -109,8 +116,15 @@ public class CategoryActivity extends BaseActivity implements BaseBiz, CategoryA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 
     @Override

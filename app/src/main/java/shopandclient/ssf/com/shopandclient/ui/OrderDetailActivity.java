@@ -14,17 +14,22 @@ import com.jaeger.library.StatusBarUtil;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.OrderAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.OrderDetailBean;
 import shopandclient.ssf.com.shopandclient.entity.OrderInStoreBean;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
+import shopandclient.ssf.com.shopandclient.util.Observer;
+import shopandclient.ssf.com.shopandclient.util.SpConfig;
+import shopandclient.ssf.com.shopandclient.util.Subject;
+import shopandclient.ssf.com.shopandclient.util.TokenManager;
 
 import java.util.ArrayList;
 
 /**
  * Created by zhg on 2019/6/11.
  */
-public class OrderDetailActivity extends BaseActivity implements BaseBiz {
+public class OrderDetailActivity extends BaseActivity implements BaseBiz, Observer {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
@@ -49,6 +54,7 @@ public class OrderDetailActivity extends BaseActivity implements BaseBiz {
     ArrayList<OrderDetailBean> orderDetailBeans2 = new ArrayList<>();
     ArrayList<OrderDetailBean> orderDetailBeans3 = new ArrayList<>();
     ArrayList<OrderInStoreBean> list = new ArrayList<>();
+    private TokenManager tokenManager;
 
 
     @Override
@@ -70,10 +76,16 @@ public class OrderDetailActivity extends BaseActivity implements BaseBiz {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
     }
 
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
+    }
     @Override
     protected void initView() {
         super.initView();

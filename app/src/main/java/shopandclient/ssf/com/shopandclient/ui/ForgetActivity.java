@@ -26,9 +26,7 @@ import shopandclient.ssf.com.shopandclient.entity.SendCodeBean;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.UserService;
-import shopandclient.ssf.com.shopandclient.util.MD5Utils;
-import shopandclient.ssf.com.shopandclient.util.SpConfig;
-import shopandclient.ssf.com.shopandclient.util.ToastUtil;
+import shopandclient.ssf.com.shopandclient.util.*;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -36,7 +34,7 @@ import java.util.TimerTask;
 /**
  * Created by zhg on 2019/5/29.
  */
-public class ForgetActivity extends BaseActivity implements BaseBiz, TextWatcher {
+public class ForgetActivity extends BaseActivity implements BaseBiz, TextWatcher, Observer {
 
     @BindView(R.id.et_credit_num)
     EditText etCreditNum;
@@ -69,6 +67,7 @@ public class ForgetActivity extends BaseActivity implements BaseBiz, TextWatcher
     TextView tvSave;
     private int recLen = 60;//跳过倒计时提示5秒
     TimerTask task;
+    private TokenManager tokenManager;
 
     @Override
     public int getLayoutResourceId() {
@@ -89,6 +88,8 @@ public class ForgetActivity extends BaseActivity implements BaseBiz, TextWatcher
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.white), 0);
         etCreditNum.addTextChangedListener(this);
@@ -220,4 +221,8 @@ public class ForgetActivity extends BaseActivity implements BaseBiz, TextWatcher
         });
     }
 
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
+    }
 }

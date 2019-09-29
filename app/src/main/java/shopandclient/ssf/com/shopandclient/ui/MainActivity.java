@@ -37,9 +37,7 @@ import shopandclient.ssf.com.shopandclient.im.ui.ChatActivity;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.UserService;
-import shopandclient.ssf.com.shopandclient.util.PermissionsUtils;
-import shopandclient.ssf.com.shopandclient.util.SpConfig;
-import shopandclient.ssf.com.shopandclient.util.ToastUtil;
+import shopandclient.ssf.com.shopandclient.util.*;
 
 import java.util.List;
 
@@ -47,7 +45,7 @@ import java.util.List;
 /**
  * Created by zhg on 2019/5/27.
  */
-public class MainActivity extends BaseActivity implements BaseBiz {
+public class MainActivity extends BaseActivity implements BaseBiz, Observer {
 
 
     @BindView(R.id.rl_chat)
@@ -84,10 +82,13 @@ public class MainActivity extends BaseActivity implements BaseBiz {
     public boolean isConflict = false;
     // user account was removed
     private boolean isCurrentAccountRemoved = false;
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tokenManager =  TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.theme_bg), 0);
         //两个日历权限和一个数据读写权限
         String[] permissions = new String[]{Manifest.permission.INTERNET, Manifest.permission.VIBRATE, Manifest.permission.RECORD_AUDIO,
@@ -244,6 +245,11 @@ public class MainActivity extends BaseActivity implements BaseBiz {
             }
         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 
     public class MyContactListener implements EMContactListener {

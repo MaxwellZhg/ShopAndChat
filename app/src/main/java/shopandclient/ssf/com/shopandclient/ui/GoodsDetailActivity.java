@@ -31,6 +31,7 @@ import shopandclient.ssf.com.shopandclient.adapter.AttrAdapter;
 import shopandclient.ssf.com.shopandclient.adapter.AttrInfoAdapter;
 import shopandclient.ssf.com.shopandclient.adapter.SlideFragmentPagerAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.*;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
@@ -38,7 +39,7 @@ import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.ProductService;
 import shopandclient.ssf.com.shopandclient.ui.fragment.GoodCommentFragment;
 import shopandclient.ssf.com.shopandclient.ui.fragment.GoodDetailFragment;
-import shopandclient.ssf.com.shopandclient.util.ToastUtil;
+import shopandclient.ssf.com.shopandclient.util.*;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.Banner;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.GlideImageLoader;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.view.FlingScrollDetailsLayout;
@@ -49,7 +50,7 @@ import java.util.ArrayList;
 /**
  * Created by zhg on 2019/6/14.
  */
-public class GoodsDetailActivity extends BaseActivity implements BaseBiz {
+public class GoodsDetailActivity extends BaseActivity implements BaseBiz, Observer {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
@@ -119,6 +120,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz {
     private Attr attrevent;
     private int typevalue1;
     private int typevalue2;
+    private TokenManager tokenManager;
 
     @Override
     public int getLayoutResourceId() {
@@ -139,6 +141,8 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
 
@@ -483,5 +487,10 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz {
 
             }
         });
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 }

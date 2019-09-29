@@ -13,14 +13,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.PostComment;
 import shopandclient.ssf.com.shopandclient.entity.UpdateGroupNameParams;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.services.ChatCenterService;
-import shopandclient.ssf.com.shopandclient.util.ToastUtil;
+import shopandclient.ssf.com.shopandclient.util.*;
 
-public class UpdateGroupNameActivty extends BaseActivity {
+public class UpdateGroupNameActivty extends BaseActivity implements Observer {
     @BindView(R.id.rl_btn_back)
     RelativeLayout rlBtnBack;
     @BindView(R.id.tv_center_title)
@@ -37,6 +38,7 @@ public class UpdateGroupNameActivty extends BaseActivity {
     ImageView ivBack;
     private int groupId;
     private String str;
+    private TokenManager tokenManager;
 
     @Override
     public int getLayoutResourceId() {
@@ -47,6 +49,8 @@ public class UpdateGroupNameActivty extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
     }
@@ -93,5 +97,10 @@ public class UpdateGroupNameActivty extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 }

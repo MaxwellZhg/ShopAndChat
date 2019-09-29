@@ -25,9 +25,7 @@ import shopandclient.ssf.com.shopandclient.entity.PostComment;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.ChatCenterService;
-import shopandclient.ssf.com.shopandclient.util.ActionSheetDialog;
-import shopandclient.ssf.com.shopandclient.util.SpConfig;
-import shopandclient.ssf.com.shopandclient.util.ToastUtil;
+import shopandclient.ssf.com.shopandclient.util.*;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.view.MyRecycleview;
 
 import java.util.ArrayList;
@@ -35,7 +33,7 @@ import java.util.ArrayList;
 /**
  * Created by zhg on 2019/6/20.
  */
-public class ManagerGroupActivity extends BaseActivity implements BaseBiz, AdapterView.OnItemClickListener,GroupMemberAdapter.OnitemClick {
+public class ManagerGroupActivity extends BaseActivity implements BaseBiz, AdapterView.OnItemClickListener,GroupMemberAdapter.OnitemClick, Observer {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
@@ -56,6 +54,7 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
     private View itemview;
     private int groupId;
     private int groupAdminID;
+    private TokenManager tokenManager;
 
     @Override
     public int getLayoutResourceId() {
@@ -76,6 +75,8 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
     }
@@ -261,5 +262,10 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
 
             }
         });
+    }
+
+    @Override
+    public void update(Subject subject) {
+
     }
 }

@@ -23,6 +23,7 @@ import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.StreetInfoAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.ProPara;
 import shopandclient.ssf.com.shopandclient.entity.ProductListBean;
@@ -30,7 +31,7 @@ import shopandclient.ssf.com.shopandclient.entity.StreetInfoBean;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.ProductService;
-import shopandclient.ssf.com.shopandclient.util.ToastUtil;
+import shopandclient.ssf.com.shopandclient.util.*;
 
 import java.util.ArrayList;
 
@@ -40,7 +41,7 @@ import java.util.ArrayList;
  * Date: 2019/9/17
  * Desc:
  */
-public class SearchProActivity extends BaseActivity implements BaseBiz, TextWatcher {
+public class SearchProActivity extends BaseActivity implements BaseBiz, TextWatcher , Observer {
     @BindView(R.id.rl_btn_back)
     RelativeLayout rlBtnBack;
     @BindView(R.id.tv_center_title)
@@ -68,6 +69,7 @@ public class SearchProActivity extends BaseActivity implements BaseBiz, TextWatc
     ArrayList<StreetInfoBean.DataBean.ListBean> allList=new ArrayList<>();
     private String strInfo;
     private StreetInfoAdapter streetAdapter;
+    private TokenManager tokenManager;
 
     @Override
     public int getLayoutResourceId() {
@@ -102,9 +104,16 @@ public class SearchProActivity extends BaseActivity implements BaseBiz, TextWatc
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
 
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 
     @Override

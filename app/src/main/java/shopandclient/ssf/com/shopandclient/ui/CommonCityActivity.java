@@ -19,20 +19,21 @@ import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.CommonCityAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.*;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.ChatCenterService;
 import shopandclient.ssf.com.shopandclient.net.services.ProductService;
-import shopandclient.ssf.com.shopandclient.util.ToastUtil;
+import shopandclient.ssf.com.shopandclient.util.*;
 
 import java.util.ArrayList;
 
 /**
  * Created by zhg on 2019/6/19.
  */
-public class CommonCityActivity extends BaseActivity implements BaseBiz, CommonCityAdapter.onItemFriendClick {
+public class CommonCityActivity extends BaseActivity implements BaseBiz, CommonCityAdapter.onItemFriendClick, Observer {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
@@ -52,6 +53,8 @@ public class CommonCityActivity extends BaseActivity implements BaseBiz, CommonC
     private int count = 8;
     ArrayList<LocalUserBean.DataBean.ListBean> brandDetails;
     ArrayList<LocalUserBean.DataBean.ListBean> allList=new ArrayList<>();
+    private TokenManager tokenManager;
+
     @Override
     public int getLayoutResourceId() {
         return R.layout.activity_common_city;
@@ -71,6 +74,8 @@ public class CommonCityActivity extends BaseActivity implements BaseBiz, CommonC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
     }
@@ -148,5 +153,10 @@ public class CommonCityActivity extends BaseActivity implements BaseBiz, CommonC
 
             }
         });
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 }

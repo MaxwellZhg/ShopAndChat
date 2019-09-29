@@ -20,6 +20,7 @@ import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.StreetAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
+import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.CollectParams;
 import shopandclient.ssf.com.shopandclient.entity.PostComment;
@@ -27,14 +28,14 @@ import shopandclient.ssf.com.shopandclient.entity.StoreInfoBean;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.ProductService;
-import shopandclient.ssf.com.shopandclient.util.ToastUtil;
+import shopandclient.ssf.com.shopandclient.util.*;
 
 import java.util.ArrayList;
 
 /**
  * Created by zhg on 2019/6/5.
  */
-public class StoreDetailActivity extends BaseActivity implements BaseBiz {
+public class StoreDetailActivity extends BaseActivity implements BaseBiz, Observer {
     @BindView(R.id.gv_sotre_detail)
     GridViewWithHeaderAndFooter gvSotreDetail;
     @BindView(R.id.rl_btn_back)
@@ -80,6 +81,7 @@ public class StoreDetailActivity extends BaseActivity implements BaseBiz {
     private ArrayList<StoreInfoBean.DataBean.ProListBean.ListBean> alllist = new ArrayList<>();
     private ArrayList<StoreInfoBean.DataBean.ProListBean.ListBean> list;
     private StreetAdapter streetAdapter;
+    private TokenManager tokenManager;
 
     @Override
     public int getLayoutResourceId() {
@@ -139,9 +141,16 @@ public class StoreDetailActivity extends BaseActivity implements BaseBiz {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
+        tokenManager = TokenManager.newInstance();
+        tokenManager.registerObserver(this);
         ButterKnife.bind(this);
         StatusBarUtil.setColor(this, MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips), 0);
         streetAdapter = new StreetAdapter(this);
+    }
+
+    @Override
+    public void update(Subject subject) {
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
 
 
