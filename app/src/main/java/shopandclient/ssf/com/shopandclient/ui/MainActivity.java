@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.OnClick;
+import com.bumptech.glide.Glide;
 import com.hyphenate.*;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
@@ -466,6 +467,7 @@ public class MainActivity extends BaseActivity implements BaseBiz, Observer {
                 if (response.body().getCode() == 200 && response != null) {
                     Log.e("ttttttt", response.body().toString());
                     tvUserName.setText(response.body().getData().getUserName());
+                    Glide.with(MainActivity.this).load("http://www.xdgia.com/Upload/20190927091515.png").into(ivImg);
                 }
             }
 

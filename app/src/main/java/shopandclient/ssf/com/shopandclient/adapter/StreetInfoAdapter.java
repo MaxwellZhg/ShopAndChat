@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.entity.StreetInfoBean;
 
@@ -53,6 +54,7 @@ public class StreetInfoAdapter extends BaseAdapter {
         hodler.tv_brands_name.setText(beans.get(position).getProName());
         hodler.tv_price.setText("¥"+beans.get(position).getPrice());
         hodler.tv_sale_count.setText("已售"+beans.get(position).getNum()+"件");
+        Glide.with(context).load(beans.get(position).getImg()).into(hodler.iv_street_brands);
         return convertView;
     }
     class ViewHodler{

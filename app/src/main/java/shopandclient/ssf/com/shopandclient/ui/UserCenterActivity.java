@@ -1,10 +1,12 @@
 package shopandclient.ssf.com.shopandclient.ui;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -12,6 +14,7 @@ import com.jaeger.library.StatusBarUtil;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
 import shopandclient.ssf.com.shopandclient.base.Constants;
+import shopandclient.ssf.com.shopandclient.base.DemoHelper;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.util.Observer;
@@ -38,6 +41,7 @@ public class UserCenterActivity extends BaseActivity implements BaseBiz, Observe
     @BindView(R.id.rl_action)
     RelativeLayout rlAction;
     private TokenManager tokenManager;
+    private ProgressDialog dialog;
 
     @Override
     public int getLayoutResourceId() {
@@ -83,5 +87,38 @@ public class UserCenterActivity extends BaseActivity implements BaseBiz, Observe
     @Override
     public void update(Subject subject) {
         SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
+    }
+
+    private void updateRemoteNick(final String nickName) {
+        dialog = ProgressDialog.show(this, getString(R.string.dl_update_nick), getString(R.string.dl_waiting));
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                boolean updatenick = DemoHelper.getInstance().getUserProfileManager().updateCurrentUserNickName(nickName);
+                if (UserCenterActivity.this.isFinishing()) {
+                    return;
+                }
+                if (!updatenick) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(UserCenterActivity.this, getString(R.string.toast_updatenick_fail), Toast.LENGTH_SHORT)
+                                    .show();
+                            dialog.dismiss();
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.dismiss();
+                            Toast.makeText(UserCenterActivity.this, getString(R.string.toast_updatenick_success), Toast.LENGTH_SHORT)
+                                    .show();
+                            //tvNickName.setText(nickName);
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 }

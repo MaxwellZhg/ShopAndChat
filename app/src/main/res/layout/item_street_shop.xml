@@ -4,7 +4,7 @@
                 android:layout_height="wrap_content"
                 xmlns:app="http://schemas.android.com/apk/res-auto">
  <android.support.v7.widget.CardView android:layout_width="match_parent"
-                                     android:layout_height="wrap_content"
+                                     android:layout_height="278dp"
                                      app:cardCornerRadius="12dp"
                                      android:layout_marginTop="10dp"
                                      android:layout_marginLeft="5dp"
@@ -25,6 +25,7 @@
                    android:id="@+id/tv_brands_name"
                    android:textColor="@color/text_bg"
                    android:textSize="15sp"
+                   android:lines="2"
                    android:layout_below="@+id/iv_street_brands"
                   android:text="111111111111111111111111"/>
          <RelativeLayout android:layout_width="match_parent"

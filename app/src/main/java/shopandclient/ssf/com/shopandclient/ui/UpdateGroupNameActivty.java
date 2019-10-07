@@ -2,11 +2,14 @@ package shopandclient.ssf.com.shopandclient.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.exceptions.HyphenateException;
 import com.jaeger.library.StatusBarUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,6 +42,7 @@ public class UpdateGroupNameActivty extends BaseActivity implements Observer {
     private int groupId;
     private String str;
     private TokenManager tokenManager;
+    private String imGroupId;
 
     @Override
     public int getLayoutResourceId() {
@@ -60,6 +64,7 @@ public class UpdateGroupNameActivty extends BaseActivity implements Observer {
         super.initView();
         Intent intent = getIntent();
         groupId = intent.getIntExtra("groupId", -1);
+        imGroupId = intent.getStringExtra("imGroupId");
         rlAction.setBackgroundColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
         ivBack.setBackgroundDrawable(MyApplication.getInstance().mContext.getResources().getDrawable(R.drawable.black));
         tvCenterTitle.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.update_name_ofgroup));
@@ -88,7 +93,7 @@ public class UpdateGroupNameActivty extends BaseActivity implements Observer {
             @Override
             public void onResponse(Call<PostComment> call, Response<PostComment> response) {
                 if(response.body().getCode()==200){
-                    finish();
+                   changeImGroupName(str);
                 }
             }
 
@@ -102,5 +107,26 @@ public class UpdateGroupNameActivty extends BaseActivity implements Observer {
     @Override
     public void update(Subject subject) {
         SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
+    }
+
+    public void changeImGroupName(String groupName){
+        final String returnData = groupName;
+        if(!TextUtils.isEmpty(returnData)){
+            new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        EMClient.getInstance().groupManager().changeGroupName(imGroupId, returnData);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        });
+                    } catch (HyphenateException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
     }
 }
