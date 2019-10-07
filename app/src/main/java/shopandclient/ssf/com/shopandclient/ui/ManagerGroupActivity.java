@@ -9,6 +9,7 @@ import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.hyphenate.chat.EMClient;
 import com.jaeger.library.StatusBarUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -268,4 +269,105 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
     public void update(Subject subject) {
 
     }
+
+  /*  *//**
+     * 退出群组
+     *
+     *//*
+    private void exitGrop() {
+        String st1 = getResources().getString(R.string.Exit_the_group_chat_failure);
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    EMClient.getInstance().groupManager().leaveGroup(groupId);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            progressDialog.dismiss();
+                            setResult(RESULT_OK);
+                            finish();
+                            if(ChatActivity.activityInstance != null)
+                                ChatActivity.activityInstance.finish();
+                        }
+                    });
+                } catch (final Exception e) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.Exit_the_group_chat_failure) + " " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
+    *//**
+     * 解散群组
+     *
+     *//*
+    private void deleteGrop() {
+        final String st5 = getResources().getString(R.string.Dissolve_group_chat_tofail);
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    EMClient.getInstance().groupManager().destroyGroup(groupId);
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            progressDialog.dismiss();
+                            setResult(RESULT_OK);
+                            finish();
+                            if(ChatActivity.activityInstance != null)
+                                ChatActivity.activityInstance.finish();
+                        }
+                    });
+                } catch (final Exception e) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), st5 + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
+    *//**
+     * 增加群成员
+     *
+     * @param newmembers
+     *//*
+    private void addMembersToGroup(final String[] newmembers) {
+        final String st6 = getResources().getString(R.string.Add_group_members_fail);
+        new Thread(new Runnable() {
+
+            public void run() {
+                try {
+                    // 创建者调用add方法
+                    if (EMClient.getInstance().getCurrentUser().equals(group.getOwner())) {
+                        EMClient.getInstance().groupManager().addUsersToGroup(groupId, newmembers);
+                    } else {
+                        // 一般成员调用invite方法
+                        EMClient.getInstance().groupManager().inviteUser(groupId, newmembers, null);
+                    }
+                    updateGroup();
+                    refreshMembersAdapter();
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            ((TextView) findViewById(R.id.group_name)).setText(group.getGroupName() + "(" + group.getMemberCount()
+                                    + st);
+                            progressDialog.dismiss();
+                        }
+                    });
+                } catch (final Exception e) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), st6 + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        }).start();
+    }*/
 }
