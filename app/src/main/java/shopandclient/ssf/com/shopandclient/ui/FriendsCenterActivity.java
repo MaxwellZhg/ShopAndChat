@@ -57,6 +57,7 @@ public class FriendsCenterActivity extends BaseActivity implements BaseBiz, Obse
     private int state;
     private String guidNo;
     private TokenManager tokenManager;
+    private String username;
 
     @Override
     public int getLayoutResourceId() {
@@ -91,6 +92,7 @@ public class FriendsCenterActivity extends BaseActivity implements BaseBiz, Obse
         type = intent.getIntExtra("type", -1);
         state = intent.getIntExtra("state", -1);
         guidNo = intent.getStringExtra("GuidNo");
+        username = intent.getStringExtra("username");
         rlAction.setBackgroundColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
         ivBack.setBackgroundDrawable(MyApplication.getInstance().mContext.getResources().getDrawable(R.drawable.black));
         tvCenterTitle.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.friend_center));
@@ -134,6 +136,9 @@ public class FriendsCenterActivity extends BaseActivity implements BaseBiz, Obse
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_scan_chat_record:
+                startActivity(new Intent(FriendsCenterActivity.this, ChatActivity.class)
+                        .putExtra("userId",guidNo )
+                        .putExtra("username",username));
                 break;
             case R.id.rl_black_name:
                 if (state == 1) {
@@ -152,7 +157,10 @@ public class FriendsCenterActivity extends BaseActivity implements BaseBiz, Obse
                 if (type == 1) {
                     AddFriend(id);
                 }else{
-                    startActivity(new Intent(FriendsCenterActivity.this, ChatActivity.class).putExtra("userId",guidNo ));
+                    startActivity(new Intent(FriendsCenterActivity.this, ChatActivity.class)
+                            .putExtra("userId",guidNo )
+                           .putExtra("username",username));
+
 
                 }
                 break;

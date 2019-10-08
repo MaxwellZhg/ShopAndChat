@@ -1,5 +1,6 @@
 package shopandclient.ssf.com.shopandclient.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -55,7 +56,7 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
     private int groupId;
     private int groupAdminID;
     private TokenManager tokenManager;
-
+    private static final int REQUEST_CODE_GROUP_DETAIL = 13;
     @Override
     public int getLayoutResourceId() {
         return R.layout.activity_manager_group;
@@ -161,8 +162,10 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
         switch (strings.get(position-1)){
             case "群聊名称":
                 bundle.putInt("groupId",groupId);
-                openActivity(UpdateGroupNameActivty.class,bundle);
-                finish();
+                Intent intent=new Intent();
+                intent.putExtras(bundle);
+                intent.setClass(ManagerGroupActivity.this,UpdateGroupNameActivty.class);
+                startActivityForResult(intent,REQUEST_CODE_GROUP_DETAIL);
                 break;
             case "解散该群":
                  deteleGroup(groupId);
@@ -266,6 +269,17 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
 
     @Override
     public void update(Subject subject) {
-
+        SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+              if(requestCode==REQUEST_CODE_GROUP_DETAIL){
+                  setResult(Activity.RESULT_OK,data);
+                  finish();
+              }
+            }
+        }
 }

@@ -110,6 +110,7 @@ public class MyGroupActivity extends BaseActivity implements AdapterView.OnItemC
         Intent intent = new Intent(MyGroupActivity.this, ChatActivity.class);
         // it is group chat
         intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
+        intent.putExtra("groupName",arrayList.get(position).getGroupName());
         intent.putExtra("userId",grouplist.get(position).getGroupId());
         intent.putExtra("groupId",arrayList.get(position).getGroupID());
         intent.putExtra("groupAdminID",arrayList.get(position).getGroupAdminID());

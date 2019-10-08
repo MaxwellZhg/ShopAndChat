@@ -1,5 +1,6 @@
 package shopandclient.ssf.com.shopandclient.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -88,6 +89,9 @@ public class UpdateGroupNameActivty extends BaseActivity implements Observer {
             @Override
             public void onResponse(Call<PostComment> call, Response<PostComment> response) {
                 if(response.body().getCode()==200){
+                    Intent intent=new Intent();
+                    intent.putExtra("groupUpdateName",str);
+                    setResult(Activity.RESULT_OK,intent);
                     finish();
                 }
             }

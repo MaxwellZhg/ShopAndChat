@@ -89,6 +89,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
 
     protected static final int TYPING_SHOW_TIME = 5000;
 
+    protected static final int GET_UPDATE_GROUPNAME = 5;
+    private static final int REQUEST_CODE_GROUP_DETAIL = 13;
     /**
      * params to fragment
      */
@@ -122,10 +124,9 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     static final int ITEM_PICTURE = 2;
     static final int ITEM_LOCATION = 3;
     
-    protected int[] itemStrings = { R.string.attach_take_pic, R.string.attach_picture, R.string.attach_location };
-    protected int[] itemdrawables = { R.drawable.ease_chat_takepic_selector, R.drawable.ease_chat_image_selector,
-            R.drawable.ease_chat_location_selector };
-    protected int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION };
+    protected int[] itemStrings = { R.string.attach_take_pic, R.string.attach_picture};
+    protected int[] itemdrawables = { R.drawable.ease_chat_takepic_selector, R.drawable.ease_chat_image_selector,};
+    protected int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE};
     private boolean isMessageListInited;
     protected MyItemClickListener extendMenuItemClickListener;
     protected boolean isRoaming = false;
@@ -134,6 +135,12 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     private Handler typingHandler = null;
     // "正在输入"功能的开关，打开后本设备发送消息将持续发送cmd类型消息通知对方"正在输入"
     private boolean turnOnTyping;
+    private String username;
+    private int id;
+    private int type;
+    private int state;
+    private String guidNo;
+    private String groupName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -153,7 +160,12 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
         chatType = fragmentArgs.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         // userId you are chat with or group id
         toChatUsername = fragmentArgs.getString(EaseConstant.EXTRA_USER_ID);
-
+        username = fragmentArgs.getString("username");
+        id = fragmentArgs.getInt("id", -1);
+        type = fragmentArgs.getInt("type", -1);
+        state = fragmentArgs.getInt("state", -1);
+        guidNo = fragmentArgs.getString("GuidNo");
+        groupName = fragmentArgs.getString("groupName");
         this.turnOnTyping = turnOnTyping();
 
         super.onActivityCreated(savedInstanceState);
@@ -291,13 +303,13 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
     }
 
     protected void setUpView() {
-        titleBar.setTitle(toChatUsername);
+        titleBar.setTitle(username);
         if (chatType == EaseConstant.CHATTYPE_SINGLE) {
             // set title
             if(EaseUserUtils.getUserInfo(toChatUsername) != null){
                 EaseUser user = EaseUserUtils.getUserInfo(toChatUsername);
                 if (user != null) {
-                    titleBar.setTitle(user.getNickname());
+                    titleBar.setTitle(username);
                 }
             }
             titleBar.setRightImageResource(R.drawable.ease_mm_title_remove);
@@ -307,7 +319,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 //group chat
                 EMGroup group = EMClient.getInstance().groupManager().getGroup(toChatUsername);
                 if (group != null)
-                    titleBar.setTitle(group.getGroupName());
+                    titleBar.setTitle(groupName);
                 // listen the event that user moved out group or group is dismissed
                 groupListener = new GroupListener();
                 EMClient.getInstance().groupManager().addGroupChangeListener(groupListener);
@@ -587,6 +599,9 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                 // Send the ding-type msg.
                 EMMessage dingMsg = EaseDingMessageHelper.get().createDingMessage(toChatUsername, msgContent);
                 sendMessage(dingMsg);
+            }else if(requestCode==REQUEST_CODE_GROUP_DETAIL){
+                String str=data.getStringExtra("groupUpdateName");
+                titleBar.setTitle(str);
             }
         }
     }
@@ -727,7 +742,11 @@ public class EaseChatFragment extends EaseBaseFragment implements EMMessageListe
                     if (ACTION_TYPING_BEGIN.equals(body.action()) && msg.getFrom().equals(toChatUsername)) {
                         titleBar.setTitle(getString(R.string.alert_during_typing));
                     } else if (ACTION_TYPING_END.equals(body.action()) && msg.getFrom().equals(toChatUsername)) {
-                        titleBar.setTitle(toChatUsername);
+                        if (chatType == EaseConstant.CHATTYPE_SINGLE) {
+                            titleBar.setTitle(username);
+                        }else{
+                            titleBar.setTitle(groupName);
+                        }
                     }
                 }
             });

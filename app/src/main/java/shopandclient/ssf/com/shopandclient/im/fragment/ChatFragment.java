@@ -39,6 +39,7 @@ import shopandclient.ssf.com.shopandclient.im.widget.ChatRowConferenceInvitePres
 import shopandclient.ssf.com.shopandclient.im.widget.ChatRowLivePresenter;
 import shopandclient.ssf.com.shopandclient.im.widget.EaseChatRecallPresenter;
 import shopandclient.ssf.com.shopandclient.im.widget.EaseChatVoiceCallPresenter;
+import shopandclient.ssf.com.shopandclient.ui.FriendsCenterActivity;
 import shopandclient.ssf.com.shopandclient.ui.MainActivity;
 import shopandclient.ssf.com.shopandclient.ui.ManagerGroupActivity;
 
@@ -77,6 +78,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
      * if it is chatBot
      */
     private boolean isRobot;
+    private String titleName;
+    private int id;
+    private int type;
+    private int state;
+    private String guidNo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -101,6 +107,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
         Bundle intent=getArguments();
         groupId = intent.getInt("groupId",-1);
         groupAdminID = intent.getInt("groupAdminID",-1);
+       titleName = intent.getString("username");
+        id = intent.getInt("id", -1);
+        type = intent.getInt("type", -1);
+        state = intent.getInt("state", -1);
+        guidNo = intent.getString("GuidNo");
         super.setUpView();
         // set click listener
         titleBar.setLeftLayoutClickListener(new View.OnClickListener() {
@@ -148,8 +159,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
             inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, ITEM_VOICE_CALL, extendMenuItemClickListener);
             inputMenu.registerExtendMenuItem(R.string.attach_video_call, R.drawable.em_chat_video_call_selector, ITEM_VIDEO_CALL, extendMenuItemClickListener);
         } else if (chatType == Constant.CHATTYPE_GROUP) { // 音视频会议
-            inputMenu.registerExtendMenuItem(R.string.voice_and_video_conference, R.drawable.em_chat_video_call_selector, ITEM_CONFERENCE_CALL, extendMenuItemClickListener);
-            inputMenu.registerExtendMenuItem(R.string.title_live, R.drawable.em_chat_video_call_selector, ITEM_LIVE, extendMenuItemClickListener);
         }
     }
 
@@ -295,8 +304,17 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     @Override
     public void onAvatarClick(String username) {
         //handling when user click avatar
-        Intent intent = new Intent(getActivity(), UserProfileActivity.class);
+        Intent intent = new Intent(getActivity(), FriendsCenterActivity.class);
         intent.putExtra("username", username);
+        intent.putExtra("id",id);
+        intent.putExtra("type",2);
+        intent.putExtra("state",state);
+        if(guidNo==null) {
+            intent.putExtra("GuidNo", toChatUsername);
+        }else{
+            intent.putExtra("GuidNo", guidNo);
+        }
+        intent.putExtra("username",titleName);
         startActivity(intent);
     }
 
