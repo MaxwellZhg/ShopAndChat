@@ -1,18 +1,26 @@
 package shopandclient.ssf.com.shopandclient.adapter;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.entity.CatetogryBrandName;
 import shopandclient.ssf.com.shopandclient.entity.ProductListBean;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
+
+import static shopandclient.ssf.com.shopandclient.im.ui.CallActivity.TAG;
 
 /**
  * Created by zhg on 2019/5/31.
@@ -52,14 +60,22 @@ public class CategoryNameAdapter extends RecyclerView.Adapter {
         private TextView tv_brands_tips;
         private ImageView img_brands;
         private RelativeLayout rl_category;
+        private TextView tv_price;
+        private TextView tv_orginal_price;
+        private RequestListener mRequestListener;
+
         public BrandsNameViewHolder(View itemView) {
             super(itemView);
             tv_brands_title= (TextView) itemView.findViewById(R.id.tv_brands_title);
             img_brands= (ImageView) itemView.findViewById(R.id.img_brands);
             tv_brands_tips=(TextView)itemView.findViewById(R.id.tv_brands_tips);
             rl_category=(RelativeLayout)itemView.findViewById(R.id.rl_category);
+            tv_price=(TextView)itemView.findViewById(R.id.tv_price);
+            tv_orginal_price=(TextView)itemView.findViewById(R.id.tv_orginal_price);
         }
         public void setData(final int position){
+            Glide.with(context).load(catetogryBrandNames.get(position).getImg()).placeholder(R.drawable.meinv).into(img_brands);
+            tv_price.setText("¥ "+catetogryBrandNames.get(position).getPrice());
             tv_brands_title.setText(catetogryBrandNames.get(position).getProName());
             tv_brands_tips.setText(catetogryBrandNames.get(position).getRemark());
             if (onitemClick != null) {
@@ -70,6 +86,8 @@ public class CategoryNameAdapter extends RecyclerView.Adapter {
                     }
                 });
             }
+
         }
+
     }
 }
