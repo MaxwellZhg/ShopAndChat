@@ -24,12 +24,18 @@ import java.util.ArrayList;
 public class ShopCartAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<ShopCartBean.DataBean> orderDetailBeans;
+    private GotoEnsureOrderListener onGotoEnsureOrderListener;
+
+
 
     public ShopCartAdapter(Context context, ArrayList<ShopCartBean.DataBean> orderDetailBeans) {
         this.context = context;
         this.orderDetailBeans = orderDetailBeans;
     }
 
+    public void setOnGotoEnsureOrderListener(GotoEnsureOrderListener onGotoEnsureOrderListener) {
+        this.onGotoEnsureOrderListener = onGotoEnsureOrderListener;
+    }
     @Override
     public int getCount() {
         return orderDetailBeans.size();
@@ -75,12 +81,15 @@ public class ShopCartAdapter extends BaseAdapter {
                if(str.equals("")){
                    ToastUtil.showToast(context,"请选择商品");
                }else{
-                   Intent intent=new Intent();
+               /*    Intent intent=new Intent();
                    intent.putExtra("str",str);
                    intent.putExtra("type",2);
                    intent.setClass(context, EnsureOrderActivity.class);
                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                   context.startActivity(intent);
+                   context.startActivity(intent);*/
+               if(onGotoEnsureOrderListener!=null){
+                   onGotoEnsureOrderListener.gotoEnsureOrder(str,2);
+                   }
                }
             }
         });
@@ -90,5 +99,8 @@ public class ShopCartAdapter extends BaseAdapter {
         private MyRecycleview rv_shop;
         private TextView tv_store_name;
         private TextView limmit_pay;
+    }
+    public interface GotoEnsureOrderListener{
+       public void gotoEnsureOrder(String str,int type);
     }
 }

@@ -71,7 +71,7 @@ public class ProductInfo {
         private String proName;
         private int seriesID;
         private int cateGoryID;
-        private int price;
+        private double price;
         private double discount;
         private int amount;
         private int storeID;
@@ -127,7 +127,7 @@ public class ProductInfo {
             this.cateGoryID = cateGoryID;
         }
 
-        public int getPrice() {
+        public double getPrice() {
             return price;
         }
 

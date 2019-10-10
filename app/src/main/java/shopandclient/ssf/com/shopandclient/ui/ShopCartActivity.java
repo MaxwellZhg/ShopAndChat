@@ -1,6 +1,7 @@
 package shopandclient.ssf.com.shopandclient.ui;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,7 +43,7 @@ import java.util.ArrayList;
 /**
  * Created by zhg on 2019/6/12.
  */
-public class ShopCartActivity extends BaseActivity implements BaseBiz , Observer {
+public class ShopCartActivity extends BaseActivity implements BaseBiz , Observer, ShopCartAdapter.GotoEnsureOrderListener {
     @BindView(R.id.lv_shop_cart)
     ListView lvShopCart;
     ArrayList<OrderDetailBean> orderDetailBeans1 = new ArrayList<>();
@@ -132,6 +133,7 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz , Observer
                 if(response.body().getCode()==200){
                     list=response.body().getData();
                     orderAdapter = new ShopCartAdapter(MyApplication.getInstance().mContext, list);
+                    orderAdapter.setOnGotoEnsureOrderListener(ShopCartActivity.this);
                     lvShopCart.setAdapter(orderAdapter);
                 }
             }
@@ -354,5 +356,15 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz , Observer
 
             }
         });
+    }
+
+    @Override
+    public void gotoEnsureOrder(String str, int type) {
+                   Intent intent=new Intent();
+                   intent.putExtra("str",str);
+                   intent.putExtra("type",type);
+                   intent.setClass(this, EnsureOrderActivity.class);
+                   startActivity(intent);
+                   finish();
     }
 }

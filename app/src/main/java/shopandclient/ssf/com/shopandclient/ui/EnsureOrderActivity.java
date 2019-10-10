@@ -3,8 +3,6 @@ package shopandclient.ssf.com.shopandclient.ui;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -19,7 +17,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
-import shopandclient.ssf.com.shopandclient.adapter.AddressAdapter;
 import shopandclient.ssf.com.shopandclient.adapter.EnsureOrderAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
 import shopandclient.ssf.com.shopandclient.base.Constants;
@@ -38,7 +35,7 @@ import java.util.ArrayList;
 /**
  * Created by zhg on 2019/6/18.
  */
-public class EnsureOrderActivity extends BaseActivity implements BaseBiz,View.OnClickListener, Observer {
+public class EnsureOrderActivity extends BaseActivity implements BaseBiz, View.OnClickListener, Observer {
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rl_btn_back)
@@ -115,15 +112,15 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz,View.On
         super.initView();
         getNoLinkData();
         initNoLinkOptionsPicker();
-        Intent intent =getIntent();
-        type = intent.getIntExtra("type",0);
+        Intent intent = getIntent();
+        type = intent.getIntExtra("type", 0);
 
-        if(type==1) {
-            id = intent.getIntExtra("id",0);
+        if (type == 1) {
+            id = intent.getIntExtra("id", 0);
             account = intent.getIntExtra("account", 0);
             attr1 = intent.getIntExtra("attr1", 0);
             attr2 = intent.getIntExtra("attr2", 0);
-        }else {
+        } else {
             str = intent.getStringExtra("str");
         }
         rlAction.setBackgroundColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
@@ -133,78 +130,79 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz,View.On
         rlBtnScope.setVisibility(View.INVISIBLE);
         tips = LayoutInflater.from(this).inflate(R.layout.item_ensure_order_header, null);
         no_addrwss_tips = LayoutInflater.from(this).inflate(R.layout.item_ensure_order_no_address, null);
-        View footer=LayoutInflater.from(this).inflate(R.layout.item_ensure_order_footer,null);
+        View footer = LayoutInflater.from(this).inflate(R.layout.item_ensure_order_footer, null);
         tv_recivier = (TextView) tips.findViewById(R.id.tv_recivier);
         tv_reciver_phone = (TextView) tips.findViewById(R.id.tv_reciver_phone);
         tv_reciver_address = (TextView) tips.findViewById(R.id.tv_reciver_address);
         ll_addresss = (LinearLayout) tips.findViewById(R.id.ll_addresss);
         tv_track_way = (TextView) footer.findViewById(R.id.tv_track_way);
         tv_track_way.setOnClickListener(this);
-        add_address = (TextView)no_addrwss_tips.findViewById(R.id.add_address);
+        add_address = (TextView) no_addrwss_tips.findViewById(R.id.add_address);
         add_address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.putExtra("type",1);
-                intent.putExtra("ensuretype",1);
-                intent.setClass(EnsureOrderActivity.this,AddintoAddressActivity.class);
-                startActivityForResult(intent,1);
+                intent.putExtra("type", 1);
+                intent.putExtra("ensuretype", 1);
+                intent.setClass(EnsureOrderActivity.this, AddintoAddressActivity.class);
+                startActivityForResult(intent, 1);
             }
         });
         ll_addresss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.putExtra("type",2);
-                intent.setClass(EnsureOrderActivity.this,AddressActivity.class);
-                startActivityForResult(intent,1);
+                intent.putExtra("type", 2);
+                intent.setClass(EnsureOrderActivity.this, AddressActivity.class);
+                startActivityForResult(intent, 1);
             }
         });
         getAddressList();
         lvEnsureOrder.addFooterView(footer);
-        if(type==1){
-            postlimmitBuyInfo(id,account,attr1,attr2);
-        }else{
-            str=str.substring(0,str.length()-1);
+        if (type == 1) {
+            postlimmitBuyInfo(id, account, attr1, attr2);
+        } else {
+            str = str.substring(0, str.length() - 1);
             postlimmitCartBuyInfo(str);
         }
     }
 
-    @OnClick(R.id.rl_btn_back)
+    @OnClick({R.id.rl_btn_back, R.id.rl_ensure})
     public void onViewClicked() {
         finish();
     }
 
-   private void initNoLinkOptionsPicker() {
-       pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
-           @Override
-           public void onOptionsSelect(int options1, int options2, int options3, View v) {
-               final String tx = reason.get(options1);
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       tv_track_way.setText(tx);
-                   }
-               });
-           }
-       })
-               .setTitleText("选择快递")
-               .setContentTextSize(20)//设置滚轮文字大小
-               .setDividerColor(Color.LTGRAY)//设置分割线的颜色
-               .setSelectOptions(0)//默认选中项
-               .setBgColor(Color.WHITE)
-               .setTitleBgColor(Color.WHITE)
-               .setTitleColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.text_bg))
-               .setCancelColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.text_bg))
-               .setSubmitColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips))
-               .setTextColorCenter(MyApplication.getInstance().mContext.getResources().getColor(R.color.text_bg))
-               .isRestoreItem(true)//切换时是否还原，设置默认选中第一项。
-               .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-               .setOutSideColor(0x00000000) //设置外部遮罩颜色
-               .setOutSideCancelable(false)
-               .build();
-       pvOptions.setPicker(reason);//二级选择器
-   }
+    private void initNoLinkOptionsPicker() {
+        pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                final String tx = reason.get(options1);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tv_track_way.setText(tx);
+                    }
+                });
+            }
+        })
+                .setTitleText("选择快递")
+                .setContentTextSize(20)//设置滚轮文字大小
+                .setDividerColor(Color.LTGRAY)//设置分割线的颜色
+                .setSelectOptions(0)//默认选中项
+                .setBgColor(Color.WHITE)
+                .setTitleBgColor(Color.WHITE)
+                .setTitleColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.text_bg))
+                .setCancelColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.text_bg))
+                .setSubmitColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips))
+                .setTextColorCenter(MyApplication.getInstance().mContext.getResources().getColor(R.color.text_bg))
+                .isRestoreItem(true)//切换时是否还原，设置默认选中第一项。
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .setOutSideColor(0x00000000) //设置外部遮罩颜色
+                .setOutSideCancelable(false)
+                .build();
+        pvOptions.setPicker(reason);//二级选择器
+    }
+
     private void getNoLinkData() {
         reason.add("免邮");
         reason.add("EMS");
@@ -225,12 +223,12 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz,View.On
             public void onResponse(Call<AddressBean> call, Response<AddressBean> response) {
                 if (response.body().getCode() == 200) {
                     listaddress = response.body().getData();
-                    if(listaddress.size()>0){
+                    if (listaddress.size() > 0) {
                         lvEnsureOrder.addHeaderView(tips);
                         tv_recivier.setText(listaddress.get(0).getUserName());
-                        tv_reciver_address.setText(listaddress.get(0).getAddress()+listaddress.get(0).getAddressInfo());
+                        tv_reciver_address.setText(listaddress.get(0).getAddress() + listaddress.get(0).getAddressInfo());
                         tv_reciver_phone.setText(listaddress.get(0).getPhone());
-                    }else{
+                    } else {
                         lvEnsureOrder.addHeaderView(no_addrwss_tips);
                     }
                 }
@@ -246,32 +244,33 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz,View.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==1){
-            if(resultCode==RESULT_OK){
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
                 lvEnsureOrder.removeHeaderView(no_addrwss_tips);
                 getAddressList();
             }
-            if(resultCode==2){
-                int pos = data.getIntExtra("pos",0);
+            if (resultCode == 2) {
+                int pos = data.getIntExtra("pos", 0);
                 tv_recivier.setText(listaddress.get(pos).getUserName());
-                tv_reciver_address.setText(listaddress.get(pos).getAddress()+listaddress.get(pos).getAddressInfo());
+                tv_reciver_address.setText(listaddress.get(pos).getAddress() + listaddress.get(pos).getAddressInfo());
                 tv_reciver_phone.setText(listaddress.get(pos).getPhone());
             }
         }
     }
-    public void postlimmitBuyInfo(int proid,int account,int L1,int L2) {
+
+    public void postlimmitBuyInfo(int proid, int account, int L1, int L2) {
         PesronnalService service = RetrofitHandle.getInstance().retrofit.create(PesronnalService.class);
-        Call<LimmitBuyBean> call = service.limmitBuy(new LimitBuyParams(proid,account,L1,L2));
+        Call<LimmitBuyBean> call = service.limmitBuy(new LimitBuyParams(proid, account, L1, L2));
         call.enqueue(new Callback<LimmitBuyBean>() {
             @Override
             public void onResponse(Call<LimmitBuyBean> call, Response<LimmitBuyBean> response) {
-                    if(response.body().getCode()==200){
-                        list=response.body().getData().getBuyPro();
-                        eoa = new EnsureOrderAdapter(MyApplication.getInstance().mContext, list);
-                        lvEnsureOrder.setAdapter(eoa);
-                        tvTotalNum.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.total_clothes, list.get(0).getListPro().size()));
-                        tvTotalPrice.setText("总计：" + response.body().getData().getAllTotal());
-                    }
+                if (response.body().getCode() == 200) {
+                    list = response.body().getData().getBuyPro();
+                    eoa = new EnsureOrderAdapter(MyApplication.getInstance().mContext, list);
+                    lvEnsureOrder.setAdapter(eoa);
+                    tvTotalNum.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.total_clothes, list.get(0).getListPro().size()));
+                    tvTotalPrice.setText("总计：" + response.body().getData().getAllTotal());
+                }
             }
 
             @Override
@@ -280,29 +279,50 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz,View.On
             }
         });
     }
+
     public void postlimmitCartBuyInfo(String str) {
         PesronnalService service = RetrofitHandle.getInstance().retrofit.create(PesronnalService.class);
-        Call<LimmitBuyBean> call=service.limmitCartBuy(new LimitCartBuyParams(str));
+        Call<LimmitBuyBean> call = service.limmitCartBuy(new LimitCartBuyParams(str));
         call.enqueue(new Callback<LimmitBuyBean>() {
             @Override
             public void onResponse(Call<LimmitBuyBean> call, Response<LimmitBuyBean> response) {
-                   if(response.body().getCode()==200){
-                       list=response.body().getData().getBuyPro();
-                       eoa = new EnsureOrderAdapter(MyApplication.getInstance().mContext, list);
-                       lvEnsureOrder.setAdapter(eoa);
-                       int num=0;
-                       for(int i=0;i<list.size();i++){
-                           for(int j=0;j<list.get(i).getListPro().size();j++){
-                               num+=list.get(i).getListPro().get(j).getAmount();
-                           }
-                       }
-                       tvTotalNum.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.total_clothes, num));
-                       tvTotalPrice.setText("总计：" + response.body().getData().getAllTotal());
-                   }
+                if (response.body().getCode() == 200) {
+                    list = response.body().getData().getBuyPro();
+                    eoa = new EnsureOrderAdapter(MyApplication.getInstance().mContext, list);
+                    lvEnsureOrder.setAdapter(eoa);
+                    int num = 0;
+                    for (int i = 0; i < list.size(); i++) {
+                        for (int j = 0; j < list.get(i).getListPro().size(); j++) {
+                            num += list.get(i).getListPro().get(j).getAmount();
+                        }
+                    }
+                    tvTotalNum.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.total_clothes, num));
+                    tvTotalPrice.setText("总计：" + response.body().getData().getAllTotal());
+                }
             }
 
             @Override
             public void onFailure(Call<LimmitBuyBean> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void postCartInfoToOrder(String str) {
+        PesronnalService service = RetrofitHandle.getInstance().retrofit.create(PesronnalService.class);
+        Call<PostCartInfoBean> call = service.postCartProToOrder(new PostComfrimCartParams(str));
+        call.enqueue(new Callback<PostCartInfoBean>() {
+            @Override
+            public void onResponse(Call<PostCartInfoBean> call, Response<PostCartInfoBean> response) {
+                if (response.body().getCode() == 200) {
+                    Intent intent = new Intent();
+                    intent.setClass(EnsureOrderActivity.this, MyOrderActivity.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostCartInfoBean> call, Throwable t) {
 
             }
         });
@@ -311,5 +331,17 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz,View.On
     @Override
     public void update(Subject subject) {
         SpConfig.getInstance().putBool(Constants.ISLOGIN, false);
+    }
+
+    @OnClick({R.id.rl_btn_back, R.id.rl_ensure})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.rl_btn_back:
+                finish();
+                break;
+            case R.id.rl_ensure:
+                postCartInfoToOrder(str);
+                break;
+        }
     }
 }
