@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.ajguan.library.EasyRefreshLayout;
 import com.ajguan.library.LoadModel;
+import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -74,7 +75,7 @@ public class AllHistoryScanFragment extends BaseFragment implements BaseBiz {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
-
+        EventBus.getDefault().register(this);
         return rootView;
     }
 
