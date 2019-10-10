@@ -121,6 +121,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz, Observ
     private int typevalue1;
     private int typevalue2;
     private TokenManager tokenManager;
+    private int storeId;
 
     @Override
     public int getLayoutResourceId() {
@@ -169,12 +170,6 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz, Observ
         itemtips.add("商品详情");
         itemtips.add("商品参数");
         itemtips.add("评价");
-        bannerlist.add("http://i9.hexunimg.cn/2013-07-05/155842064.jpg");
-        bannerlist.add("http://hbimg.b0.upaiyun.com/fc4e0017928cd9281e13a84c025b5277e5314d2c247e8-VOlLH3_fw658");
-        bannerlist.add("http://i6.hexunimg.cn/2013-07-05/155842061.jpg");
-        bannerlist.add("http://s10.sinaimg.cn/mw690/006hikKrzy7sly9tEBb49&amp");
-        bannerlist.add("http://i6.hexunimg.cn/2013-07-05/155842061.jpg");
-        banner.setImages(bannerlist).setImageLoader(glideImageLoader).start();
         banner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -239,9 +234,20 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz, Observ
             public void onResponse(Call<ProductInfo> call, Response<ProductInfo> response) {
                 if (response.body().getCode() == 200) {
                     data = response.body().getData();
+                    storeId = data.getStoreID();
+                    if(data.getProImg()!=null&&data.getProImg().size()>0){
+                        for(int i=0;i<data.getProImg().size();i++){
+                            bannerlist.add(data.getProImg().get(i).getFileImg());
+                        }
+                        banner.setImages(bannerlist).setImageLoader(glideImageLoader).start();
+                    }
                     attrs.addAll(response.body().getData().getProAttrType());
-                    typevalue1 = response.body().getData().getProAttrType().get(0).getProAttrTypeValue().get(0).getId();
-                    typevalue2 = response.body().getData().getProAttrType().get(1).getProAttrTypeValue().get(0).getId();
+                    if(response.body().getData().getProAttrType().size()==1) {
+                        typevalue1 = response.body().getData().getProAttrType().get(0).getProAttrTypeValue().get(0).getId();
+                    }else if(response.body().getData().getProAttrType().size()==2){
+                        typevalue1 = response.body().getData().getProAttrType().get(0).getProAttrTypeValue().get(0).getId();
+                        typevalue2 = response.body().getData().getProAttrType().get(1).getProAttrTypeValue().get(0).getId();
+                    }
                     tvTitle.setText(response.body().getData().getProName());
                     tvStoreLike.setText(response.body().getData().getGiveLikeNum() + "人赞过");
                     tvPrice.setText("¥" + response.body().getData().getPrice());
@@ -277,7 +283,7 @@ public class GoodsDetailActivity extends BaseActivity implements BaseBiz, Observ
                 break;
             case R.id.rl_homeshop:
                 Bundle bundle=new Bundle();
-                bundle.putInt("id",id);
+                bundle.putInt("id",storeId);
                 openActivity(StoreDetailActivity.class,bundle);
                 break;
             case R.id.rl_collect:

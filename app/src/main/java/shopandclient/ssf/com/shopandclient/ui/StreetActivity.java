@@ -137,7 +137,7 @@ public class StreetActivity extends BaseActivity implements BaseBiz, AdapterView
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Bundle bundle = new Bundle();
-        bundle.putInt("id", allList.get(position).getStoreID());
+        bundle.putInt("id", allList.get(position).getId());
         openActivity(GoodsDetailActivity.class, bundle);
     }
 

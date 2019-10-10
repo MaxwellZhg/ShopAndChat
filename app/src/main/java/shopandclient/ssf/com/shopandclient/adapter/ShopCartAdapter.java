@@ -79,6 +79,7 @@ public class ShopCartAdapter extends BaseAdapter {
                    intent.putExtra("str",str);
                    intent.putExtra("type",2);
                    intent.setClass(context, EnsureOrderActivity.class);
+                   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                    context.startActivity(intent);
                }
             }

@@ -39,4 +39,7 @@ public interface ProductService {
     Call<StreetInfoBean> postStreetInfo(@Body ProductTypeInfoParams params);
     @POST("/api/product/GetProductListOfType")
     Call<StreetInfoBean> postSearchPro(@Body ProPara params);
+
+    @POST("/api/PersonalCenter/ConfirmOrderFromCart")
+    Call<PostCartInfoBean> postCartProToOrder(@Body ProPara params);
 }

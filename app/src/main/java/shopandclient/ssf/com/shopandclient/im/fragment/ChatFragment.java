@@ -293,8 +293,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
                     REQUEST_CODE_GROUP_DETAIL);*/
             startActivityForResult(
                     (new Intent(getActivity(), ManagerGroupActivity.class)
+                            .putExtra("imGroupId",toChatUsername)
                             .putExtra("groupId", groupId))
                             .putExtra("groupAdminID",groupAdminID),
+
                     REQUEST_CODE_GROUP_DETAIL);
         }else if(chatType == Constant.CHATTYPE_CHATROOM){
             startActivityForResult(new Intent(getActivity(), ChatRoomDetailsActivity.class).putExtra("roomId", toChatUsername), REQUEST_CODE_GROUP_DETAIL);

@@ -11,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.exceptions.HyphenateException;
 import com.jaeger.library.StatusBarUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,6 +25,7 @@ import shopandclient.ssf.com.shopandclient.base.MyApplication;
 import shopandclient.ssf.com.shopandclient.entity.GroupInfoBean;
 import shopandclient.ssf.com.shopandclient.entity.OrderDetailBean;
 import shopandclient.ssf.com.shopandclient.entity.PostComment;
+import shopandclient.ssf.com.shopandclient.im.ui.ChatActivity;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.ChatCenterService;
@@ -49,7 +51,7 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
     @BindView(R.id.lv_manager_group)
     ListView lvManagerGroup;
     private MyRecycleview rv_manager;
-    ArrayList<GroupInfoBean.DataBean.ListBean> arrayList ;
+    ArrayList<GroupInfoBean.DataBean.ListBean> arrayList;
     ArrayList<String> strings = new ArrayList<>();
     private GroupMemberAdapter gma;
     private LvManagerGroupAdapter lma;
@@ -58,6 +60,8 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
     private int groupAdminID;
     private TokenManager tokenManager;
     private static final int REQUEST_CODE_GROUP_DETAIL = 13;
+    private String imGroupId;
+
     @Override
     public int getLayoutResourceId() {
         return R.layout.activity_manager_group;
@@ -86,9 +90,10 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
     @Override
     protected void initView() {
         super.initView();
-        Intent intent=getIntent();
-        groupId = intent.getIntExtra("groupId",-1);
-        groupAdminID = intent.getIntExtra("groupAdminID",-1);
+        Intent intent = getIntent();
+        imGroupId = intent.getStringExtra("imGroupId");
+        groupId = intent.getIntExtra("groupId", -1);
+        groupAdminID = intent.getIntExtra("groupAdminID", -1);
         rlAction.setBackgroundColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
         ivBack.setBackgroundDrawable(MyApplication.getInstance().mContext.getResources().getDrawable(R.drawable.black));
         tvCenterTitle.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.manager_group));
@@ -104,25 +109,25 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
 
     private void getData(int groupId) {
         ChatCenterService service = RetrofitHandle.getInstance().retrofit.create(ChatCenterService.class);
-        Call<GroupInfoBean> call=service.getGroupInfo(groupId);
+        Call<GroupInfoBean> call = service.getGroupInfo(groupId);
         call.enqueue(new Callback<GroupInfoBean>() {
             @Override
             public void onResponse(Call<GroupInfoBean> call, Response<GroupInfoBean> response) {
-                  if(response.body().getCode()==200) {
-                      strings.clear();
-                      arrayList=response.body().getData().getList();
-                      strings.add(MyApplication.getInstance().mContext.getResources().getString(R.string.group_chat_name));
-                      for (int i=0;i<arrayList.size();i++){
-                          if(arrayList.get(i).getUserID()==SpConfig.getInstance().getInt(Constants.USERID)){
-                              if(arrayList.get(i).getGroupAdminID()==1) {
-                                  strings.add(MyApplication.getInstance().mContext.getResources().getString(R.string.change_group_manager));
-                                  strings.add(MyApplication.getInstance().mContext.getResources().getString(R.string.detele_group));
-                                  strings.add(MyApplication.getInstance().mContext.getResources().getString(R.string.forbid_member));
-                              }else{
-                                  strings.add(MyApplication.getInstance().mContext.getResources().getString(R.string.out_group));
-                              }
-                          }
-                      }
+                if (response.body().getCode() == 200) {
+                    strings.clear();
+                    arrayList = response.body().getData().getList();
+                    strings.add(MyApplication.getInstance().mContext.getResources().getString(R.string.group_chat_name));
+                    for (int i = 0; i < arrayList.size(); i++) {
+                        if (arrayList.get(i).getUserID() == SpConfig.getInstance().getInt(Constants.USERID)) {
+                            if (arrayList.get(i).getGroupAdminID() == 1) {
+                                strings.add(MyApplication.getInstance().mContext.getResources().getString(R.string.change_group_manager));
+                                strings.add(MyApplication.getInstance().mContext.getResources().getString(R.string.detele_group));
+                                strings.add(MyApplication.getInstance().mContext.getResources().getString(R.string.forbid_member));
+                            } else {
+                                strings.add(MyApplication.getInstance().mContext.getResources().getString(R.string.out_group));
+                            }
+                        }
+                    }
                      /* if(groupAdminID== SpConfig.getInstance().getInt(Constants.USERID)) {
                           strings.add(MyApplication.getInstance().mContext.getResources().getString(R.string.change_group_manager));
                       }
@@ -134,15 +139,15 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
                       if(groupAdminID== SpConfig.getInstance().getInt(Constants.USERID)) {
                           strings.add(MyApplication.getInstance().mContext.getResources().getString(R.string.forbid_member));
                       }*/
-                      gma.setImages(arrayList);
-                      rv_manager.setLayoutManager(new GridLayoutManager(ManagerGroupActivity.this, 4));
-                      rv_manager.setAdapter(gma);
-                      if(lvManagerGroup.getHeaderViewsCount()==0) {
-                          lvManagerGroup.addHeaderView(itemview);
-                      }
-                      lvManagerGroup.setAdapter(lma);
-                      lvManagerGroup.setOnItemClickListener(ManagerGroupActivity.this);
-                  }
+                    gma.setImages(arrayList);
+                    rv_manager.setLayoutManager(new GridLayoutManager(ManagerGroupActivity.this, 4));
+                    rv_manager.setAdapter(gma);
+                    if (lvManagerGroup.getHeaderViewsCount() == 0) {
+                        lvManagerGroup.addHeaderView(itemview);
+                    }
+                    lvManagerGroup.setAdapter(lma);
+                    lvManagerGroup.setOnItemClickListener(ManagerGroupActivity.this);
+                }
             }
 
             @Override
@@ -159,44 +164,45 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Bundle bundle =new Bundle();
-        switch (strings.get(position-1)){
+        Bundle bundle = new Bundle();
+        switch (strings.get(position - 1)) {
             case "群聊名称":
-                bundle.putInt("groupId",groupId);
-                Intent intent=new Intent();
+                bundle.putInt("groupId", groupId);
+                bundle.putString("imGroupId",imGroupId);
+                Intent intent = new Intent();
                 intent.putExtras(bundle);
-                intent.setClass(ManagerGroupActivity.this,UpdateGroupNameActivty.class);
-                startActivityForResult(intent,REQUEST_CODE_GROUP_DETAIL);
+                intent.setClass(ManagerGroupActivity.this, UpdateGroupNameActivty.class);
+                startActivityForResult(intent, REQUEST_CODE_GROUP_DETAIL);
                 break;
             case "解散该群":
-                 deteleGroup(groupId);
+                deteleGroup(groupId);
                 break;
             case "退出群":
                 outGroup(groupId);
                 break;
             case "管理员移交":
-                bundle.putInt("groupId",groupId);
-                bundle.putInt("type",1);
-                openActivity(ChangeGroupManegerActivity.class,bundle);
+                bundle.putInt("groupId", groupId);
+                bundle.putInt("type", 1);
+                openActivity(ChangeGroupManegerActivity.class, bundle);
                 break;
             case "禁言":
-                bundle.putInt("groupId",groupId);
-                bundle.putInt("type",2);
-                openActivity(ChangeGroupManegerActivity.class,bundle);
+                bundle.putInt("groupId", groupId);
+                bundle.putInt("type", 2);
+                openActivity(ChangeGroupManegerActivity.class, bundle);
                 break;
         }
     }
 
     private void outGroup(int groupId) {
         ChatCenterService service = RetrofitHandle.getInstance().retrofit.create(ChatCenterService.class);
-        Call<PostComment> call=service.outGroupMember(groupId);
+        Call<PostComment> call = service.outGroupMember(groupId);
         call.enqueue(new Callback<PostComment>() {
             @Override
             public void onResponse(Call<PostComment> call, Response<PostComment> response) {
-                   if(response.body().getCode()==200){
-                       openActivity(FriendsListActivity.class);
-                       finish();
-                   }
+                if (response.body().getCode() == 200) {
+                    openActivity(FriendsListActivity.class);
+                    finish();
+                }
             }
 
             @Override
@@ -206,13 +212,13 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
         });
     }
 
-    public void deteleGroup(int groupId){
+    public void deteleGroup(int groupId) {
         ChatCenterService service = RetrofitHandle.getInstance().retrofit.create(ChatCenterService.class);
-        Call<PostComment> call=service.deteleGroup(groupId);
+        Call<PostComment> call = service.deteleGroup(groupId);
         call.enqueue(new Callback<PostComment>() {
             @Override
             public void onResponse(Call<PostComment> call, Response<PostComment> response) {
-                if(response.body().getCode()==200){
+                if (response.body().getCode() == 200) {
                     finish();
                 }
             }
@@ -233,7 +239,7 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
 
     @Override
     public void onItemClick(int position) {
-        if(groupAdminID== SpConfig.getInstance().getInt(Constants.USERID)) {
+        if (groupAdminID == SpConfig.getInstance().getInt(Constants.USERID)) {
             new ActionSheetDialog(this)
                     .builder()
                     .setCancelable(false)
@@ -250,14 +256,14 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
 
     private void setState(int userID, int groupID) {
         ChatCenterService service = RetrofitHandle.getInstance().retrofit.create(ChatCenterService.class);
-        Call<PostComment> call=service.deteleSingleFormGroup(userID,groupID);
+        Call<PostComment> call = service.deteleSingleFormGroup(userID, groupID);
         call.enqueue(new Callback<PostComment>() {
             @Override
             public void onResponse(Call<PostComment> call, Response<PostComment> response) {
-                if(response.body().getCode()==200){
+                if (response.body().getCode() == 200) {
                     getData(groupId);
-                }else{
-                    ToastUtil.showToast(ManagerGroupActivity.this,response.body().getResult());
+                } else {
+                    ToastUtil.showToast(ManagerGroupActivity.this, response.body().getResult());
                 }
             }
 
@@ -277,112 +283,101 @@ public class ManagerGroupActivity extends BaseActivity implements BaseBiz, Adapt
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-              if(requestCode==REQUEST_CODE_GROUP_DETAIL){
-                  setResult(Activity.RESULT_OK,data);
-                  finish();
-              }
+            if (requestCode == REQUEST_CODE_GROUP_DETAIL) {
+                setResult(Activity.RESULT_OK, data);
+                finish();
             }
         }
     }
 
-  /*  *//**
+    /**
      * 退出群组
-     *
-     *//*
+     */
     private void exitGrop() {
         String st1 = getResources().getString(R.string.Exit_the_group_chat_failure);
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    EMClient.getInstance().groupManager().leaveGroup(groupId);
+                    EMClient.getInstance().groupManager().leaveGroup(imGroupId);
+                    setResult(RESULT_OK);
+                    finish();
+                } catch (HyphenateException e) {
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            progressDialog.dismiss();
-                            setResult(RESULT_OK);
-                            finish();
-                            if(ChatActivity.activityInstance != null)
-                                ChatActivity.activityInstance.finish();
-                        }
-                    });
-                } catch (final Exception e) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            progressDialog.dismiss();
                             Toast.makeText(getApplicationContext(), getResources().getString(R.string.Exit_the_group_chat_failure) + " " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
                 }
+
             }
-        }).start();
-    }
+        }
+        ).start();
+    };
 
-    *//**
-     * 解散群组
-     *
-     *//*
-    private void deleteGrop() {
-        final String st5 = getResources().getString(R.string.Dissolve_group_chat_tofail);
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    EMClient.getInstance().groupManager().destroyGroup(groupId);
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            progressDialog.dismiss();
-                            setResult(RESULT_OK);
-                            finish();
-                            if(ChatActivity.activityInstance != null)
-                                ChatActivity.activityInstance.finish();
-                        }
-                    });
-                } catch (final Exception e) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            progressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), st5 + e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        }).start();
-    }
-
-    *//**
-     * 增加群成员
-     *
-     * @param newmembers
-     *//*
-    private void addMembersToGroup(final String[] newmembers) {
-        final String st6 = getResources().getString(R.string.Add_group_members_fail);
-        new Thread(new Runnable() {
-
-            public void run() {
-                try {
-                    // 创建者调用add方法
-                    if (EMClient.getInstance().getCurrentUser().equals(group.getOwner())) {
-                        EMClient.getInstance().groupManager().addUsersToGroup(groupId, newmembers);
-                    } else {
-                        // 一般成员调用invite方法
-                        EMClient.getInstance().groupManager().inviteUser(groupId, newmembers, null);
+        /**
+         * 解散群组
+         *
+         */
+        private void deleteGrop () {
+            final String st5 = getResources().getString(R.string.Dissolve_group_chat_tofail);
+            new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        EMClient.getInstance().groupManager().destroyGroup(imGroupId);
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                setResult(RESULT_OK);
+                                finish();
+                            }
+                        });
+                    } catch (final Exception e) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), st5 + e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
-                    updateGroup();
+                }
+            }).start();
+        }
+
+        /**
+         * 增加群成员
+         *
+         * @param newmembers
+         */
+        private void addMembersToGroup ( final String[] newmembers){
+            final String st6 = getResources().getString(R.string.Add_group_members_fail);
+            new Thread(new Runnable() {
+
+                public void run() {
+                    try {
+                        // 创建者调用add方法
+             /*           if (EMClient.getInstance().getCurrentUser().equals(group.getOwner())) {
+                            EMClient.getInstance().groupManager().addUsersToGroup(imGroupId, newmembers);
+                        } else {
+                            // 一般成员调用invite方法
+                            EMClient.getInstance().groupManager().inviteUser(imGroupId, newmembers, null);
+                        }*/
+           /*         updateGroup();
                     refreshMembersAdapter();
                     runOnUiThread(new Runnable() {
                         public void run() {
                             ((TextView) findViewById(R.id.group_name)).setText(group.getGroupName() + "(" + group.getMemberCount()
                                     + st);
-                            progressDialog.dismiss();
                         }
-                    });
-                } catch (final Exception e) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            progressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), st6 + e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    });*/
+                    } catch (final Exception e) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), st6 + e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
                 }
-            }
-        }).start();
-    }*/
-}
+            }).start();
+        };
+    }
+
+
+
