@@ -162,7 +162,6 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz, View.O
         if (type == 1) {
             postlimmitBuyInfo(id, account, attr1, attr2);
         } else {
-            str = str.substring(0, str.length() - 1);
             postlimmitCartBuyInfo(str);
         }
     }
@@ -308,25 +307,6 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz, View.O
         });
     }
 
-    public void postCartInfoToOrder(String str) {
-        PesronnalService service = RetrofitHandle.getInstance().retrofit.create(PesronnalService.class);
-        Call<PostCartInfoBean> call = service.postCartProToOrder(new PostComfrimCartParams(str));
-        call.enqueue(new Callback<PostCartInfoBean>() {
-            @Override
-            public void onResponse(Call<PostCartInfoBean> call, Response<PostCartInfoBean> response) {
-                if (response.body().getCode() == 200) {
-                    Intent intent = new Intent();
-                    intent.setClass(EnsureOrderActivity.this, MyOrderActivity.class);
-                    startActivity(intent);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PostCartInfoBean> call, Throwable t) {
-
-            }
-        });
-    }
 
     @Override
     public void update(Subject subject) {
@@ -340,7 +320,7 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz, View.O
                 finish();
                 break;
             case R.id.rl_ensure:
-                postCartInfoToOrder(str);
+                //postCartInfoToOrder(str);
                 break;
         }
     }

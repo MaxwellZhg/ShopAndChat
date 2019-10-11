@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -72,6 +71,10 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
     TextView tvEnsure;
     @BindView(R.id.tv_total_price)
     TextView tvTotalPrice;
+    @BindView(R.id.iv_scope)
+    ImageView ivScope;
+    @BindView(R.id.tv_save)
+    TextView tvSave;
     private ShopCartAdapter orderAdapter;
     private Dialog mShareDialog;
     private TextView tv_price;
@@ -84,6 +87,7 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
     private int count;
     private ProductInfo.DataBean data;
     private ArrayList<ProductInfo.DataBean.ProAttrTypeBean> attrs = new ArrayList<>();
+    private ArrayList<ShopCartBean.DataBean.ListProBean> addinfoDatas = new ArrayList<>();
     private int typevalue1;
     private int typevalue2;
     private CartAttrEvent attrEvent;
@@ -92,6 +96,7 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
     private TokenManager tokenManager;
     private int totalCount = 0;
     private double totalMoney;
+    private String str;
 
     @Override
     public int getLayoutResourceId() {
@@ -135,10 +140,6 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
         checkbox.setOnCheckedChangeListener(this);
     }
 
-    @OnClick(R.id.rl_btn_back)
-    public void onViewClicked() {
-        finish();
-    }
 
     public void getShopCartInfo() {
         PesronnalService service = RetrofitHandle.getInstance().retrofit.create(PesronnalService.class);
@@ -203,16 +204,38 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
 
     private void addUpDataCartDataInfo(ShopCartBean.DataBean.ListProBean listbenas) {
         totalCount += listbenas.getAmount();
-        totalMoney += listbenas.getuPrice()*listbenas.getAmount();
-        tvTotalNum.setText("共"+totalCount+"件");
-        Log.e("ttttttt", totalMoney + "");
+        totalMoney += listbenas.getuPrice() * listbenas.getAmount();
+        addinfoDatas.add(listbenas);
+        tvTotalNum.setText("共" + totalCount + "件");
+        tvTotalPrice.setText("总计：¥" + totalMoney);
+        detailAddDataOfAllSelect();
+    }
+
+    private void detailAddDataOfAllSelect() {
+        int countsize = 0;
+        for (int i = 0; i < list.size(); i++) {
+            countsize += list.get(i).getListPro().size();
+        }
+        if (addinfoDatas.size() == countsize) {
+            checkbox.setChecked(true);
+        }
     }
 
     private void subcritUpDataCartDataInfo(ShopCartBean.DataBean.ListProBean listbenas) {
         totalCount -= listbenas.getAmount();
-        totalMoney -= listbenas.getUPrice()*listbenas.getAmount();
-        tvTotalNum.setText("共"+totalCount+"件");
-        Log.e("ttttttt", totalMoney + "");
+        totalMoney -= listbenas.getUPrice() * listbenas.getAmount();
+        tvTotalNum.setText("共" + totalCount + "件");
+        tvTotalPrice.setText("总计：¥" + totalMoney);
+        detailAddInfoDatas(listbenas);
+    }
+
+    private void detailAddInfoDatas(ShopCartBean.DataBean.ListProBean listbenas) {
+        for (int i = 0; i < addinfoDatas.size(); i++) {
+            if (addinfoDatas.get(i).getId()==listbenas.getId()) {
+                addinfoDatas.remove(i);
+            }
+        }
+        checkbox.setChecked(false);
     }
 
     /**
@@ -416,11 +439,33 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked) {
+        if (checkbox.isChecked()) {
             updateCartInfoState();
+            detailAllSelectCountAndMoney();
         } else {
+            totalCount = 0;
+            totalMoney = 0.00;
             updateCartInfoNoState();
+            addinfoDatas.clear();
+            tvTotalNum.setText("共" + totalCount + "件");
+            tvTotalPrice.setText("总计：¥" + totalMoney);
         }
+    }
+
+    private void detailAllSelectCountAndMoney() {
+        totalCount = 0;
+        totalMoney = 0.00;
+        addinfoDatas.clear();
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = 0; j < list.get(i).getListPro().size(); j++) {
+                addinfoDatas.add(list.get(i).getListPro().get(j));
+                list.get(i).getListPro().get(j).setChoose(true);
+                totalCount += list.get(i).getListPro().get(j).getAmount();
+                totalMoney += list.get(i).getListPro().get(j).getuPrice() * list.get(i).getListPro().get(j).getAmount();
+            }
+        }
+        tvTotalNum.setText("共" + totalCount + "件");
+        tvTotalPrice.setText("总计：¥" + totalMoney);
     }
 
     public void updateCartInfoState() {
@@ -439,7 +484,68 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
                 list.get(i).getListPro().get(j).setChoose(false);
             }
         }
+        for (int i = 0; i < list.size(); i++) {
+            for (int j = 0; j < list.get(i).getListPro().size(); j++) {
+                 detailAddIntoCartAndAllList(list.get(i).getListPro().get(j));
+            }
+        }
         orderAdapter.clearData();
         orderAdapter.addData(list);
+    }
+
+    private void detailAddIntoCartAndAllList(ShopCartBean.DataBean.ListProBean listProBean) {
+        for (int i = 0; i < addinfoDatas.size(); i++) {
+            if (addinfoDatas.get(i).getId()==listProBean.getId()) {
+               listProBean.setChoose(true);
+            }
+        }
+        for (int i = 0; i <addinfoDatas.size(); i++) {
+            totalCount += addinfoDatas.get(i).getAmount();
+            totalMoney += addinfoDatas.get(i).getuPrice() * addinfoDatas.get(i).getAmount();
+
+        }
+    }
+
+
+    @OnClick({R.id.rl_btn_back, R.id.tv_ensure})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.rl_btn_back:
+                finish();
+                break;
+            case R.id.tv_ensure:
+                str = "";
+                for(int i=0;i<addinfoDatas.size();i++){
+                    if(i<addinfoDatas.size()-1) {
+                        str += addinfoDatas.get(i).getId()+",";
+                    }else{
+                        str += addinfoDatas.get(i).getId();
+                    }
+                }
+                postCartInfoToOrder(str);
+                break;
+        }
+    }
+
+    public void postCartInfoToOrder(String str) {
+        PesronnalService service = RetrofitHandle.getInstance().retrofit.create(PesronnalService.class);
+        Call<PostCartInfoBean> call = service.postCartProToOrder(new PostComfrimCartParams(str));
+        call.enqueue(new Callback<PostCartInfoBean>() {
+            @Override
+            public void onResponse(Call<PostCartInfoBean> call, Response<PostCartInfoBean> response) {
+                if (response.body().getCode() == 200) {
+                    Intent intent = new Intent();
+                    intent.putExtra("str", str);
+                    intent.putExtra("type", 2);
+                    intent.setClass(ShopCartActivity.this, EnsureOrderActivity.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostCartInfoBean> call, Throwable t) {
+
+            }
+        });
     }
 }
