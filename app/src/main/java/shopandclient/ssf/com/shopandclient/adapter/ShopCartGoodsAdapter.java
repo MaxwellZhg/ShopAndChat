@@ -16,17 +16,19 @@ import shopandclient.ssf.com.shopandclient.entity.OrderDetailBean;
 import shopandclient.ssf.com.shopandclient.entity.PostComment;
 import shopandclient.ssf.com.shopandclient.entity.ShopCartBean;
 import shopandclient.ssf.com.shopandclient.entity.UpdateCartNumParams;
+import shopandclient.ssf.com.shopandclient.event.AddCartInfoEvent;
 import shopandclient.ssf.com.shopandclient.event.CartAttrEvent;
 import shopandclient.ssf.com.shopandclient.event.DeteleCartEvent;
 import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.services.PesronnalService;
+import shopandclient.ssf.com.shopandclient.util.UpCartDataInfo;
 
 import java.util.ArrayList;
 
 /**
  * Created by zhg on 2019/6/12.
  */
-public class ShopCartGoodsAdapter extends RecyclerView.Adapter {
+public class ShopCartGoodsAdapter extends RecyclerView.Adapter implements UpCartDataInfo {
     private Context context;
     private ArrayList<ShopCartBean.DataBean.ListProBean> orderDetailBeans;
     private int pos;
@@ -50,6 +52,11 @@ public class ShopCartGoodsAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return orderDetailBeans.size();
+    }
+
+    @Override
+    public void updataCartyInfo() {
+        notifyDataSetChanged();
     }
 
     class GoodsViewHolder extends RecyclerView.ViewHolder{
@@ -81,6 +88,11 @@ public class ShopCartGoodsAdapter extends RecyclerView.Adapter {
             tv_attrs.setText("已选：" + orderDetailBeans.get(position).getL1Name() + orderDetailBeans.get(position).getL2Name());
             tv_price.setText("¥" + orderDetailBeans.get(position).getuPrice());
             et_count.setText("" + orderDetailBeans.get(position).getAmount());
+            if(orderDetailBeans.get(position).isChoose()){
+                checkbox.setChecked(true);
+            }else{
+                checkbox.setChecked(false);
+            }
             tv_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -129,6 +141,11 @@ public class ShopCartGoodsAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     orderDetailBeans.get(position).setChoose(b);
+                    if(b) {
+                        EventBus.getDefault().post(new AddCartInfoEvent(1,orderDetailBeans.get(position)));
+                    }else{
+                        EventBus.getDefault().post(new AddCartInfoEvent(2,orderDetailBeans.get(position)));
+                    }
                 }
             });
         }
@@ -170,4 +187,6 @@ public class ShopCartGoodsAdapter extends RecyclerView.Adapter {
             }
         });
     }
+
+
 }

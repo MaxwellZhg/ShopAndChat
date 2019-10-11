@@ -14,6 +14,7 @@ import shopandclient.ssf.com.shopandclient.entity.OrderInStoreBean;
 import shopandclient.ssf.com.shopandclient.entity.ShopCartBean;
 import shopandclient.ssf.com.shopandclient.ui.EnsureOrderActivity;
 import shopandclient.ssf.com.shopandclient.util.ToastUtil;
+import shopandclient.ssf.com.shopandclient.util.UpdataDataInfoManager;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.view.MyRecycleview;
 
 import java.util.ArrayList;
@@ -23,14 +24,14 @@ import java.util.ArrayList;
  */
 public class ShopCartAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<ShopCartBean.DataBean> orderDetailBeans;
+    private ArrayList<ShopCartBean.DataBean> orderDetailBeans=new ArrayList<>();
     private GotoEnsureOrderListener onGotoEnsureOrderListener;
+    private ShopCartGoodsAdapter goodsAdapter;
+    private UpdataDataInfoManager manager;
 
-
-
-    public ShopCartAdapter(Context context, ArrayList<ShopCartBean.DataBean> orderDetailBeans) {
+    public ShopCartAdapter(Context context) {
         this.context = context;
-        this.orderDetailBeans = orderDetailBeans;
+        manager=new UpdataDataInfoManager();
     }
 
     public void setOnGotoEnsureOrderListener(GotoEnsureOrderListener onGotoEnsureOrderListener) {
@@ -64,7 +65,8 @@ public class ShopCartAdapter extends BaseAdapter {
         }else{
             hodler=(ViewHodler)convertView.getTag();
         }
-       ShopCartGoodsAdapter goodsAdapter=new ShopCartGoodsAdapter(context,orderDetailBeans.get(position).getListPro(),position);
+        goodsAdapter = new ShopCartGoodsAdapter(context,orderDetailBeans.get(position).getListPro(),position);
+        manager.registerObserver(goodsAdapter);
         hodler.rv_shop.setLayoutManager(new LinearLayoutManager(context));
         hodler.rv_shop.setAdapter(goodsAdapter);
         //hodler.tv_store_name.setImageResource(beans.get(position).getResId());
@@ -103,4 +105,17 @@ public class ShopCartAdapter extends BaseAdapter {
     public interface GotoEnsureOrderListener{
        public void gotoEnsureOrder(String str,int type);
     }
+
+    public void clearData(){
+        orderDetailBeans.clear();
+    }
+
+    public void addData(ArrayList<ShopCartBean.DataBean> orderDetailBeans){
+        this.orderDetailBeans.addAll(orderDetailBeans);
+        notifyDataSetChanged();
+        manager.notifyAllObservers();
+    }
+   public ArrayList<ShopCartBean.DataBean> getData(){
+        return orderDetailBeans;
+     }
 }
