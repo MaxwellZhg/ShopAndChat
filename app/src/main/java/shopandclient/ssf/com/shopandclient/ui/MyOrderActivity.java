@@ -102,7 +102,7 @@ public class MyOrderActivity extends BaseActivity implements BaseBiz, Observer {
                 finish();
                 break;
             case R.id.rl_order_all:
-                openActivity(OrderDetailActivity.class);
+                openActivity(AllMyOrderActivity.class);
                 break;
             case R.id.rl_order_nopay:
                 openActivity(ReteryActivty.class);

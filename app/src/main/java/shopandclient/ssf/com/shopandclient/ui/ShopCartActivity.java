@@ -542,6 +542,7 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
                     intent.putExtra("type", 2);
                     intent.setClass(ShopCartActivity.this, EnsureOrderActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
 

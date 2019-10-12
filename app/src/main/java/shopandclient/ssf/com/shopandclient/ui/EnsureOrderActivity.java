@@ -81,6 +81,9 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz, View.O
     private LinearLayout ll_addresss;
     private int id;
     private TokenManager tokenManager;
+    ArrayList<PostOrderParams.ShopBean> shopBeans=new ArrayList<>();
+    private LimmitBuyBean.DataBean.AddressBean addressofList;
+    private double allTotal;
 
     @Override
     public int getLayoutResourceId() {
@@ -264,6 +267,8 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz, View.O
             @Override
             public void onResponse(Call<LimmitBuyBean> call, Response<LimmitBuyBean> response) {
                 if (response.body().getCode() == 200) {
+                    allTotal = response.body().getData().getAllTotal();
+                    addressofList = response.body().getData().getAddress();
                     list = response.body().getData().getBuyPro();
                     eoa = new EnsureOrderAdapter(MyApplication.getInstance().mContext, list);
                     lvEnsureOrder.setAdapter(eoa);
@@ -286,6 +291,8 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz, View.O
             @Override
             public void onResponse(Call<LimmitBuyBean> call, Response<LimmitBuyBean> response) {
                 if (response.body().getCode() == 200) {
+                    allTotal = response.body().getData().getAllTotal();
+                    addressofList = response.body().getData().getAddress();
                     list = response.body().getData().getBuyPro();
                     eoa = new EnsureOrderAdapter(MyApplication.getInstance().mContext, list);
                     lvEnsureOrder.setAdapter(eoa);
@@ -320,8 +327,52 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz, View.O
                 finish();
                 break;
             case R.id.rl_ensure:
-                //postCartInfoToOrder(str);
+                shopBeans.clear();
+                PostOrderParams params= detailPramas(list);
+                postCartInfoToOrder(params);
                 break;
         }
+    }
+
+    private void postCartInfoToOrder(PostOrderParams params) {
+        PesronnalService service = RetrofitHandle.getInstance().retrofit.create(PesronnalService.class);
+        Call<PostEnsureOrderBean> call = service.postEnsureToOrder(params);
+        call.enqueue(new Callback<PostEnsureOrderBean>() {
+            @Override
+            public void onResponse(Call<PostEnsureOrderBean> call, Response<PostEnsureOrderBean> response) {
+                if(response.body().getCode()==200){
+                       Intent intent =new Intent();
+                       intent.setClass(EnsureOrderActivity.this,MyOrderActivity.class);
+                       startActivity(intent);
+                       finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostEnsureOrderBean> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private PostOrderParams detailPramas(ArrayList<LimmitBuyBean.DataBean.BuyProBean> list) {
+        for(int i=0;i<list.size();i++){
+            for(int j=0;j<list.get(i).getListPro().size();j++){
+                PostOrderParams.ShopBean shopBean=new PostOrderParams.ShopBean();
+                shopBean.setAmount(list.get(i).getListPro().get(j).getAmount());
+                shopBean.setProID(list.get(i).getListPro().get(j).getProID());
+                shopBean.setL1(list.get(i).getListPro().get(j).getL1());
+                shopBean.setL2(list.get(i).getListPro().get(j).getL2());
+                shopBeans.add(shopBean);
+            }
+        }
+        PostOrderParams params=new PostOrderParams();
+        params.setShop(shopBeans);
+        params.setAddressID(addressofList.getId());
+        params.setUserid(SpConfig.getInstance().getInt(Constants.USERID));
+        params.setDeliveryType(1);
+        params.setRemark("尽快发货");
+        params.setTotalPrice(allTotal);
+        return params;
     }
 }

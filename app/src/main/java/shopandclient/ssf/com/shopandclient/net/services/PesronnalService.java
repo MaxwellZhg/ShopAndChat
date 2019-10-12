@@ -44,4 +44,6 @@ public interface PesronnalService {
     Call<LimmitBuyBean> limmitCartBuy(@Body LimitCartBuyParams params);
     @POST("/api/PersonalCenter/ConfirmOrderFromCart")
     Call<PostCartInfoBean> postCartProToOrder(@Body PostComfrimCartParams params);
+    @POST("/api/PersonalCenter/ImmeBuy")
+    Call<PostEnsureOrderBean> postEnsureToOrder(@Body PostOrderParams params);
 }

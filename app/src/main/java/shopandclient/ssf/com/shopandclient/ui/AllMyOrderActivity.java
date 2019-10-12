@@ -83,10 +83,10 @@ public class AllMyOrderActivity extends BaseActivity implements BaseBiz, Observe
         tvCenterTitle.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.my_order));
         tvCenterTitle.setTextColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.white));
         rlBtnScope.setVisibility(View.INVISIBLE);
-        fragments.add(new AllMyOrderFragment());
-        fragments.add(new AllMyOrderFragment());
-        fragments.add(new AllMyOrderFragment());
-        fragments.add(new AllMyOrderFragment());
+        fragments.add( AllMyOrderFragment.newInstance(-1));
+        fragments.add( AllMyOrderFragment.newInstance(0));
+        fragments.add(AllMyOrderFragment.newInstance(1));
+        fragments.add(AllMyOrderFragment.newInstance(2));
         itemtips.add("全部");
         itemtips.add("未支付");
         itemtips.add("未发货");
@@ -116,8 +116,8 @@ public class AllMyOrderActivity extends BaseActivity implements BaseBiz, Observe
             @Override
             public IPagerTitleView getTitleView(Context context, final int index) {
                 ColorTransitionPagerTitleView colorTransitionPagerTitleView = new ColorTransitionPagerTitleView(context);
-                colorTransitionPagerTitleView.setNormalColor(Color.GRAY);
-                colorTransitionPagerTitleView.setSelectedColor(Color.BLACK);
+                colorTransitionPagerTitleView.setNormalColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.important_instance));
+                colorTransitionPagerTitleView.setSelectedColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
                 colorTransitionPagerTitleView.setText(itemtips.get(index));
                 colorTransitionPagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -131,6 +131,7 @@ public class AllMyOrderActivity extends BaseActivity implements BaseBiz, Observe
             @Override
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator indicator = new LinePagerIndicator(context);
+                indicator.setColors(getResources().getColor(R.color.password_tips));
                 indicator.setMode(LinePagerIndicator.MODE_WRAP_CONTENT);
                 return indicator;
             }
