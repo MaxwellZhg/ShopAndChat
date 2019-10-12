@@ -34,17 +34,14 @@ import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
 import shopandclient.ssf.com.shopandclient.net.services.PesronnalService;
 import shopandclient.ssf.com.shopandclient.net.services.ProductService;
-import shopandclient.ssf.com.shopandclient.util.Observer;
-import shopandclient.ssf.com.shopandclient.util.SpConfig;
-import shopandclient.ssf.com.shopandclient.util.Subject;
-import shopandclient.ssf.com.shopandclient.util.TokenManager;
+import shopandclient.ssf.com.shopandclient.util.*;
 
 import java.util.ArrayList;
 
 /**
  * Created by zhg on 2019/6/12.
  */
-public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer, ShopCartAdapter.GotoEnsureOrderListener, CompoundButton.OnCheckedChangeListener {
+public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer, ShopCartAdapter.GotoEnsureOrderListener {
     @BindView(R.id.lv_shop_cart)
     ListView lvShopCart;
     ArrayList<OrderDetailBean> orderDetailBeans1 = new ArrayList<>();
@@ -61,8 +58,6 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
     RelativeLayout rlBtnScope;
     @BindView(R.id.rl_action)
     RelativeLayout rlAction;
-    @BindView(R.id.checkbox)
-    CheckBox checkbox;
     @BindView(R.id.tv_total_num)
     TextView tvTotalNum;
     @BindView(R.id.tv_all_select)
@@ -74,7 +69,10 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
     @BindView(R.id.iv_scope)
     ImageView ivScope;
     @BindView(R.id.tv_save)
+
     TextView tvSave;
+    @BindView(R.id.checkbox)
+    ImageView checkbox;
     private ShopCartAdapter orderAdapter;
     private Dialog mShareDialog;
     private TextView tv_price;
@@ -97,7 +95,7 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
     private int totalCount = 0;
     private double totalMoney;
     private String str;
-
+    private boolean isAllSelect=false;
     @Override
     public int getLayoutResourceId() {
         return R.layout.activity_shop_cart;
@@ -137,7 +135,6 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
         tvCenterTitle.setTextColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.white));
         rlBtnScope.setVisibility(View.INVISIBLE);
         getShopCartInfo();
-        checkbox.setOnCheckedChangeListener(this);
     }
 
 
@@ -205,6 +202,7 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
     private void addUpDataCartDataInfo(ShopCartBean.DataBean.ListProBean listbenas) {
         totalCount += listbenas.getAmount();
         totalMoney += listbenas.getuPrice() * listbenas.getAmount();
+        totalMoney= MathUtils.formatDouble1(totalMoney);
         addinfoDatas.add(listbenas);
         tvTotalNum.setText("共" + totalCount + "件");
         tvTotalPrice.setText("总计：¥" + totalMoney);
@@ -217,13 +215,15 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
             countsize += list.get(i).getListPro().size();
         }
         if (addinfoDatas.size() == countsize) {
-            checkbox.setChecked(true);
+            checkbox.setBackground(MyApplication.getInstance().mContext.getResources().getDrawable(R.drawable.icon_cart_selected));
+            isAllSelect=true;
         }
     }
 
     private void subcritUpDataCartDataInfo(ShopCartBean.DataBean.ListProBean listbenas) {
         totalCount -= listbenas.getAmount();
         totalMoney -= listbenas.getUPrice() * listbenas.getAmount();
+        totalMoney= MathUtils.formatDouble1(totalMoney);
         tvTotalNum.setText("共" + totalCount + "件");
         tvTotalPrice.setText("总计：¥" + totalMoney);
         detailAddInfoDatas(listbenas);
@@ -231,11 +231,12 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
 
     private void detailAddInfoDatas(ShopCartBean.DataBean.ListProBean listbenas) {
         for (int i = 0; i < addinfoDatas.size(); i++) {
-            if (addinfoDatas.get(i).getId()==listbenas.getId()) {
+            if (addinfoDatas.get(i).getId() == listbenas.getId()) {
                 addinfoDatas.remove(i);
             }
         }
-        checkbox.setChecked(false);
+        isAllSelect=true;
+        checkbox.setBackground(MyApplication.getInstance().mContext.getResources().getDrawable(R.drawable.icon_cart_option));
     }
 
     /**
@@ -437,20 +438,6 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
         finish();
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (checkbox.isChecked()) {
-            updateCartInfoState();
-            detailAllSelectCountAndMoney();
-        } else {
-            totalCount = 0;
-            totalMoney = 0.00;
-            updateCartInfoNoState();
-            addinfoDatas.clear();
-            tvTotalNum.setText("共" + totalCount + "件");
-            tvTotalPrice.setText("总计：¥" + totalMoney);
-        }
-    }
 
     private void detailAllSelectCountAndMoney() {
         totalCount = 0;
@@ -464,6 +451,7 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
                 totalMoney += list.get(i).getListPro().get(j).getuPrice() * list.get(i).getListPro().get(j).getAmount();
             }
         }
+        totalMoney= MathUtils.formatDouble1(totalMoney);
         tvTotalNum.setText("共" + totalCount + "件");
         tvTotalPrice.setText("总计：¥" + totalMoney);
     }
@@ -484,30 +472,26 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
                 list.get(i).getListPro().get(j).setChoose(false);
             }
         }
-        for (int i = 0; i < list.size(); i++) {
-            for (int j = 0; j < list.get(i).getListPro().size(); j++) {
-                 detailAddIntoCartAndAllList(list.get(i).getListPro().get(j));
-            }
-        }
         orderAdapter.clearData();
         orderAdapter.addData(list);
     }
 
     private void detailAddIntoCartAndAllList(ShopCartBean.DataBean.ListProBean listProBean) {
         for (int i = 0; i < addinfoDatas.size(); i++) {
-            if (addinfoDatas.get(i).getId()==listProBean.getId()) {
-               listProBean.setChoose(true);
+            if (addinfoDatas.get(i).getId() == listProBean.getId()) {
+                listProBean.setChoose(true);
             }
         }
-        for (int i = 0; i <addinfoDatas.size(); i++) {
+        for (int i = 0; i < addinfoDatas.size(); i++) {
             totalCount += addinfoDatas.get(i).getAmount();
             totalMoney += addinfoDatas.get(i).getuPrice() * addinfoDatas.get(i).getAmount();
 
         }
+        totalMoney= MathUtils.formatDouble1(totalMoney);
     }
 
 
-    @OnClick({R.id.rl_btn_back, R.id.tv_ensure})
+    @OnClick({R.id.rl_btn_back, R.id.tv_ensure,R.id.checkbox})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_btn_back:
@@ -515,16 +499,35 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
                 break;
             case R.id.tv_ensure:
                 str = "";
-                for(int i=0;i<addinfoDatas.size();i++){
-                    if(i<addinfoDatas.size()-1) {
-                        str += addinfoDatas.get(i).getId()+",";
-                    }else{
+                for (int i = 0; i < addinfoDatas.size(); i++) {
+                    if (i < addinfoDatas.size() - 1) {
+                        str += addinfoDatas.get(i).getId() + ",";
+                    } else {
                         str += addinfoDatas.get(i).getId();
                     }
                 }
                 postCartInfoToOrder(str);
                 break;
+            case R.id.checkbox:
+                if (isAllSelect) {
+                    totalCount = 0;
+                    totalMoney = 0.00;
+                    updateCartInfoNoState();
+                    addinfoDatas.clear();
+                    tvTotalNum.setText("共" + totalCount + "件");
+                    tvTotalPrice.setText("总计：¥" + totalMoney);
+                    checkbox.setBackground(MyApplication.getInstance().mContext.getResources().getDrawable(R.drawable.icon_cart_option));
+                    isAllSelect=false;
+                } else {
+                    updateCartInfoState();
+                    detailAllSelectCountAndMoney();
+                    checkbox.setBackground(MyApplication.getInstance().mContext.getResources().getDrawable(R.drawable.icon_cart_selected));
+                    isAllSelect=true;
+
+                }
+                break;
         }
+
     }
 
     public void postCartInfoToOrder(String str) {
@@ -548,4 +551,5 @@ public class ShopCartActivity extends BaseActivity implements BaseBiz, Observer,
             }
         });
     }
+
 }

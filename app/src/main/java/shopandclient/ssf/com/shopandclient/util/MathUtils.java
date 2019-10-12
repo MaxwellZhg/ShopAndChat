@@ -24,4 +24,8 @@ public class MathUtils {
     public static int addcount(int num1 , int num2){
         return num1+num2;
     }
+    public static double formatDouble1(double d) {
+        return (double)Math.round(d*100)/100;
+    }
+
 }
