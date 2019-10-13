@@ -92,15 +92,6 @@ public class AllMyOrderActivity extends BaseActivity implements BaseBiz, Observe
         itemtips.add("未发货");
         itemtips.add("已发货");
         initPageIndecator();
-    /*    tla = new TabLayoutAdapter(getSupportFragmentManager(), fragments);
-        vpMain.setAdapter(tla);
-        vpMain.setOffscreenPageLimit(3);
-        tabMain.setupWithViewPager(vpMain);
-        tabMain.getTabAt(0).setText(itemtips.get(0));
-        tabMain.getTabAt(1).setText(itemtips.get(1));
-        tabMain.getTabAt(2).setText(itemtips.get(2));
-        tabMain.getTabAt(3).setText(itemtips.get(3));
-        vpMain.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabMain));*/
     }
     private void initPageIndecator() {
         // 设置viewpager指示器

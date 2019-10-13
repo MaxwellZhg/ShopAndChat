@@ -54,7 +54,7 @@
                   android:layout_height="25dp"
                   android:text="在线客服"
                   android:gravity="center"
-                  android:layout_toLeftOf="@+id/tv_retery"
+                  android:layout_toLeftOf="@+id/limmit_pay"
                   android:id="@+id/link_talker"
                   android:textColor="@color/important_instance"
                   android:textSize="14sp"

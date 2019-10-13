@@ -1,15 +1,24 @@
 package shopandclient.ssf.com.shopandclient.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.widget.ListView;
+import com.ajguan.library.EasyRefreshLayout;
+import com.ajguan.library.LoadModel;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.AllMyOrderAdapter;
+import shopandclient.ssf.com.shopandclient.adapter.ScanLisstAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseFragment;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
-import shopandclient.ssf.com.shopandclient.entity.MyAllOrderBean;
-import shopandclient.ssf.com.shopandclient.entity.OrderDetailBean;
-import shopandclient.ssf.com.shopandclient.entity.OrderInStoreBean;
+import shopandclient.ssf.com.shopandclient.entity.*;
+import shopandclient.ssf.com.shopandclient.net.RetrofitHandle;
 import shopandclient.ssf.com.shopandclient.net.inter.BaseBiz;
+import shopandclient.ssf.com.shopandclient.net.services.PesronnalService;
+import shopandclient.ssf.com.shopandclient.util.ToastUtil;
 
 import java.util.ArrayList;
 
@@ -19,12 +28,14 @@ import java.util.ArrayList;
 public class AllMyOrderFragment extends BaseFragment implements BaseBiz {
 
     private ListView lv_my_all_order;
-    ArrayList<OrderDetailBean> orderDetailBeans1 = new ArrayList<>();
-    ArrayList<OrderDetailBean> orderDetailBeans2 = new ArrayList<>();
-    ArrayList<OrderDetailBean> orderDetailBeans3 = new ArrayList<>();
-    ArrayList<OrderInStoreBean> list = new ArrayList<>();
-    ArrayList<OrderInStoreBean> list1 = new ArrayList<>();
-    ArrayList<MyAllOrderBean> myList=new ArrayList<>();
+    ArrayList<OrderTypeBean.DataBean.ListBean> orderDetailBeans1 = new ArrayList<>();
+    private int orderType;
+    private int count=8;
+    private int pageNum=1;
+    private EasyRefreshLayout erlObligation;
+    private ArrayList<OrderTypeBean.DataBean.ListBean> list;
+    private AllMyOrderAdapter adapter;
+
     @Override
     protected int getLayoutResouceId() {
         return R.layout.fragment_all_my_order;
@@ -41,24 +52,18 @@ public class AllMyOrderFragment extends BaseFragment implements BaseBiz {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     protected void initView() {
         super.initView();
+        Bundle args = getArguments();
+        orderType = args.getInt("type");
+        erlObligation = (EasyRefreshLayout)findViewById(R.id.erl_obligation);
         lv_my_all_order = (ListView)findViewById(R.id.lv_my_all_order);
-        orderDetailBeans1.add(new OrderDetailBean(R.drawable.meinv, "美女0"));
-        orderDetailBeans2.add(new OrderDetailBean(R.drawable.meinv1, "美女1"));
-        orderDetailBeans2.add(new OrderDetailBean(R.drawable.meinv2, "美女2"));
-        orderDetailBeans3.add(new OrderDetailBean(R.drawable.meinv1, "美女1"));
-        orderDetailBeans3.add(new OrderDetailBean(R.drawable.meinv2, "美女2"));
-        orderDetailBeans3.add(new OrderDetailBean(R.drawable.meinv3, "美女3"));
-        orderDetailBeans3.add(new OrderDetailBean(R.drawable.meinv, "美女4"));
-        list.add(new OrderInStoreBean("天猫小店", orderDetailBeans1));
-        list.add(new OrderInStoreBean("京东小店", orderDetailBeans2));
-        list.add(new OrderInStoreBean("淘宝小店", orderDetailBeans3));
-        list1.add(new OrderInStoreBean("淘宝小店", orderDetailBeans3));
-        myList.add(new MyAllOrderBean("订单号码：011111111111111111111101",list));
-        myList.add(new MyAllOrderBean("订单号码：011111111111111111111102",list1));
-        AllMyOrderAdapter adapter=new AllMyOrderAdapter(MyApplication.getInstance().mContext,myList);
-        lv_my_all_order.setAdapter(adapter);
+        getData( orderType,1);
 
     }
 
@@ -69,4 +74,54 @@ public class AllMyOrderFragment extends BaseFragment implements BaseBiz {
         newFragment.setArguments(bundle);
         return newFragment;
     }
+
+    public void getData(int orderType,int page){
+        PesronnalService service= RetrofitHandle.getInstance().retrofit.create(PesronnalService.class);
+        Call<OrderTypeBean> call=service.postOrderbyType(orderType,page);
+        call.enqueue(new Callback<OrderTypeBean>() {
+            @Override
+            public void onResponse(Call<OrderTypeBean> call, Response<OrderTypeBean> response) {
+                if(response.body().getCode()==200){
+                    list = response.body().getData().getList();
+                    orderDetailBeans1.addAll(list);
+                    adapter = new AllMyOrderAdapter(MyApplication.getInstance().mContext,orderDetailBeans1);
+                    lv_my_all_order.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderTypeBean> call, Throwable t) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void initEvent() {
+        super.initEvent();
+        erlObligation.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
+            @Override
+            public void onLoadMore() {
+                if (count < list.size()) {
+                    pageNum++;
+                    getData(orderType,pageNum);
+                } else {
+                    ToastUtil.showToast(MyApplication.getInstance().mContext, getString(R.string.no_more));
+                    erlObligation.loadMoreComplete();
+                    erlObligation.setLoadMoreModel(LoadModel.NONE);
+                }
+            }
+
+            @Override
+            public void onRefreshing() {
+                pageNum = 1;
+                orderDetailBeans1.clear();
+                getData(orderType,pageNum);
+                erlObligation.setLoadMoreModel(LoadModel.COMMON_MODEL);
+                erlObligation.refreshComplete();
+            }
+        });
+    }
+
 }

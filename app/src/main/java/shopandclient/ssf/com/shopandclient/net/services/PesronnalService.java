@@ -46,4 +46,8 @@ public interface PesronnalService {
     Call<PostCartInfoBean> postCartProToOrder(@Body PostComfrimCartParams params);
     @POST("/api/PersonalCenter/ImmeBuy")
     Call<PostEnsureOrderBean> postEnsureToOrder(@Body PostOrderParams params);
+    @GET("/api/PersonalCenter/GetMyOrder")
+    Call<OrderTypeBean> postOrderbyType(@Query("typeid") int typeid,@Query("page") int page);
+    @POST("/api/PersonalCenter/PayOrderInfo")
+    Call<PostComment> postOrdertoPay(@Body PostComfrimCartParams params);
 }

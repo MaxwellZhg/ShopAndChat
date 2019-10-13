@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.entity.MyAllOrderBean;
+import shopandclient.ssf.com.shopandclient.entity.OrderTypeBean;
 import shopandclient.ssf.com.shopandclient.weiget.bananer.view.MyRecycleview;
 
 import java.util.ArrayList;
@@ -19,9 +20,9 @@ import java.util.ArrayList;
  */
 public class AllMyOrderAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<MyAllOrderBean> arrayLists;
+    private ArrayList<OrderTypeBean.DataBean.ListBean> arrayLists;
 
-    public AllMyOrderAdapter(Context context, ArrayList<MyAllOrderBean> arrayLists) {
+    public AllMyOrderAdapter(Context context, ArrayList<OrderTypeBean.DataBean.ListBean> arrayLists) {
         this.context = context;
         this.arrayLists = arrayLists;
     }
@@ -54,11 +55,10 @@ public class AllMyOrderAdapter extends BaseAdapter {
         }else{
             hodler=(ViewHodler)convertView.getTag();
         }
-        AllMyOrderStoreInfoAdapter goodsAdapter=new AllMyOrderStoreInfoAdapter(context,arrayLists.get(position).getList());
+        AllMyOrderStoreInfoAdapter goodsAdapter=new AllMyOrderStoreInfoAdapter(context,arrayLists.get(position),arrayLists.get(position).getStoreName());
         hodler.rv_my_all_order.setLayoutManager(new LinearLayoutManager(context));
         hodler.rv_my_all_order.setAdapter(goodsAdapter);
-        //hodler.tv_store_name.setImageResource(beans.get(position).getResId());
-        hodler.tv_order_num.setText(arrayLists.get(position).getOrderNum());
+        hodler.tv_order_num.setText("订单编号："+arrayLists.get(position).getOrderNo());
         if(position==arrayLists.size()-1){
             hodler.iv_order_cent.setVisibility(View.GONE);
         }else{

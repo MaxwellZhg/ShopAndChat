@@ -105,19 +105,7 @@ public class HistoryScanActivity extends BaseActivity implements BaseBiz, TabLay
             itemtips.add("收藏商品");
         }
         initPageIndecator();
-   /*     tla = new TabLayoutAdapter(getSupportFragmentManager(), fragments);
-        vpMain.setAdapter(tla);
-        vpMain.setOffscreenPageLimit(3);
-        tabMain.setupWithViewPager(vpMain);
-        if (scantype == 1) {
-            tabMain.getTabAt(0).setText(itemtips.get(0));
-            tabMain.getTabAt(1).setText(itemtips.get(1));
-            tabMain.getTabAt(2).setText(itemtips.get(2));
-        } else {
-            tabMain.getTabAt(0).setText(itemtips.get(0));
-            tabMain.getTabAt(1).setText(itemtips.get(1));
-        }
-        vpMain.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabMain));*/
+
 
     }
 
