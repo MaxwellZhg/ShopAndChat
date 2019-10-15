@@ -18,6 +18,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import shopandclient.ssf.com.shopandclient.R;
 import shopandclient.ssf.com.shopandclient.adapter.EnsureOrderAdapter;
+import shopandclient.ssf.com.shopandclient.adapter.OrderDetailAdapter;
 import shopandclient.ssf.com.shopandclient.base.BaseActivity;
 import shopandclient.ssf.com.shopandclient.base.Constants;
 import shopandclient.ssf.com.shopandclient.base.MyApplication;
@@ -50,6 +51,7 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz, View.O
     ListView lvEnsureOrder;
     ArrayList<OrderDetailBean> orderDetailBeans3 = new ArrayList<>();
     ArrayList<LimmitBuyBean.DataBean.BuyProBean> list;
+    ArrayList<OrderDetailInfoBean.DataBean.OrderDetailBean> listOrderInfo;
     @BindView(R.id.iv_scope)
     ImageView ivScope;
     @BindView(R.id.tv_save)
@@ -84,6 +86,8 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz, View.O
     ArrayList<PostOrderParams.ShopBean> shopBeans=new ArrayList<>();
     private LimmitBuyBean.DataBean.AddressBean addressofList;
     private double allTotal;
+    private String orderNo;
+    private OrderDetailAdapter oda;
 
     @Override
     public int getLayoutResourceId() {
@@ -123,8 +127,10 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz, View.O
             account = intent.getIntExtra("account", 0);
             attr1 = intent.getIntExtra("attr1", 0);
             attr2 = intent.getIntExtra("attr2", 0);
-        } else {
+        } else if(type==2) {
             str = intent.getStringExtra("str");
+        }else if(type==3){
+            orderNo = intent.getStringExtra("orderNo");
         }
         rlAction.setBackgroundColor(MyApplication.getInstance().mContext.getResources().getColor(R.color.password_tips));
         ivBack.setBackgroundDrawable(MyApplication.getInstance().mContext.getResources().getDrawable(R.drawable.nav_black));
@@ -164,9 +170,40 @@ public class EnsureOrderActivity extends BaseActivity implements BaseBiz, View.O
         lvEnsureOrder.addFooterView(footer);
         if (type == 1) {
             postlimmitBuyInfo(id, account, attr1, attr2);
-        } else {
+        } else if(type==2){
             postlimmitCartBuyInfo(str);
+        }else{
+            getOrderDetail(orderNo);
         }
+    }
+
+    private void getOrderDetail(String orderNo) {
+        PesronnalService service = RetrofitHandle.getInstance().retrofit.create(PesronnalService.class);
+        Call<OrderDetailInfoBean> call = service.postOrderDetailInfo(orderNo);
+        call.enqueue(new Callback<OrderDetailInfoBean>() {
+            @Override
+            public void onResponse(Call<OrderDetailInfoBean> call, Response<OrderDetailInfoBean> response) {
+                  if(response.body().getCode()==200){
+                      listOrderInfo = response.body().getData().getOrderDetail();
+                      oda = new OrderDetailAdapter(MyApplication.getInstance().mContext, listOrderInfo);
+                      lvEnsureOrder.setAdapter(oda);
+                      int num = 0;
+                      for (int i = 0; i < listOrderInfo.size(); i++) {
+                          for (int j = 0; j < listOrderInfo.get(i).getOrderInfo().size(); j++) {
+                              num += listOrderInfo.get(i).getOrderInfo().get(j).getAmount();
+                          }
+                      }
+                      tvTotalNum.setText(MyApplication.getInstance().mContext.getResources().getString(R.string.total_clothes, num));
+                      tvTotalPrice.setText("总计：" + listOrderInfo.get(0).getTotalPrice());
+                  }
+            }
+
+            @Override
+            public void onFailure(Call<OrderDetailInfoBean> call, Throwable t) {
+
+            }
+        });
+
     }
 
     @OnClick({R.id.rl_btn_back, R.id.rl_ensure})

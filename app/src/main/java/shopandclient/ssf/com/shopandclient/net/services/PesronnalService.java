@@ -50,4 +50,6 @@ public interface PesronnalService {
     Call<OrderTypeBean> postOrderbyType(@Query("typeid") int typeid,@Query("page") int page);
     @POST("/api/PersonalCenter/PayOrderInfo")
     Call<PostComment> postOrdertoPay(@Body PostComfrimCartParams params);
+    @GET("/api/PersonalCenter/GetOrderDetail")
+    Call<OrderDetailInfoBean> postOrderDetailInfo(@Query("orderNo") String orderNo);
 }
